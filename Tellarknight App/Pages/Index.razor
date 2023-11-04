@@ -1,0 +1,49 @@
+﻿@page "/"
+@using Tellarknight_App.Models;
+
+<h2 style="text-align: center; margin-bottom: 2%">TEST UI</h2>
+
+<div id="content" style="text-align: center;">
+    <div id="top">
+        <div id="left" style="width: 50%; float: left;">
+            <div class="container">Left Panel</div>
+        </div>
+        <div id="right" style="width: 50%; float: right;">
+            <div class="container">
+                <table class="table table-bordered table-striped" style="width: 100%;">
+                    <tbody>
+                        @foreach (var chunk in supportedCards.Cards.Select((value, index) => new { Index = index, Value = value }).GroupBy(x => x.Index / 5))
+                        {
+                            <tr>
+                                @foreach (var card in chunk.Select(x => x.Value))
+                                {
+                                    <td style="max-width: 20%; width: auto; text-align: center;">
+                                        <!-- Adjust the width to your needs -->
+                                        <img src="@card.Image" alt="@card.Name" style="display: block; margin: 0 auto; width: 100%;">
+                                        <input type="text" style="width: 100%; text-align: center;" @bind-value="card.Quantity">
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <button>Confirm Deck</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottom" style="clear: both;">
+        Bottom Options Here
+    </div>
+</div>
+
+
+
+
+@code {
+    private SupportedCards supportedCards = new SupportedCards();
+
+    // ... (rest of your code)
+}
