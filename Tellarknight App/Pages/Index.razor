@@ -1,24 +1,47 @@
 ﻿@page "/"
 @using Tellarknight_App.Models;
+@using Services;
 
-<h2 style="text-align: center; margin-bottom: 2%">TEST UI</h2>
+<h2 style="text-align: center; margin-bottom: 2%">Tellarknight Hand Statistics App</h2>
 
 <div id="content" style="text-align: center;">
-    <div id="top">
-        <div id="left" style="width: 50%; float: left;">
-            <div class="container">Left Panel</div>
+    <div id="top" style="display: flex; width: 100%;">
+        <div id="left" style="width: 50%;">
+            <div>
+                <h5><b>Deck Statistics</b></h5>
+            </div>
+            <div>Deck Size: @(deck.Count + hand.Count)</div>
+            <div>Brick Chance: @stats.BrickChance%</div>
+            <div>Average # Tellars: @stats.BrickChance</div>
+            <div>Average # Extenders: @stats.BrickChance</div>
+            <div>Average # Hand Traps: @stats.BrickChance</div>
+            <p>
+                <div>Average XYZ Caduceus (0 Tellars): @stats.BrickChance</div>
+                <div>Average XYZ Caduceus (1 Tellars): @stats.BrickChance</div>
+                <div>Average XYZ Caduceus (Unuk or Lyran): @stats.BrickChance</div>
+            </p>
+            <div> </div>
+            <div>
+                <h5><b>TEST HAND</b></h5>
+            </div>
+            @foreach (Card card in hand)
+            {
+                <div>
+                    @card.Name
+                </div>
+            }    
         </div>
-        <div id="right" style="width: 50%; float: right;">
-            <div class="container">
+        <div id="right" style="width: 50%;">
+            <div class="container" style="width: 90%; max-width: 100%; overflow: hidden;">
                 <table class="table table-bordered table-striped" style="width: 100%;">
                     <tbody>
-                        @foreach (var chunk in supportedCards.Cards.Select((value, index) => new { Index = index, Value = value }).GroupBy(x => x.Index / 5))
+                        <!-- AI Generated foreach loop to organize the cards -->
+                        @foreach (var chunk in supportedCards.Cards.Select((value, index) => new { Index = index, Value = value }).GroupBy(x => x.Index / 9))
                         {
                             <tr>
                                 @foreach (var card in chunk.Select(x => x.Value))
                                 {
                                     <td style="max-width: 20%; width: auto; text-align: center;">
-                                        <!-- Adjust the width to your needs -->
                                         <img src="@card.Image" alt="@card.Name" style="display: block; margin: 0 auto; width: 100%;">
                                         <input type="text" style="width: 100%; text-align: center;" @bind-value="card.Quantity">
                                     </td>
@@ -27,9 +50,10 @@
                         }
                     </tbody>
                 </table>
-
                 <div style="text-align: center; margin-top: 10px;">
-                    <button>Confirm Deck</button>
+                    <b>Hand Size:</b> 
+                    <input type="text" style="width: 12%; text-align: center;" @bind-value="startingHand">
+                    <button class="btn btn-primary" @onclick="@(() => CheckDeck())">Check Deck</button>
                 </div>
             </div>
         </div>
@@ -39,11 +63,89 @@
     </div>
 </div>
 
-
-
-
 @code {
+    private int startingHand = 5;
+    private bool normalSummon = false;
+    private Card onField;
+    private (Card, Card) scales;
+    private DeckStatistics stats = new DeckStatistics();
+    private List<Card> deck = new List<Card>();
+    private List<Card> hand = new List<Card>();
     private SupportedCards supportedCards = new SupportedCards();
 
-    // ... (rest of your code)
+    private async Task CheckDeck()
+    {
+        stats = new DeckStatistics();
+
+        for (int i = 0; i < 1000; i++)
+        {
+            // Reset Everything
+            deck.Clear();
+            hand.Clear();
+            onField = new Card();
+            scales = (new Card(), new Card());
+            bool normalSummon = false;
+
+            // Build Deck & Hand
+            BuildDeck();
+            ShuffleDeck();
+            DrawHand();
+
+            // Analyze Hand For Plays & Update Stats
+            (hand, deck, normalSummon, onField, scales) = CardSearcher.CardSearch(hand, deck, normalSummon, onField, scales);
+            (hand, deck, normalSummon, onField, stats, scales) = StandardAnalyzer.HandCheck(hand, deck, normalSummon, onField, stats, scales);
+        }
+    }
+
+    private void BuildDeck()
+    {
+        foreach (Card card in supportedCards.Cards)
+        {
+            if (card.Quantity > 3 && card.Name != "Hand Trap" && card.Name != "Level 4" && card.Name != "Empty Card")
+            {
+                card.Quantity = 3;
+            }
+            if (card.Quantity > 0)
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    deck.Add(card);
+                }
+            }
+        }
+        while(deck.Count < 40)
+        {
+            deck.Add(new Card() 
+            { 
+                Name = "Empty Card"
+            });
+        }
+    }
+
+    private void ShuffleDeck()
+    {
+        var random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            int deckCount = deck.Count;
+            while (deckCount > 1)
+            {
+                deckCount--;
+                int randomIndex = random.Next(deckCount + 1);
+                var tempCard = deck[randomIndex];
+                deck[randomIndex] = deck[deckCount];
+                deck[deckCount] = tempCard;
+            }
+        }
+    }
+
+    public void DrawHand()
+    {
+        Random random = new Random();
+        for (int i = 0; i < startingHand; i++)
+        {
+            hand.Add(deck[0]);
+            deck.RemoveAt(0);
+        }
+    }
 }
