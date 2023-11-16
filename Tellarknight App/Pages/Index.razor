@@ -66,8 +66,8 @@
 @code {
     private int startingHand = 5;
     private bool normalSummon = false;
-    private Card onField;
-    private (Card, Card) scales;
+    private List<Card> onField = new List<Card>();
+    private List<Card> scales = new List<Card>();
     private DeckStatistics stats = new DeckStatistics();
     private List<Card> deck = new List<Card>();
     private List<Card> hand = new List<Card>();
@@ -82,8 +82,8 @@
             // Reset Everything
             deck.Clear();
             hand.Clear();
-            onField = new Card();
-            scales = (new Card(), new Card());
+            onField.Clear();
+            scales.Clear();
             bool normalSummon = false;
 
             // Build Deck & Hand
@@ -91,9 +91,11 @@
             ShuffleDeck();
             DrawHand();
 
-            // Analyze Hand For Plays & Update Stats
+            // Check Hand & Deck For Optimal Searches
             (hand, deck, normalSummon, onField, scales) = CardSearcher.CardSearch(hand, deck, normalSummon, onField, scales);
-            (hand, deck, normalSummon, onField, stats, scales) = StandardAnalyzer.HandCheck(hand, deck, normalSummon, onField, stats, scales);
+
+            // Analyze Hand & Update Hand Statistics
+            (hand, deck, normalSummon, onField, scales, stats) = StandardAnalyzer.HandCheck(hand, deck, normalSummon, onField, scales, stats);
         }
     }
 

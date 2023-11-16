@@ -9,9 +9,9 @@ namespace Tellarknight_App.Services
 {
     internal class StandardAnalyzer
     {
-        public static (List<Card>, List<Card>, bool, Card, DeckStatistics, (Card, Card)) HandCheck(List<Card> hand, List<Card> deck, bool normalSummon, Card onField, DeckStatistics stats, (Card, Card) scales)
+        public static (List<Card>, List<Card>, bool, List<Card>, List<Card>, DeckStatistics) HandCheck(List<Card> hand, List<Card> deck, bool normalSummon, List<Card> onField, List<Card> scales, DeckStatistics stats)
         {
-            return (hand, deck, normalSummon, onField, stats, scales);
+            return (hand, deck, normalSummon, onField, scales, stats);
         }
 
     }
