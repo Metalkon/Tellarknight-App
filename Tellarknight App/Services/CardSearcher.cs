@@ -11,10 +11,14 @@ namespace Tellarknight_App.Services
     {
         public static (List<Card>, List<Card>, bool, List<Card>, List<Card>) CardSearch(List<Card> hand, List<Card> deck, bool normalSummon, List<Card> onField, List<Card> scales)
         {
+            // (hand, deck, normalSummon, onField, scales) = SuperheavySamurai(hand, deck, normalSummon, onField, scales);
+
+
             // If the hand/deck contains Zefraath, use Zefra Searches
             if (hand.Any(x => x.Name == "Zefraath") || deck.Any(x => x.Name == "Zefraath"))
             {
-                // SHS Search/Setup
+                // Zefra oracle/prov search before rota, and replace with empty card for any duplicates so it doesn't mess with rota
+                // normal deneb somewhere for thuban
                 (hand, deck, normalSummon, onField, scales) = ZefraRota(hand, deck, normalSummon, onField, scales);
 
             }
@@ -22,13 +26,9 @@ namespace Tellarknight_App.Services
             // If the hand/deck does not contain Zefraath, use Standard Searches
             else if (!hand.Any(x => x.Name == "Zefraath") && !deck.Any(x => x.Name == "Zefraath"))
             {
-                // SHS Search/Setup
                 StandardRota(hand, deck);
-
             }
-            // StandardRota(hand, deck);
-            // SmallWorld(hand, deck);
-            // NormalSummn(hand, deck);
+
             return (hand, deck, normalSummon, onField, scales);
         }
 
@@ -64,51 +64,50 @@ namespace Tellarknight_App.Services
             return false;
         }
 
+        public static (List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraSearch(List<Card> hand, List<Card> deck, bool normalSummon, List<Card> onField, List<Card> scales)
+        {
+
+
+            return (hand, deck, normalSummon, onField, scales);
+        }
+
         public static (List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraRota(List<Card> hand, List<Card> deck, bool normalSummon, List<Card> onField, List<Card> scales)
         {
             string searchCard = "Reinforcement of the Army";
 
+            // REMINDER: CANNOT SEARCH ZEFRAATH (And Oracle/PROV searches will be done before rota, any in hand will be unused)
+
+
             // ----- Zefra SHS -----
 
-
-
-
-            // Personal reminder... if the default while having zefraath is already to grab thuban, theres probably no point to this section compared to regular? Unless i include zefraxciton distinction for oracle
-            // may need to redo much of the normal zefra part too as it all searches zefraath, and the if statement needs to be restructured like the zefra shs ones (check hand, check field, check deck)
-
-
-
-            // HAND: x1 Unique Oracle/Prov In Hand... With SHS, No Zefraath -> Search Zefraath
-            if (CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence") && !hand.Any(x => x.Name == "Zefraath")
-                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi") && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
-                && deck.Any(x => x.Name == "Zefraath"))
+            // HAND: Min x1 Unique Oracle/Prov/Zefraath In Hand... With SHS, No Lv4 Zefra -> Search Thuban
+            if (CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath") 
+                && !hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)
+                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi")
+                && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
+                && deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
             {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
+                (hand, deck) = UpdateCards(hand, deck, searchCard, "Satellarknight Zefrathuban");
                 return (hand, deck, normalSummon, onField, scales);
             }
 
-            // HAND: x1 Zefraath In Hand... With SHS, No Thuban -> Search Thuban
-            if (hand.Any(x => x.Name == "Zefraath") && !hand.Any(x => x.Name == "Satellarknight Zefrathuban") && !hand.Any(x => x.Name == "Stellarknight Zefraxciton")
-                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi") && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
+            // HAND: Min x1 Unique Oracle/Prov/Zefraath In Hand... With SHS, With Lv4 Zefra -> Search Lyran
+            if (CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath")
+                && hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) && !hand.Any(x => x.Name == "Tellarknight Lyran")
+                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi")
+                && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
                 && deck.Any(x => x.Name == "Tellarknight Lyran"))
             {
                 (hand, deck) = UpdateCards(hand, deck, searchCard, "Tellarknight Lyran");
                 return (hand, deck, normalSummon, onField, scales);
             }
 
-            // HAND: x1 Zefraath In Hand... With SHS, With Lyran -> Search Unuk
-            if (hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Tellarknight Lyran") && !hand.Any(x => x.Name == "Satellarknight Unukalhai")
-                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi") && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
-                && !hand.Any(x => x.Name == "Tellarknight Lyran") && deck.Any(x => x.Name == "Tellarknight Lyran"))
-            {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Satellarknight Unukalhai");
-                return (hand, deck, normalSummon, onField, scales);
-            }
-
-            // HAND: x1 Zefraath In Hand... With SHS, With Lyran -> Search Unuk
-            if (hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Tellarknight Lyran") && !hand.Any(x => x.Name == "Satellarknight Unukalhai")
-                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi") && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
-                && !hand.Any(x => x.Name == "Tellarknight Lyran") && deck.Any(x => x.Name == "Tellarknight Lyran"))
+            // HAND: Min x1 Unique Oracle/Prov/Zefraath In Hand... With SHS, With Lv4 Zefra Monster -> Search Lyran
+            if (CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath")
+                && hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) && hand.Any(x => x.Name == "Tellarknight Lyran") && !hand.Any(x => x.Name == "Satellarknight Unukalhai")
+                && onField.Any(x => x.Name == "Superheavy Samurai Prodigy Wakaushi")
+                && scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei")
+                && deck.Any(x => x.Name == "Satellarknight Unukalhai"))
             {
                 (hand, deck) = UpdateCards(hand, deck, searchCard, "Satellarknight Unukalhai");
                 return (hand, deck, normalSummon, onField, scales);
@@ -117,54 +116,16 @@ namespace Tellarknight_App.Services
             // ----- Zefra Normal -----
 
             // HAND: x2 Unique Zefraath/Oracle/Prov/Thuban In Hand... No Lyran -> Search Lyran
-            if (CheckUniqueCards(hand, "Min", 2, "Zefraath", "Oracle of Zefra", "Zefra Providence", "Satellarknight Zefrathuban") == true
-                && deck.Any(x => x.Name == "Tellarknight Lyran") && !hand.Any(x => x.Name == "Tellarknight Lyran")
-                && !deck.Any(x => x.Name == "Tellarknight Lyran"))
+            if (CheckUniqueCards(hand, "M", 2, "Zefraath", "Oracle of Zefra", "Zefra Providence", "Satellarknight Zefrathuban")
+                && !hand.Any(x => x.Name == "Tellarknight Lyran")
+                && deck.Any(x => x.Name == "Tellarknight Lyran") 
+                && deck.Any(x => x.Name == "Tellarknight Lyran"))
             {
                 (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
                 return (hand, deck, normalSummon, onField, scales);
             }
 
-            // HAND: x2 Unique Zefraath/Oracle/Prov/Thuban In Hand... No Lyran -> Search Lyran
-            if (CheckUniqueCards(hand, "Min", 2, "Zefraath", "Oracle of Zefra", "Zefra Providence", "Satellarknight Zefrathuban") == true
-                && deck.Any(x => x.Name == "Tellarknight Lyran") && !hand.Any(x => x.Name == "Tellarknight Lyran")
-                && !deck.Any(x => x.Name == "Tellarknight Lyran"))
-            {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
-                return (hand, deck, normalSummon, onField, scales);
-            }
 
-            // HAND: x2 Unique Zefraath/Oracle/Prov/Thuban In Hand... With Lyran -> Search Unuk
-            if (CheckUniqueCards(hand, "Min", 2, "Zefraath", "Oracle of Zefra", "Zefra Providence", "Satellarknight Zefrathuban") == true
-                && deck.Any(x => x.Name == "Satellarknight Unukalhai") && hand.Any(x => x.Name == "Tellarknight Lyran"))
-            {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
-                return (hand, deck, normalSummon, onField, scales);
-            }
-
-            // HAND: x2 Unique Zefraath/Oracle/Prov/Thuban In Hand... With Lyran+Unuk -> Search Deneb
-            if (CheckUniqueCards(hand, "Min", 2, "Zefraath", "Oracle of Zefra", "Zefra Providence", "Satellarknight Zefrathuban") == true
-                && deck.Any(x => x.Name == "Satellarknight Deneb") && hand.Any(x => x.Name == "Tellarknight Lyran") && hand.Any(x => x.Name == "Satellarknight Unukalhai"))
-            {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
-                return (hand, deck, normalSummon, onField, scales);
-            }
-
-            // HAND: x2 Unique Zefraath/Oracle/Prov/Thuban In Hand... With Lyran+Unuk+Deneb -> Search Thuban
-            if (CheckUniqueCards(hand, "Min", 2, "Zefraath", "Oracle of Zefra", "Zefra Providence", "Satellarknight Zefrathuban") == true
-                && deck.Any(x => x.Name == "Satellarknight Zefrathuban") && hand.Any(x => x.Name == "Tellarknight Lyran") && hand.Any(x => x.Name == "Satellarknight Unukalhai") && hand.Any(x => x.Name == "Satellarknight Zefrathuban"))
-            {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
-                return (hand, deck, normalSummon, onField, scales);
-            }
-
-            // HAND: x1 Unique Zefraath/Oracle/Prov/Thuban In Hand... With Deneb... -> Search Thuban
-            if (CheckUniqueCards(hand, "Max", 1, "Zefraath", "Oracle of Zefra", "Zefra Providence") == true
-                && deck.Any(x => x.Name == "Satellarknight Zefrathuban") && hand.Any(x => x.Name == "Satellarknight Deneb") && hand.Any(x => x.Name == "Satellarknight Unukalhai") && hand.Any(x => x.Name == "Satellarknight Zefrathuban"))
-            {
-                (hand, deck) = UpdateCards(hand, deck, searchCard, "Zefraath");
-                return (hand, deck, normalSummon, onField, scales);
-            }
 
 
             /*
