@@ -98,8 +98,6 @@
         stats = new DeckStatistics();
         totalCount = 0;
 
-        // tests only
-
         for (int i = 0; i < 1; i++)
         {
             int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
@@ -125,16 +123,11 @@
             (hand, deck, gy, normalSummon, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummon, onField, scales);
 
             // Analyze Hand & Update Hand Statistics
-            //(hand, gy, deck, normalSummon, onField, scales, stats) = StandardAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, stats);
+            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, stats);
 
             totalCount++;   
             await InvokeAsync(StateHasChanged);
         }
-    }
-
-    private void TEST()
-    {
-
     }
 
     private void BuildDeck()
