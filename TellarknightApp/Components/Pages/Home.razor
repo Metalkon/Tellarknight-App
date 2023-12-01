@@ -10,18 +10,29 @@
             <div>
                 <h5><b>Deck Statistics</b></h5>
             </div>
-            <div>Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count)</div>
-            <div>Brick Chance: @stats.BrickChance%</div>
-            <div>Average # Tellars: @stats.BrickChance</div>
-            <div>Average # Extenders: @stats.BrickChance</div>
-            <div>Average # Hand Traps: @stats.BrickChance</div>
+            <div>
+                Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
+                Success Rate: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
+                Failure Rate: @((stats.BrickChance / totalCount) * 100)% <br />
+                Raw Number: @stats.BrickChance
+            </div>
+            <div>Average # Tellars: @stats.AverageTellars</div>
+            <div>Average # Hand Traps: </div>
             <p>
-                <div>Average XYZ Caduceus (0 Tellars): @stats.BrickChance</div>
-                <div>Average XYZ Caduceus (1 Tellars): @stats.BrickChance</div>
-                <div>Average XYZ Caduceus (Unuk or Lyran): @stats.BrickChance</div>
+                <div>
+                    Average XYZ Caduceus (0 Tellars): @((stats.AverageXyzNoTellar / checkCount) * 100)%</div>
+                <div>
+                    Average XYZ Caduceus (1+ Tellars): @((stats.AverageXyzWithTellar / checkCount) * 100)%</div>
+                <div>
+                    Average XYZ Caduceus (2+ Tellars): @((stats.AverageXyzTwoTellars / checkCount) * 100)%</div>
+                <div>
+                    Average XYZ Caduceus (Unuk or Lyran): @((stats.AverageXyzUnukOrLyran / checkCount) * 100)%</div>
             </p>
-            <div>Scales: @(scales?.Count > 0 ? scales[0]?.Name : " ")</div>
-            <div>On Field: @(onField?.Count > 0 ? onField[0]?.Name : " ") / @(onField?.Count > 1 ? onField[1]?.Name : " ")</div>
+            <!--
+                <div>Scales: @(scales?.Count > 0 ? scales[0]?.Name : " ")</div>
+                <div>On Field: @(onField?.Count > 0 ? onField[0]?.Name : " ") / @(onField?.Count > 1 ? onField[1]?.Name : " ")</div>
+            -->
+            
 
             <!-- Test Only Start -->
             <div>
@@ -79,6 +90,7 @@
 </div>
 
 @code {
+    private int checkCount = 100000;
     private int totalCount;
     private int startingHand = 5;
     private bool normalSummon = false;
@@ -97,11 +109,13 @@
     {
         stats = new DeckStatistics();
         totalCount = 0;
+        int tempCount = 0;
+        int tempCountNext = (int)(checkCount * 0.001);
+        Random random = new Random();
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < checkCount; i++)
         {
             int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
-
 
             // Reset Everything
             deck.Clear();
@@ -125,8 +139,13 @@
             // Analyze Hand & Update Hand Statistics
             stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, stats);
 
-            totalCount++;   
-            await InvokeAsync(StateHasChanged);
+            totalCount++;
+            tempCount++;
+            if (tempCount >= tempCountNext)
+            {
+                tempCountNext = tempCountNext + random.Next((int)(checkCount * 0.0005), (int)(checkCount * 0.015));
+                await InvokeAsync(StateHasChanged);
+            }
         }
     }
 
@@ -151,7 +170,9 @@
             deck.Add(new Card() 
             { 
                 Name = "Empty Card",
-                Archetype = "None"
+                Archetype = "None",
+                Type = "None",
+                Role = "None"
             });
         }
     }

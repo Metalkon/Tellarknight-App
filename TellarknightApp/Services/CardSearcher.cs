@@ -18,6 +18,10 @@ namespace TellarknightApp.Services
                 (hand, deck, gy, normalSummon, onField, scales) = SuperheavySamurai(hand, deck, gy, normalSummon, onField, scales);
             }
 
+            // Add Small World
+            // Automatically Adds +1 Lv4 & +1 HT
+            // Does Calculation based on statistics to draw the bridge with lv4's and ht's in hand, if it will skip the search or not
+
             // Zefra Searchers
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {

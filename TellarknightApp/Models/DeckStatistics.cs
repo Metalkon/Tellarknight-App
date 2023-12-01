@@ -10,11 +10,14 @@ namespace TellarknightApp.Models
     {
         public float BrickChance { get; set; }
         public float AverageTellars { get; set; }
-        public float AverageExtenders { get; set; }
-        public float AverageDelterosNoTellar { get; set; }
-        public float AverageDelterosWithTellar { get; set; }
-        public float AverageDelterosUnukOrLyran { get; set; }
+        public float AverageXyzNoTellar { get; set; }
+        public float AverageXyzWithTellar { get; set; }
+        public float AverageXyzUnukOrLyran { get; set; }
+        public float AverageXyzTwoTellars { get; set; }
+        public float ZefraathAndSHS { get; set; }
+        public float ZefraathAndThuban { get; set; }
+        public float ZefraComboWithTrap { get; set; }
+        public float ZefraComboWithNormalAvailable { get; set; }
         public float AverageHandTraps { get; set; }
-
     }
 }
