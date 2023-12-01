@@ -28,8 +28,8 @@ namespace TellarknightApp.Models
                 new Card() { Name = "Satellarknight Skybridge", Type = "Spell", Level = null, Archetype = "Tellarknight", Image = "./CardArt/Skybridge.png", Role = "None" },
                 new Card() { Name = "Constellar Tellarknights", Type = "Spell", Level = null, Archetype = "Tellarknight/Constellar", Image = "./CardArt/ConstellarTellarknights.png", Role = "None" },
 
-                new Card() { Name = "Living Fossil", Type = "Spell", Level = null, Archetype = "None", Image = "./CardArt/Fossil.png", Role = "None" },
-                new Card() { Name = "\"Infernoble Arms - Durendal\"", Type = "Spell", Level = null, Archetype = "None", Image = "./CardArt/Durendal.png", Role = "Extender" },
+                new Card() { Name = "Living Fossil", Type = "Equip", Level = null, Archetype = "None", Image = "./CardArt/Fossil.png", Role = "None" },
+                new Card() { Name = "\"Infernoble Arms - Durendal\"", Type = "Equip", Level = null, Archetype = "None", Image = "./CardArt/Durendal.png", Role = "Extender" },
                 new Card() { Name = "Infernoble Knight - Renaud", Type = "Warrior", Level = 1, Archetype = "None/Any", Image = "./CardArt/Renaud.png", Role = "None" },
                 new Card() { Name = "Fire Flint Lady", Type = "Warrior", Level = 1, Archetype = "None/Any", Image = "./CardArt/FireFlint.png", Role = "Extender" },
 

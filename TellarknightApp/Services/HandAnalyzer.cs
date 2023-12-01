@@ -184,6 +184,10 @@ namespace TellarknightApp.Services
             {
                 localStats.AverageXyzNoTellar = false;
             }
+            if (localStats.AverageXyzWithTellar && (hand.Any(x => x.Name == "Satellarknight Unukalhai") || hand.Any(x => x.Name == "Constellar Tellarknights")))
+            {
+                localStats.AverageXyzUnukOrLyran = true;
+            }
 
             // Check For Hand Brick
             if (!localStats.AverageXyzNoTellar 
@@ -197,6 +201,18 @@ namespace TellarknightApp.Services
             {
                 localStats.BrickChance = true;
             }
+
+            string test = string.Join(", ", hand.Select(x => x.Name));
+
+            // Isolde Bricking
+            if (
+                (deck.Count(x => x.Name == "Living Fossil" || x.Name == "\"Infernoble Arms - Durendal\"") == 0
+                || deck.Count(x => x.Name == "Infernoble Knight - Renaud" || x.Name == "Fire Flint Lady") == 0)
+            )
+            {
+                localStats.IsoldeBrick = true;
+            }
+
 
             // Note: Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell
             // Note: Add stats for unuk that tags altair being unusable later
@@ -249,6 +265,7 @@ namespace TellarknightApp.Services
             if (localStats.ZefraComboWithTrap) stats.ZefraComboWithTrap++;
             if (localStats.ZefraComboWithNormalAvailable) stats.ZefraComboWithNormalAvailable++;
             if (localStats.AverageHandTraps) stats.AverageHandTraps++;
+            if (localStats.IsoldeBrick) stats.IsoldeBrick++;
 
             return stats;
         }
@@ -267,6 +284,7 @@ namespace TellarknightApp.Services
             public bool ZefraComboWithTrap { get; set; } = false;
             public bool ZefraComboWithNormalAvailable { get; set; } = false;
             public bool AverageHandTraps { get; set; } = false;
+            public bool IsoldeBrick { get; set; } = false;
         }
 
         public static int CountCards(List<Card> hand, int level)

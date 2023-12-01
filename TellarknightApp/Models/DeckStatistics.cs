@@ -19,5 +19,8 @@ namespace TellarknightApp.Models
         public float ZefraComboWithTrap { get; set; }
         public float ZefraComboWithNormalAvailable { get; set; }
         public float AverageHandTraps { get; set; }
+        public float IsoldeBrick { get; set; }
+        public float IsoldeBrickFull { get; set; }
+
     }
 }
