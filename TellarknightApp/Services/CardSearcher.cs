@@ -25,6 +25,8 @@ namespace TellarknightApp.Services
             // Zefra Searchers
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {
+                // Add Terraforming
+
                 // Add Deneb NS For Thuban Search Here
 
                 if (hand.Any(x => x.Name.Contains("Reinforcement of the Army")))

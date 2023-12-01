@@ -4,63 +4,41 @@
 
 <h2 style="text-align: center; margin-bottom: 2%">Tellarknight Hand Statistics App</h2>
 
-<div id="content" style="text-align: center;">
+<div id="content" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
     <div id="top" style="display: flex; width: 100%;">
-        <div id="left" style="width: 50%;">
-            <div>
+        <div id="left" style="width: 50%; margin-right: 10px;">
+            <div style="text-align: center;">
                 <h5><b>Deck Statistics</b></h5>
             </div>
-            <div>
-                Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
-                Success Rate: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
-                Failure Rate: @((stats.BrickChance / totalCount) * 100)% <br />
-                Raw Number: @stats.BrickChance
-            </div>
-            <div>Average # Tellars: @stats.AverageTellars</div>
-            <div>Average # Hand Traps: </div>
-            <p>
-                <div>
-                    Average XYZ Caduceus (0 Tellars): @((stats.AverageXyzNoTellar / checkCount) * 100)%</div>
-                <div>
-                    Average XYZ Caduceus (1+ Tellars): @((stats.AverageXyzWithTellar / checkCount) * 100)%</div>
-                <div>
-                    Average XYZ Caduceus (2+ Tellars): @((stats.AverageXyzTwoTellars / checkCount) * 100)%</div>
-                <div>
-                    Average XYZ Caduceus (Unuk or Lyran): @((stats.AverageXyzUnukOrLyran / checkCount) * 100)%</div>
-            </p>
-            <!--
-                <div>Scales: @(scales?.Count > 0 ? scales[0]?.Name : " ")</div>
-                <div>On Field: @(onField?.Count > 0 ? onField[0]?.Name : " ") / @(onField?.Count > 1 ? onField[1]?.Name : " ")</div>
-            -->
-            
-
-            <!-- Test Only Start -->
-            <div>
-                <p><b>TEST HAND (Before Searches)</b></p>
-                @foreach (Card card in startingHandTest)
-                {
-                    <div>
-                        @card.Name
-                    </div>
-                }
-            </div>
-            <!-- Test Only End -->
-
-            <div>
-                <h5><b>TEST HAND</b></h5>
-            </div>
-            @foreach (Card card in hand)
-            {
-                <div>
-                    @card.Name
+            <div class="row">
+                <!-- Left content continued... -->
+                <div class="box">
+                    <b>Basic Stats:</b> <br />
+                    Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
+                    Total Monsters (Deck): @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
+                    Combo Chance: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
+                    Brick Chance: @((stats.BrickChance / totalCount) * 100)% <br />
                 </div>
-            }    
+                <div class="box">
+                    Average # Tellars: @(stats.AverageTellars / totalCount) <br />
+                    Average # Hand Traps: @(stats.AverageHandTraps / totalCount)
+                </div>
+            </div>
+            <div class="row">
+                <div class="box">
+                    XYZ Caduceus (0 Tellars): @((stats.AverageXyzNoTellar / checkCount) * 100)% <br />
+                    XYZ Caduceus (1 Tellars): @(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / checkCount) * 100)% <br />
+                    XYZ Caduceus (2 Tellars): @((stats.AverageXyzTwoTellars / checkCount) * 100)% <br />
+                    XYZ Caduceus (Unuk/Lyran): @((stats.AverageXyzUnukOrLyran / checkCount) * 100)% <br />
+                </div>
+                <div class="box">Box 4</div>
+            </div>
         </div>
         <div id="right" style="width: 50%;">
             <div class="container" style="width: 90%; max-width: 100%; overflow: hidden;">
                 <table class="table table-bordered table-striped" style="width: 100%;">
                     <tbody>
-                        <!-- AI Generated foreach loop to organize the cards -->
+                        <!-- Right content continued... -->
                         @foreach (var chunk in supportedCards.Cards.Select((value, index) => new { Index = index, Value = value }).GroupBy(x => x.Index / 9))
                         {
                             <tr>
@@ -76,20 +54,41 @@
                     </tbody>
                 </table>
                 <div style="text-align: center; margin-top: 10px;">
-                    <b>Hand Size:</b> 
+                    <b>Hand Size:</b>
                     <input type="text" style="width: 12%; text-align: center;" @bind-value="startingHand">
-                    <button class="btn btn-primary" @onclick="@(() => CheckDeck())">Check Deck</button>
+                    <button class="btn btn-primary" @onclick="@(() => { if (!active) CheckDeck(); })">Check Deck</button>
                     <div>Hands Tested: @totalCount</div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="bottom" style="clear: both;">
+    <div id="bottom" style="clear: both; text-align: center; margin-top: 20px;">
         Bottom Options Here
     </div>
 </div>
 
+<style>
+    .row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .box {
+        flex: 1;
+        min-height: 150px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        color: #333;
+        border-radius: 5%;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+    }
+</style>
+
+
+
 @code {
+    private bool active = false;
     private int checkCount = 100000;
     private int totalCount;
     private int startingHand = 5;
@@ -107,6 +106,7 @@
 
     private async Task CheckDeck()
     {
+        active = true;
         stats = new DeckStatistics();
         totalCount = 0;
         int tempCount = 0;
@@ -139,6 +139,7 @@
             // Analyze Hand & Update Hand Statistics
             stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, stats);
 
+
             totalCount++;
             tempCount++;
             if (tempCount >= tempCountNext)
@@ -146,6 +147,7 @@
                 tempCountNext = tempCountNext + random.Next((int)(checkCount * 0.0005), (int)(checkCount * 0.015));
                 await InvokeAsync(StateHasChanged);
             }
+            active = false;
         }
     }
 

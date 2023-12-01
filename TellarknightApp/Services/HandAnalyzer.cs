@@ -69,7 +69,12 @@ namespace TellarknightApp.Services
                         localStats.AverageXyzUnukOrLyran = true;
                     }
                 }
-                // add sheratan without another tellar/constellar
+                if (hand.Any(x => x.Name == "Constellar Sheratan" && x.Level == 4) && CheckUniqueCards(hand, "Min", 1, "Sakitama", "ZS - Ascended Sage", "Photon Thrasher")
+                    && (deck.Any(x => x.Name == "Constellar Caduceus") || deck.Any(x => x.Name == "Constellar Caduceus"))
+                    && (hand.Any(x => x.Name == "Constellar Tellarknights") || deck.Any(x => x.Name == "Constellar Tellarknights")))
+                {
+                    localStats.AverageXyzWithTellar = true;
+                }
             }
 
             // Tellarknight/Constellars
@@ -130,11 +135,7 @@ namespace TellarknightApp.Services
                 }
                 if (hand.Where(x => x.Name == "Tellarknight Lyran").Count() >= 2
                     && CountCards(hand, "Tellarknight Lyran", 4, "Tellarknight", "Constellar") == 0
-                    && (
-                        (hand.Any(x => x.Name == "Satellarknight Skybridge") || deck.Any(x => x.Name == "Satellarknight Skybridge"))
-                        || (hand.Any(x => x.Name == "Constellar Tellarknights") || deck.Any(x => x.Name == "Constellar Tellarknights"))
-                       )
-                   )
+                    && ((hand.Any(x => x.Name == "Satellarknight Skybridge" || x.Name == "Constellar Tellarknights") || deck.Any(x => x.Name == "Satellarknight Skybridge" || x.Name == "Constellar Tellarknights"))))
                 {
                     localStats.AverageXyzTwoTellars = true;
                 }
@@ -199,6 +200,10 @@ namespace TellarknightApp.Services
 
             // Note: Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell
             // Note: Add stats for unuk that tags altair being unusable later
+
+            stats.AverageHandTraps = stats.AverageHandTraps + hand.Count(x => x.Role == "HandTrap");
+            stats.AverageTellars = stats.AverageTellars + hand.Count(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"));
+
 
             stats = UpdateStats(localStats, stats);
 
