@@ -25,13 +25,17 @@ namespace TellarknightApp.Services
             // Zefra Searchers
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {
-                // Add Terraforming
-
-                // Add Deneb NS For Thuban Search Here
-
+                if (hand.Any(x => x.Name == "Terraforming") && deck.Any(x => x.Name == "Oracle of Zefra"))
+                {
+                    (hand, deck, gy) = UpdateCards(hand, deck, gy, "Terraforming", "Oracle of Zefra");
+                }
                 if (hand.Any(x => x.Name.Contains("Reinforcement of the Army")))
                 {
                     (hand, deck, gy, normalSummon, onField, scales) = ZefraRota(hand, deck, gy, normalSummon, onField, scales);
+                }
+                if (hand.Any(x => x.Name.Contains("Satellarknight Deneb")))
+                {
+                    (hand, deck, gy, normalSummon, onField, scales) = ZefraDeneb(hand, deck, gy, normalSummon, onField, scales);
                 }
                 if (hand.Any(x => x.Name.Contains("Zefra Providence")))
                 {
@@ -140,9 +144,7 @@ namespace TellarknightApp.Services
 
             return (hand, deck, gy, normalSummon, onField, scales);
         }
-
-
-        public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraRota(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
+            public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraRota(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
         {
             string searchCard = "Reinforcement of the Army";
 
@@ -261,6 +263,14 @@ namespace TellarknightApp.Services
             }
 
             return (hand, deck, gy, normalSummon, onField, scales);
+        }
+
+        public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraDeneb(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
+        {
+            string searchCard = "Reinforcement of the Army";
+
+            return (hand, deck, gy, normalSummon, onField, scales);
+
         }
 
         public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ProvidenceSearch(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)

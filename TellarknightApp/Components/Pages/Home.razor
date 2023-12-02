@@ -3,14 +3,15 @@
 @using Services;
 
 <div class="page-background-class">
-    <h2 style="text-align: center; margin-bottom: 2%">Tellarknight Hand Statistics App</h2>
+    <h2 style="text-align: center; margin-bottom: 2%; color: white;">Tellarknight Deck Statistics App</h2>
 
-    <div id="content" style="display: flex; flex-direction: column; align-items: center; margin: 20px; ">
+    <div id="content" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
         <div id="top" style="display: flex; width: 100%;">
-            <div id="left" style="width: 50%; margin-right: 10px;">
+            <div id="left" style="width: 50%; margin-right: 15px; margin-left: 15px;">
                 <div style="text-align: center;">
-                    <h5><b>Deck Statistics</b></h5>
+                    <h5 style="color: white; margin-bottom: 1.5%;"><b>Deck Statistics</b></h5>
                 </div>
+
                 <div class="row">
                     <!-- Left content continued... -->
                     <div class="box">
@@ -18,29 +19,54 @@
                         Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
                         Total Monsters (Deck): @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
                         Combo Chance: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
-                        Brick Chance: @((stats.BrickChance / totalCount) * 100)% <br />
+                        Brick Chance: @((stats.BrickChance / totalCount) * 100)%  <br />
+                        (1 In @(totalCount / stats.BrickChance)) <br />
+                        <br />
+                        <br />
+                        <br />
                     </div>
                     <div class="box">
-                        Average # Tellars: @(stats.AverageTellars / totalCount) <br />
-                        Average # Hand Traps: @(stats.AverageHandTraps / totalCount) <br />
-                        Isolde Brick Chance: @((stats.IsoldeBrick / totalCount) * 100)% <br />
-                        @stats.IsoldeBrick
+                        <b>Zefra Stats:</b> <br />
+                        Pendulumn Chance (Any): @((stats.PendulumnSummon / totalCount) * 100)% <br />
+                        Pendulumn (Zefraath/Thuban): @((stats.ZefraathAndThuban / totalCount) * 100)% <br />
+                        Pendulumn (Zefraath/SHS): @((stats.ZefraathAndSHS / totalCount) * 100)% <br />
+                        <br />
+                        Pendulumn (NS Available): N/A <br />
+                        Pendulumn (NS/Zefraath/SHS): N/A <br />
+                        Obtain Trap (Any Xyz): @((stats.ZefraComboWithTrap / totalCount) * 100)%<br />
+
                     </div>
                 </div>
                 <div class="row">
                     <div class="box">
+                        <b>Xyz Stats:</b> <br />
                         Xyz Summon (0 Tellars): @((stats.AverageXyzNoTellar / totalCount) * 100)% <br />
                         Xyz Summon (1 Tellars): @(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100)% <br />
                         Xyz Summon (2 Tellars): @((stats.AverageXyzTwoTellars / totalCount) * 100)% <br />
-                        Other Condition: @((stats.AverageXyzUnukOrLyran / totalCount) * 100)% <br />
+                        Xyz Summon (Unknown): @((stats.AverageXyzUnknown / totalCount) * 100)% <br />
+                        <br />
+                        Xyz Summon (Lyran/Unuk) @((stats.AverageXyzUnukOrLyran / totalCount) * 100)% <br />
                         (Altairan or Continuous Spell Prepared)
+                        <br />
+                        <br />
+
                     </div>
-                    <div class="box">Zefra Box</div>
+                    <div class="box">
+                        <b>Other Stats:</b> <br />
+                        Average # Tellars: @(stats.AverageTellars / totalCount) <br />
+                        Average # Hand Traps: @(stats.AverageHandTraps / totalCount) <br />
+                        Isolde Brick Chance: @((stats.IsoldeBrick / totalCount) * 100)% <br />
+
+                        <br />
+                        Turn Skip FTK (2 Cards): N/A <br />
+                        Turn Skip FTK (3 Cards): N/A <br />
+                        Turn Skip FTK (4 Cards): N/A <br />
+                    </div>
                 </div>
             </div>
-            <div id="right" style="width: 50%;">
-                <div class="container" style="width: 90%; max-width: 100%; overflow: hidden;">
-                    <table class="table table-bordered table-striped" style="width: 100%;">
+            <div id="right" style="width: 50%; padding: 1px;">
+                <div class="container" style="width: 95%; max-width: 100%; overflow: hidden; border-radius: 5%; background-color: #f8f8f8; padding: 15px;">
+                    <table class="table table-bordered table-striped custom-table" style="width: 100%; padding: 20px;">
                         <tbody>
                             <!-- Right content continued... -->
                             @foreach (var chunk in supportedCards.Cards.Select((value, index) => new { Index = index, Value = value }).GroupBy(x => x.Index / 9))
@@ -48,7 +74,7 @@
                                 <tr>
                                     @foreach (var card in chunk.Select(x => x.Value))
                                     {
-                                        <td style="max-width: 20%; width: auto; text-align: center;">
+                                        <td style="max-width: 20%; width: auto; text-align: center; border: 1px solid #f8f8f8; background-color: #f8f8f8; padding: 2px; border-radius: 2px;">
                                             <img src="@card.Image" alt="@card.Name" style="display: block; margin: 0 auto; width: 100%;">
                                             <input type="text" style="width: 100%; text-align: center;" @bind-value="card.Quantity">
                                         </td>
@@ -57,16 +83,17 @@
                             }
                         </tbody>
                     </table>
-                    <div style="text-align: center; margin-top: 10px;">
+                    <div style="text-align: center;">
                         <b>Hand Size:</b>
                         <input type="text" style="width: 12%; text-align: center;" @bind-value="startingHand">
                         <button class="btn btn-primary" @onclick="@(() => { if (!active) CheckDeck(); })">Check Deck</button>
-                        <div>Hands Tested: @totalCount</div>
+                        <div style="margin-top: 2px;">Hands Tested: @totalCount</div>
                     </div>
                 </div>
             </div>
+
         </div>
-        <div id="bottom" style="clear: both; text-align: center; margin-top: 20px;">
+        <div id="bottom" style="clear: both; text-align: center; color: white;">
             Bottom Options Here
         </div>
     </div>
@@ -85,20 +112,44 @@
         background-color: #f8f8f8;
         color: #333;
         border-radius: 5%;
-        box-sizing: border-box;
+        box-sizing: border-box; /* Ensure box-sizing is set to border-box */
         margin-bottom: 20px;
     }
 
+    #left {
+        width: 50%;
+        margin-right: 5px;
+        margin-left: 15px;
+    }
+
+    #right {
+        width: 50%;
+        padding: 1px;
+    }
+
     .page-background-class {
-        background-image: url(../images/image-name.png)
+        background-image: url(../background.png);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh; /* Set the height to 100% of the viewport height */
+    }
+
+    .custom-table {
+        border: 2px solid #f8f8f8;
+        border-collapse: collapse;
+    }
+
+    .custom-table td {
+        border: 1px solid #f8f8f8;
+        background-color: #f8f8f8;
+        padding: 10px;
     }
 </style>
 
-
-
 @code {
     private bool active = false;
-    private int checkCount = 10000;
+    private int checkCount = 25000;
     private int totalCount;
     private int startingHand = 5;
     private bool normalSummon = false;

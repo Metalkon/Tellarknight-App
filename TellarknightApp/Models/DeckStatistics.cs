@@ -14,13 +14,13 @@ namespace TellarknightApp.Models
         public float AverageXyzWithTellar { get; set; }
         public float AverageXyzUnukOrLyran { get; set; }
         public float AverageXyzTwoTellars { get; set; }
+        public float AverageXyzUnknown { get; set; }
+        public float PendulumnSummon { get; set; }
         public float ZefraathAndSHS { get; set; }
         public float ZefraathAndThuban { get; set; }
         public float ZefraComboWithTrap { get; set; }
         public float ZefraComboWithNormalAvailable { get; set; }
         public float AverageHandTraps { get; set; }
         public float IsoldeBrick { get; set; }
-        public float IsoldeBrickFull { get; set; }
-
     }
 }
