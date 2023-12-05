@@ -44,6 +44,49 @@ namespace TellarknightApp.Services
                         localStats.AverageXyzWithTellar = true;
                     }
                 }
+                if (hand.Any(x => x.Name == "Mathmech Circular") && CountCards(deck, "Mathmech Circular", 4, "Mathmech") >= 1 && CountCards(hand, 4, "Any") >= 2)
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                    }
+                }
+                if (hand.Any(x => x.Name == "Mathmech Circular") && hand.Any(x => x.Name == "Mathmech Equation") && CountCards(deck, "Mathmech Circular", 4, "Mathmech") >= 1)
+                {
+                    localStats.AverageXyzNoTellar = true;
+                }
+                if (hand.Any(x => x.Name == "Zoodiac Barrage") && CountCards(hand, 4, "Any") >= 1 && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                    }
+                }
+                if (hand.Any(x => x.Name == "Madolche Petingcessoeur") && CountCards(hand, 4, "Any") >= 2)
+                {
+                    if (!hand.Any(x => x.Role.Contains("HandTrap")))
+                    {
+                        localStats.AverageXyzNoTellar = true;
+                        if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
+                        {
+                            localStats.AverageXyzWithTellar = true;
+                        }
+                    }
+                    if (hand.Any(x => x.Role.Contains("HandTrap")))
+                    {
+                        Random random = new Random();
+                        if (random.Next(2) == 0)
+                        {
+                            localStats.AverageXyzNoTellar = true;
+                            if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
+                            {
+                                localStats.AverageXyzWithTellar = true;
+                            }
+                        }
+                    }
+                }
                 if (hand.Any(x => x.Name == "Photon Thrasher") && CountCards(hand, "Photon Thrasher", 4, "Any") >= 1)
                 {
                     localStats.AverageXyzNoTellar = true;
@@ -75,6 +118,7 @@ namespace TellarknightApp.Services
                 {
                     localStats.AverageXyzWithTellar = true;
                 }
+
             }
 
             // Tellarknight/Constellars
