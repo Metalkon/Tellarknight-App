@@ -25,6 +25,8 @@ namespace TellarknightApp.Services
             // Zefra Searchers
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {
+                string test = string.Join(", ", hand.Select(x => x.Name));
+
                 if (hand.Any(x => x.Name == "Terraforming") && deck.Any(x => x.Name == "Oracle of Zefra"))
                 {
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, "Terraforming", "Oracle of Zefra");
@@ -144,7 +146,7 @@ namespace TellarknightApp.Services
 
             return (hand, deck, gy, normalSummon, onField, scales);
         }
-            public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraRota(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
+        public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraRota(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
         {
             string searchCard = "Reinforcement of the Army";
 
@@ -160,8 +162,8 @@ namespace TellarknightApp.Services
             }
 
             // HAND: SHS & (Min x2 Unique Oracle/Prov/Zefraath In Hand, or Min x1 & Lv4 Zefra) ----- Search Tellarknight
-            if (CheckSHS(onField, scales) 
-                && (CheckUniqueCards(hand, "Min", 2, "Oracle of Zefra", "Zefra Providence", "Zefraath") 
+            if (CheckSHS(onField, scales)
+                && (CheckUniqueCards(hand, "Min", 2, "Oracle of Zefra", "Zefra Providence", "Zefraath")
                 || (CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath") && hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))
                 && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
             {
@@ -190,7 +192,7 @@ namespace TellarknightApp.Services
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, "Satellarknight Zefrathuban");
                     return (hand, deck, gy, normalSummon, onField, scales);
                 }
-                else
+                if (deck.Any(x => x.Archetype == "Tellarknight" && x.Level == 4 && x.Type == "Warrior"))
                 {
                     string tellarName = deck.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Type == "Warrior").Name;
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, tellarName);
@@ -199,12 +201,12 @@ namespace TellarknightApp.Services
             }
 
             // HAND: SHS & Min x1 Unique Oracle/Prov/Zefraath In Hand --- Search Zefrathuban
-            if (CheckSHS(onField, scales) && CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath") 
+            if (CheckSHS(onField, scales) && CheckUniqueCards(hand, "Min", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath")
                 && !hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)
                 && deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
             {
                 (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, "Satellarknight Zefrathuban");
-                return (hand, deck, gy, normalSummon, onField, scales);                
+                return (hand, deck, gy, normalSummon, onField, scales);
             }
 
             // ----- Zefra Normal -----
@@ -239,7 +241,7 @@ namespace TellarknightApp.Services
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, "Satellarknight Zefrathuban");
                     return (hand, deck, gy, normalSummon, onField, scales);
                 }
-                else
+                if (deck.Any(x => x.Archetype == "Tellarknight" && x.Level == 4 && x.Type == "Warrior"))
                 {
                     string tellarName = deck.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Type == "Warrior").Name;
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, tellarName);
@@ -259,7 +261,7 @@ namespace TellarknightApp.Services
             // Backup Search
             if (hand.Any(x => x.Name.Contains("Reinforcement of the Army")))
             {
-                (hand, deck, gy, normalSummon, onField, scales) = StandardRota(hand, deck, gy, normalSummon, onField, scales);
+                //(hand, deck, gy, normalSummon, onField, scales) = StandardRota(hand, deck, gy, normalSummon, onField, scales);
             }
 
             return (hand, deck, gy, normalSummon, onField, scales);
@@ -267,7 +269,25 @@ namespace TellarknightApp.Services
 
         public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraDeneb(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
         {
-            string searchCard = "Reinforcement of the Army";
+            string searchCard = "Satellarknight Deneb";
+
+            // Zefrathuban Search
+            if (CheckUniqueCards(hand, "Max", 1, "Oracle of Zefra", "Zefra Providence", "Zefraath")
+                && !hand.Any(x => x.Name == "Satellarknight Zefrathuban")
+                && deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
+            {
+                Card thuban = deck.First(x => x.Name == "Satellarknight Zefrathuban");
+                Card deneb = hand.First(x => x.Name == "Satellarknight Deneb");
+                deck.Remove(deck.First(x => x.Name == "Satellarknight Zefrathuban"));
+                hand.Remove(hand.First(x => x.Name == "Satellarknight Deneb"));
+                onField.Add(deneb);
+                hand.Add(thuban);
+                normalSummon = true;
+
+                return (hand, deck, gy, normalSummon, onField, scales);
+            }
+
+            // Add Zefraxciton +2 Tellars/Zefra
 
             return (hand, deck, gy, normalSummon, onField, scales);
 
@@ -423,7 +443,7 @@ namespace TellarknightApp.Services
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, "Tellarknight Altairan");
                     return (hand, deck, gy, normalSummon, onField, scales);
                 }
-                else
+                if (deck.Any(x => x.Archetype == "Tellarknight" && x.Level == 4 && x.Type == "Warrior"))
                 {
                     string tellarName = deck.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Type == "Warrior").Name;
                     (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, tellarName);

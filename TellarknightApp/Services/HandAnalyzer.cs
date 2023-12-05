@@ -66,7 +66,7 @@ namespace TellarknightApp.Services
                     }
                     if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
                     {
-                        localStats.AverageXyzUnukOrLyran = true;
+                        localStats.AverageXyzSpellOrAltairan = true;
                     }
                 }
                 if (hand.Any(x => x.Name == "Constellar Sheratan" && x.Level == 4) && CheckUniqueCards(hand, "Min", 1, "Sakitama", "ZS - Ascended Sage", "Photon Thrasher")
@@ -79,58 +79,79 @@ namespace TellarknightApp.Services
 
             // Tellarknight/Constellars
             if (hand.Any(x => x.Archetype.Contains("Tellarknight")))
-            {
-                
+            {                
                 // Continuous Spell
                 if (hand.Any(x => x.Name == "Constellar Tellarknights") && CountCards(hand, 4, "Tellarknight", "Constellar") >= 1 && CountCards(hand, 4, "Any") >= 2)
                 {
                     localStats.AverageXyzWithTellar = true;
-                    if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
+                    localStats.AverageXyzSpellOrAltairan = true;
+                    if (hand.Any(x => x.Name == "Satellarknight Unukalhai"))
                     {
-                        localStats.AverageXyzUnukOrLyran = true;
+                        localStats.AverageXyzSpellOrAltairan = true;
+                    }
+                    if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 2)
+                    {
+                        localStats.AverageXyzTwoTellars = true;
                     }
                 }
-                if (hand.Any(x => x.Name == "Constellar Tellarknights") && CountCards(hand, 4, "Tellarknight", "Constellar") >= 2)
+                if (hand.Any(x => x.Name == "Constellar Tellarknights") && ((hand.Any(x => x.Name == "Satellarknight Deneb") 
+                    && CountCards(hand, "Satellarknight Deneb", 4, "Tellarknight") >= 1) || (hand.Any(x => x.Name == "Satellarknight Unukalhai") && CountCards(hand, "Satellarknight Unukalhai", 4, "Tellarknight") >= 1)))
                 {
                     localStats.AverageXyzTwoTellars = true;
-                    if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
-                    {
-                        localStats.AverageXyzUnukOrLyran = true;
-                    }
-                }
-                if (hand.Any(x => x.Name == "Constellar Tellarknights") && (hand.Any(x => x.Name == "Satellarknight Deneb") || hand.Any(x => x.Name == "Satellarknight Unukalhai")))
-                {
-                    localStats.AverageXyzTwoTellars = true;
-                    localStats.AverageXyzUnukOrLyran = true;                    
+                    localStats.AverageXyzSpellOrAltairan = true;
                 }
 
                 // Skybridge
-                if (hand.Any(x => x.Name == "Satellarknight Skybridge") && CountCards(hand, 4, "Tellarknight") >= 2)
+                if (hand.Any(x => x.Name == "Satellarknight Skybridge") && (hand.Any(x => x.Name == "Satellarknight Deneb")))
+                {
+                    if (deck.Any(x => x.Name == "Satellarknight Vega") && CountCards(deck, "Satellarknight Deneb", "Satellarknight Vega", 4, "Tellarknight") >= 1)
+                    {
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (deck.Any(x => x.Name == "Tellarknight Lyran") && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1
+                        && (hand.Any(x => x.Name == "Constellar Tellarknights") || deck.Any(x => x.Name == "Constellar Tellarknights")))
+                    {
+                        localStats.AverageXyzTwoTellars = true;
+                        localStats.AverageXyzSpellOrAltairan = true;
+                    }
+                }
+                if (hand.Any(x => x.Name == "Satellarknight Skybridge") && hand.Any(x => x.Name == "Satellarknight Unukalhai") && CheckUniqueCards(deck, "Min", 1, "Satellarknight Altair", "Tellarknight Lyran"))
+                {
+                    localStats.AverageXyzTwoTellars = true;
+                }
+                if (hand.Any(x => x.Name == "Satellarknight Skybridge") && hand.Any(x => x.Name == "Satellarknight Lyran") 
+                    && ((deck.Any(x => x.Name == "Satellarknight Unukalhai") && CountCards(deck, "Satellarknight Unukalhai", 4, "Tellarknight") >= 1) 
+                    || (deck.Any(x => x.Name == "Satellarknight Deneb") && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1))
+                    && (hand.Any(x => x.Name == "Constellar Tellarknights") || deck.Any(x => x.Name == "Constellar Tellarknights")))
+                {
+                    localStats.AverageXyzTwoTellars = true;
+                }
+                if (hand.Any(x => x.Name == "Satellarknight Skybridge") && CountCards(hand, 4, "Tellarknight") >= 2
+                    && ((deck.Any(x => x.Name == "Constellar Tellarknights") && deck.Any(x => x.Name == "Tellarknight Lyran")) || (deck.Any(x => x.Name == "Satellarknight Vega") && CountCards(hand, "Satellarknight Vega", 4, "Tellarknight") >= 1)))
                 {
                     localStats.AverageXyzTwoTellars = true;
                 }
                 if (hand.Any(x => x.Name == "Satellarknight Skybridge") && hand.Any(x => x.Name == "Constellar Tellarknights") && CountCards(hand, 4, "Tellarknight") >= 1)
                 {
-                    localStats.AverageXyzTwoTellars = true;
-                }
-                if (hand.Any(x => x.Name == "Satellarknight Skybridge") && CheckUniqueCards(hand, "Min", 1, "Satellarknight Deneb", "Satellarknight Unukalhai", "Tellarknight Lyran"))
-                {
-                    localStats.AverageXyzTwoTellars = true;
-                    if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
+                    if ((hand.Any(x => x.Name == "Satellarknight Deneb" && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1))
+                        || (hand.Any(x => x.Name == "Satellarknight Unukalhai" && CountCards(deck, "Satellarknight Unukalhai", 4, "Tellarknight") >= 1)))
                     {
-                        localStats.AverageXyzUnukOrLyran = true;
+                        localStats.AverageXyzTwoTellars = true;
                     }
                 }
 
+                // Add Skybridge Swap For Unuk/Lyran Stats
+
+
                 // Monster Effects
-                
+
                 if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1 && hand.Any(x => x.Role.Contains("Extender") && x.Level == 4))
                 {
                     localStats.AverageXyzWithTellar = true;
                 }                
                 if (hand.Any(x => x.Name == "Tellarknight Lyran") && CountCards(hand, "Tellarknight Lyran", 4, "Tellarknight", "Constellar") >= 1)
                 {
-                    localStats.AverageXyzUnukOrLyran = true;
+                    localStats.AverageXyzSpellOrAltairan = true;
                     localStats.AverageXyzTwoTellars = true;
                 }
                 if (hand.Where(x => x.Name == "Tellarknight Lyran").Count() >= 2
@@ -139,11 +160,11 @@ namespace TellarknightApp.Services
                 {
                     localStats.AverageXyzTwoTellars = true;
                 }
-                if (hand.Any(x => x.Name == "Satellarknight Vega") && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
+                if (hand.Any(x => x.Name == "Satellarknight Vega") && CountCards(hand, "Satellarknight Vega", 4, "Tellarknight") >= 1)
                 {
                     localStats.AverageXyzTwoTellars = true;
                 }
-                if (hand.Any(x => x.Name == "Constellar Caduceus") && CountCards(hand, 4, "Tellarknight", "Constellar") >= 1
+                if (hand.Any(x => x.Name == "Constellar Caduceus") && CountCards(hand, "Constellar Caduceus", 4, "Tellarknight", "Constellar") >= 1
                     && (hand.Any(x => x.Name == "Constellar Tellarknights") || deck.Any(x => x.Name == "Constellar Tellarknights")))
                 {
                     localStats.AverageXyzTwoTellars = true;
@@ -154,14 +175,16 @@ namespace TellarknightApp.Services
                 {
                     localStats.AverageXyzWithTellar = true;
                 }
-                if (hand.Any(x => x.Name == "Satellarknight Unukalhai") && hand.Any(x => x.Name == "Living Fossil"))
+                if (hand.Any(x => x.Name == "Satellarknight Unukalhai") && hand.Any(x => x.Name == "Living Fossil")
+                    && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
                 {
-                    localStats.AverageXyzUnukOrLyran = true;
+                    // Assuming altairan is sent, may need more specific dontiions in future
+                    localStats.AverageXyzSpellOrAltairan = true;
                     localStats.AverageXyzTwoTellars = true;
                 }
             }
 
-            // Zefra Pendulumns
+            // Zefra Pendulumns            
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {
                 if (!CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Satellarknight Zefrathuban"))
@@ -170,7 +193,7 @@ namespace TellarknightApp.Services
                     localStats.ZefraathAndThuban = true;
                     if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
                     {
-                        localStats.AverageXyzUnukOrLyran = true;
+                        localStats.AverageXyzSpellOrAltairan = true;
                     }
                     if ((CountCards(hand, 4, "Tellarknight", "Zefra") >= 1 && hand.Count(x => x.Level == 4) >= 2) || CountCards(hand, 4, "Tellarknight", "Zefra") >= 2)
                     {
@@ -206,41 +229,35 @@ namespace TellarknightApp.Services
                         localStats.ZefraComboWithTrap = true;
                     }
                 }
-                if (scales.Any(x => x.Name == "Superheavy Samurai Monk Big Benkei") && hand.Any(x => x.Name == "Zefraath"))
+                if (CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath"))
                 {
                     localStats.ZefraathAndSHS = true;
                 }
+                // Add Skybridge Swap For Deneb Stats
+                // Add pend stats for two tellars
+                // Add Normal Summons
             }
 
-
-
-
-
-
-
-
-
-
-            // Add Deneb Search For Zefra Tellars
-
-
-
             // Corrections
-            if (localStats.AverageXyzUnukOrLyran || localStats.AverageXyzTwoTellars)
+            if (localStats.AverageXyzSpellOrAltairan || localStats.AverageXyzTwoTellars)
             {
                 localStats.AverageXyzWithTellar = true;
             }
-            if (localStats.AverageXyzNoTellar && (localStats.AverageXyzWithTellar || localStats.AverageXyzUnukOrLyran))
+            if (localStats.AverageXyzNoTellar && (localStats.AverageXyzWithTellar || localStats.AverageXyzSpellOrAltairan))
             {
                 localStats.AverageXyzNoTellar = false;
             }
-            if (localStats.AverageXyzWithTellar && (hand.Any(x => x.Name == "Satellarknight Unukalhai") || hand.Any(x => x.Name == "Constellar Tellarknights")))
+            if (localStats.AverageXyzWithTellar && (hand.Any(x => x.Name == "Satellarknight Unukalhai") || hand.Any(x => x.Name == "Tellarknight Altairan") || hand.Any(x => x.Name == "Constellar Tellarknights")))
             {
-                localStats.AverageXyzUnukOrLyran = true;
+                localStats.AverageXyzSpellOrAltairan = true;
             }
             if (localStats.ZefraathAndSHS || localStats.ZefraathAndThuban || localStats.ZefraComboWithTrap)
             {
                 localStats.PendulumnSummon = true;
+            }
+            if (localStats.ZefraathAndThuban)
+            {
+                localStats.AverageXyzWithTellar = true;
             }
             if (localStats.ZefraathAndSHS || localStats.ZefraathAndThuban)
             {
@@ -251,7 +268,7 @@ namespace TellarknightApp.Services
             // Check For Hand Brick
             if (!localStats.AverageXyzNoTellar 
                 && !localStats.AverageXyzWithTellar 
-                && !localStats.AverageXyzUnukOrLyran 
+                && !localStats.AverageXyzSpellOrAltairan 
                 && !localStats.AverageXyzTwoTellars
                 && !localStats.AverageXyzUnknown
                 && !localStats.PendulumnSummon
@@ -268,8 +285,7 @@ namespace TellarknightApp.Services
             // Isolde Bricking
             if (
                 (deck.Count(x => x.Name == "Living Fossil" || x.Name == "\"Infernoble Arms - Durendal\"") == 0
-                || deck.Count(x => x.Name == "Infernoble Knight - Renaud" || x.Name == "Fire Flint Lady") == 0)
-            )
+                || deck.Count(x => x.Name == "Infernoble Knight - Renaud" || x.Name == "Fire Flint Lady") == 0))
             {
                 localStats.IsoldeBrick = true;
             }
@@ -351,7 +367,7 @@ namespace TellarknightApp.Services
             if (localStats.AverageTellars) stats.AverageTellars++;
             if (localStats.AverageXyzNoTellar) stats.AverageXyzNoTellar++;
             if (localStats.AverageXyzWithTellar) stats.AverageXyzWithTellar++;
-            if (localStats.AverageXyzUnukOrLyran) stats.AverageXyzUnukOrLyran++;
+            if (localStats.AverageXyzSpellOrAltairan) stats.AverageXyzSpellOrAltairan++;
             if (localStats.AverageXyzTwoTellars) stats.AverageXyzTwoTellars++;
             if (localStats.ZefraathAndSHS) stats.ZefraathAndSHS++;
             if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;
@@ -372,7 +388,7 @@ namespace TellarknightApp.Services
             public bool AverageExtenders { get; set; } = false;
             public bool AverageXyzNoTellar { get; set; } = false;
             public bool AverageXyzWithTellar { get; set; } = false;
-            public bool AverageXyzUnukOrLyran { get; set; } = false;
+            public bool AverageXyzSpellOrAltairan { get; set; } = false;
             public bool AverageXyzTwoTellars { get; set; } = false;
             public bool ZefraathAndSHS { get; set; } = false;
             public bool ZefraathAndThuban { get; set; } = false;
@@ -399,6 +415,13 @@ namespace TellarknightApp.Services
             return matchingCards.Count();
         }
 
+        public static int CountCards(List<Card> hand, string exclude1, string exclude2, int level)
+        {
+            var matchingCards = hand.Where(x => x.Level == level && x.Name != exclude1 && x.Name != exclude2);
+
+            return matchingCards.Count();
+        }
+
         public static int CountCards(List<Card> hand, int level, string archetype1)
         {
             var matchingCards = hand.Where(x => (x.Archetype.Contains(archetype1) && x.Level == level));
@@ -409,6 +432,12 @@ namespace TellarknightApp.Services
         public static int CountCards(List<Card> hand, string exclude, int level, string archetype1)
         {
             var matchingCards = hand.Where(x => (x.Archetype.Contains(archetype1) && x.Level == level && x.Name != exclude));
+
+            return matchingCards.Count();
+        }
+        public static int CountCards(List<Card> hand, string exclude1, string exclude2, int level, string archetype1)
+        {
+            var matchingCards = hand.Where(x => (x.Archetype.Contains(archetype1) && x.Level == level && x.Name != exclude1 && x.Name != exclude2));
 
             return matchingCards.Count();
         }
@@ -426,5 +455,29 @@ namespace TellarknightApp.Services
 
             return matchingCards.Count();
         }
+
+        public static int CountCards(List<Card> hand, string exclude1, string exclude2, int level, string archetype1, string archetype2)
+        {
+            var matchingCards = hand.Where(x => (x.Archetype.Contains(archetype1) || x.Archetype.Contains(archetype2)) && x.Level == level && x.Name != exclude1 && x.Name != exclude2);
+
+            return matchingCards.Count();
+        }
+
+
+        /*
+        public static int CountCards(List<Card> hand, string archetype1, int level, params string[] exclusions)
+        {
+            var matchingCards = hand.Where(x => x.Level == level && x.Archetype.Contains(archetype1) && !exclusions.Contains(x.Name));
+
+            return matchingCards.Count();
+        }
+
+        public static int CountCards(List<Card> hand, string archetype1, string archetype2, int level, params string[] exclusions)
+        {
+            var matchingCards = hand.Where(x => (x.Archetype.Contains(archetype1) || x.Archetype.Contains(archetype2)) && x.Level == level && !exclusions.Contains(x.Name));
+
+            return matchingCards.Count();
+        }
+         */
     }
 }

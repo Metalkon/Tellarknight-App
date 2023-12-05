@@ -12,7 +12,7 @@ namespace TellarknightApp.Models
         public float AverageTellars { get; set; }
         public float AverageXyzNoTellar { get; set; }
         public float AverageXyzWithTellar { get; set; }
-        public float AverageXyzUnukOrLyran { get; set; }
+        public float AverageXyzSpellOrAltairan { get; set; }
         public float AverageXyzTwoTellars { get; set; }
         public float AverageXyzUnknown { get; set; }
         public float PendulumnSummon { get; set; }

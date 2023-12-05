@@ -37,8 +37,18 @@ namespace TellarknightApp.Models
                 new Card() { Name = "ZS - Ascended Sage", Type = "Warrior", Level = 4, Archetype = "None/Any", Image = "./CardArt/AscendedSage.png", Role = "Extender" },
                 new Card() { Name = "Photon Thrasher", Type = "Warrior", Level = 4, Archetype = "None/Any", Image = "./CardArt/Thrasher.png", Role = "Extender" },
                 new Card() { Name = "Reinforcement of the Army", Type = "Spell", Level = null, Archetype = "None/Any", Image = "./CardArt/Rota.png", Role = "Search" },
-                new Card() { Name = "Terraforming", Type = "Spell", Level = null, Archetype = "None/Any", Image = "./CardArt/Terraforming.png", Role = "Search" },
+                new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
 
+                new Card() { Name = "Superheavy Samurai Prodigy Wakaushi", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Wakaushi.png", Role = "Extender" },
+                new Card() { Name = "Superheavy Samurai Monk Big Benkei", Type = "Monster", Level = 8, Archetype = "SHS/Any", Image = "./CardArt/Benkei.png", Role = "Extender" },
+                new Card() { Name = "Superheavy Samurai Motorbike", Type = "Monster", Level = 2, Archetype = "SHS/Any", Image = "./CardArt/Motorbike.png", Role = "Extender" },
+                new Card() { Name = "Superheavy Samurai Soulgaia Booster", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Booster.png", Role = "Extender" },
+                
+                new Card() { Name = "Level 4", Type = "", Level = 4, Archetype = "None/Any", Image = "./CardArt/CelticGuardian.png", Role = "None" },
+                new Card() { Name = "Hand Trap", Type = "", Level = null, Archetype = "None", Image = "./CardArt/HandTrap.png", Role = "HandTrap" },
+                new Card() { Name = "Empty Card", Type = "", Level = null, Archetype = "None", Image = "./CardArt/CardBack.png", Role = "None" },
+
+                new Card() { Name = "Terraforming", Type = "Spell", Level = null, Archetype = "None/Any", Image = "./CardArt/Terraforming.png", Role = "Search" },
                 new Card() { Name = "Oracle of Zefra", Type = "Spell", Level = null, Archetype = "Zefra", Image = "./CardArt/Oracle.png", Role = "None" },
                 new Card() { Name = "Zefra Providence", Type = "Spell", Level = null, Archetype = "Zefra", Image = "./CardArt/ZefraProvidence.png", Role = "None" },
 
@@ -48,18 +58,7 @@ namespace TellarknightApp.Models
                 new Card() { Name = "Shaddoll Zefracore", Type = "Monster", Level = 4, Archetype = "Zefra/Shaddoll/Any", Image = "./CardArt/Zefracore.png", Role = "None" },
                 new Card() { Name = "Zefraniu, Secret of the Yang Zing", Type = "Monster", Level = 6, Archetype = "Zefra/Yang Zing/Any", Image = "./CardArt/Zefraniu.png", Role = "None" },
 
-                new Card() { Name = "Zefra Divine Strike", Type = "Trap", Level = null, Archetype = "Zefra", Image = "./CardArt/DivineStrike.png", Role = "Omni" },
-
-                new Card() { Name = "Superheavy Samurai Prodigy Wakaushi", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Wakaushi.png", Role = "Extender" },
-                new Card() { Name = "Superheavy Samurai Monk Big Benkei", Type = "Monster", Level = 8, Archetype = "SHS/Any", Image = "./CardArt/Benkei.png", Role = "Extender" },
-                new Card() { Name = "Superheavy Samurai Motorbike", Type = "Monster", Level = 2, Archetype = "SHS/Any", Image = "./CardArt/Motorbike.png", Role = "Extender" },
-                new Card() { Name = "Superheavy Samurai Soulgaia Booster", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Booster.png", Role = "Extender" },
-
-                new Card() { Name = "Level 4", Type = "", Level = 4, Archetype = "None/Any", Image = "./CardArt/CelticGuardian.png", Role = "None" },
-                new Card() { Name = "Hand Trap", Type = "", Level = null, Archetype = "None", Image = "./CardArt/HandTrap.png", Role = "HandTrap" },
-                new Card() { Name = "Empty Card", Type = "", Level = null, Archetype = "None", Image = "./CardArt/CardBack.png", Role = "None" },
-                      
-                //new Card() { Name = "The Phantom Knights of Shade Brigandine", Level = 4, Type = "Monster", Archetype = ("", ""), Image = "./CardArt/Brigandine.png", Role = "Extender" },
+                new Card() { Name = "Zefra Divine Strike", Type = "Trap", Level = null, Archetype = "Zefra", Image = "./CardArt/DivineStrike.png", Role = "Omni" }
             };
         }
     }
