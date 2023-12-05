@@ -393,6 +393,14 @@ namespace TellarknightApp.Services
         {
             string searchCard = "Reinforcement of the Army";
 
+            // Constellar Pollux
+            if (deck.Any(x => x.Name == "Constellar Pollux") && hand.Any(x => x.Archetype.Contains("Tellarknight Lyran")
+                && deck.Count(x => x.Archetype.Contains("Constellar") != x.Archetype.Contains("Tellarknight") && x.Level == 4) >= 4))
+            {
+                (hand, deck, gy) = UpdateCards(hand, deck, gy, searchCard, "Constellar Pollux");
+                return (hand, deck, gy, normalSummon, onField, scales);
+            }
+
             // HAND: No SHS, No Tellars, Lv4 In Hand ----- Search Extender
             if (!CheckSHS(onField, scales)
                 && !hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x.Level == 4)

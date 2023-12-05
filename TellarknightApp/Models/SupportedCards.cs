@@ -30,18 +30,20 @@ namespace TellarknightApp.Models
                 new Card() { Name = "\"Infernoble Arms - Durendal\"", Type = "Equip", Level = null, Archetype = "None", Image = "./CardArt/Durendal.png", Role = "Extender" },
                 new Card() { Name = "Infernoble Knight - Renaud", Type = "Warrior", Level = 1, Archetype = "None/Any", Image = "./CardArt/Renaud.png", Role = "None" },
                 new Card() { Name = "Fire Flint Lady", Type = "Warrior", Level = 1, Archetype = "None/Any", Image = "./CardArt/FireFlint.png", Role = "Extender" },
+                
+                new Card() { Name = "Constellar Pollux", Type = "Warrior", Level = 4, Archetype = "Constellar/Any", Image = "./CardArt/Pollux.png", Role = "None" },
+                new Card() { Name = "Constellar Algiedi", Type = "Spellcaster", Level = 4, Archetype = "Constellar/Any", Image = "./CardArt/Algiedi.png", Role = "None" },
+                new Card() { Name = "Constellar Sombre", Type = "Fairy", Level = 4, Archetype = "Constellar/Any", Image = "./CardArt/Sombre.png", Role = "None" },
+                new Card() { Name = "Constellar Twinkle", Type = "Spell", Level = null, Archetype = "Constellar", Image = "./CardArt/Twinkle.png", Role = "None" },
+                
+                new Card() { Name = "Reinforcement of the Army", Type = "Spell", Level = null, Archetype = "None/Any", Image = "./CardArt/Rota.png", Role = "Search" },
+                new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
 
                 new Card() { Name = "Sakitama", Type = "Fairy", Level = 4, Archetype = "None/Any", Image = "./CardArt/Sakitama.png", Role = "Extender" },
                 new Card() { Name = "ZS - Ascended Sage", Type = "Warrior", Level = 4, Archetype = "None/Any", Image = "./CardArt/AscendedSage.png", Role = "Extender" },
                 new Card() { Name = "Photon Thrasher", Type = "Warrior", Level = 4, Archetype = "None/Any", Image = "./CardArt/Thrasher.png", Role = "Extender" },
-                new Card() { Name = "Reinforcement of the Army", Type = "Spell", Level = null, Archetype = "None/Any", Image = "./CardArt/Rota.png", Role = "Search" },
-                new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
 
-                new Card() { Name = "Superheavy Samurai Prodigy Wakaushi", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Wakaushi.png", Role = "Extender/Bridge" },
-                new Card() { Name = "Superheavy Samurai Monk Big Benkei", Type = "Monster", Level = 8, Archetype = "SHS/Any", Image = "./CardArt/Benkei.png", Role = "Extender" },
-                new Card() { Name = "Superheavy Samurai Motorbike", Type = "Monster", Level = 2, Archetype = "SHS/Any", Image = "./CardArt/Motorbike.png", Role = "Extender" },
-                new Card() { Name = "Superheavy Samurai Soulgaia Booster", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Booster.png", Role = "Extender" },
-                
+
                 new Card() { Name = "Level 4", Type = "", Level = 4, Archetype = "None/Any", Image = "./CardArt/CelticGuardian.png", Role = "None" },
                 new Card() { Name = "Hand Trap", Type = "", Level = null, Archetype = "None", Image = "./CardArt/HandTrap.png", Role = "HandTrap" },
                 new Card() { Name = "Empty Card", Type = "", Level = null, Archetype = "None", Image = "./CardArt/CardBack.png", Role = "None" },
@@ -66,10 +68,12 @@ namespace TellarknightApp.Models
                 new Card() { Name = "Mathmech Diameter", Type = "Cyberse", Level = 4, Archetype = "Mathmech/Any", Image = "./CardArt/Diameter.png", Role = "None" },
                 new Card() { Name = "Mathmech Equation", Type = "Spell", Level = null, Archetype = "Mathmech", Image = "./CardArt/Equation.png", Role = "None" },
                 new Card() { Name = "Mathmech Superfactorial", Type = "Trap", Level = null, Archetype = "Mathmech", Image = "./CardArt/Superfactorial.png", Role = "None" },
+                
 
-
-
-
+                new Card() { Name = "Superheavy Samurai Prodigy Wakaushi", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Wakaushi.png", Role = "Extender/Bridge" },
+                new Card() { Name = "Superheavy Samurai Monk Big Benkei", Type = "Monster", Level = 8, Archetype = "SHS/Any", Image = "./CardArt/Benkei.png", Role = "Extender" },
+                new Card() { Name = "Superheavy Samurai Motorbike", Type = "Monster", Level = 2, Archetype = "SHS/Any", Image = "./CardArt/Motorbike.png", Role = "Extender" },
+                new Card() { Name = "Superheavy Samurai Soulgaia Booster", Type = "Monster", Level = 4, Archetype = "SHS/Any", Image = "./CardArt/Booster.png", Role = "Extender" },
             };
         }
     }
