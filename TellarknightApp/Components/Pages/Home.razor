@@ -3,73 +3,82 @@
 @using Services;
 
 <div class="page-background-class">
-    <h2 style="text-align: center; margin-bottom: 2%; color: white;">Tellarknight Deck Statistics App</h2>
+    <div>
+        <a style="text-align: center; color: black;">.</a>
+        <h2 style="text-align: center; margin-bottom: 1%; color: white;">Tellarknight Deck Statistics App</h2>
+    </div>
 
-    <div id="content" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-        <div id="top" style="display: flex; width: 100%;">
-            <div id="left" style="width: 50%; margin-right: 15px; margin-left: 15px;">
-                <div class="row">
-                    <!-- Left content continued... -->
-                    <div class="box" style="border-radius: 10px;">
-                        <div style="margin-top: 5px; margin-bottom: 5px;">
-                            <b>Basic Stats:</b> <br />
-                            Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
-                            Total Monsters (Deck): @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
-                            Combo Chance: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
-                            Brick Chance: @((stats.BrickChance / totalCount) * 100)%  <br />
-                            (1 In @(totalCount / stats.BrickChance)) <br />
-                            <br />
-                            <br />
-                            <br />
+    <table border="5" style="width: 100%;">
+        <tr>
+            <td style="width: 50%; background-color: transparent; border: none; border-right: 2px solid white;">
+                <!-- Column Start -->
+                <div class="container" style="width: 100%; max-width: 100%; overflow: hidden; border-radius: 10px; background-color: #f8f8f8; padding: 20px;">
+                    <div class="row" style="margin-right: -15px; margin-left: -15px;"> <!-- Adjusted margin for the row -->
+                        <!-- Left content continued... -->
+                        <div class="box" style="border-radius: 10px; margin-right: 15px; flex-basis: 0; flex-grow: 1;">
+                            <!-- Adjusted margin for the box -->
+                            <div style="margin-top: 5px; margin-bottom: 14.25px;">
+                                <b>Basic Stats:</b> <br />
+                                Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
+                                Total Monsters (Deck): @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
+                                Combo Chance: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
+                                Brick Chance: @((stats.BrickChance / totalCount) * 100)%  <br />
+                                (1 In @(totalCount / stats.BrickChance)) <br />
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="box" style="border-radius: 10px; margin-right: 15px; flex-basis: 0; flex-grow: 1;">
+                            <!-- Adjusted margin for the box -->
+                            <div style="margin-top: 5px; margin-bottom: 14.25px;">
+                                <b>Zefra Stats:</b> <br />
+                                Pendulumn Chance (Any): @((stats.PendulumnSummon / totalCount) * 100)% <br />
+                                Pendulumn (Zefraath/Thuban): @((stats.ZefraathAndThuban / totalCount) * 100)% <br />
+                                Pendulumn (Zefraath/SHS): @((stats.ZefraathAndSHS / totalCount) * 100)% <br />
+                                <!-- Pendulumn (Post-Isolde): @((stats.ZefraathAndSHS / totalCount) * 100)% -->
+                                <br />
+                                Obtain Trap (Any Xyz): @((stats.ZefraComboWithTrap / totalCount) * 100)%
+                                <!-- Pendulumn (NS Available): N/A-->
+                                <!-- Pendulumn (NS/Zefraath/SHS): N/A-->
+                            </div>
                         </div>
                     </div>
-                    <div class="box" style="border-radius: 10px;">
-                        <div style="margin-top: 5px; margin-bottom: 5px;">
-                            <b>Zefra Stats:</b> <br />
-                            Pendulumn Chance (Any): @((stats.PendulumnSummon / totalCount) * 100)% <br />
-                            Pendulumn (Zefraath/Thuban): @((stats.ZefraathAndThuban / totalCount) * 100)% <br />
-                            Pendulumn (Zefraath/SHS): @((stats.ZefraathAndSHS / totalCount) * 100)% <br />
-                            <!-- Pendulumn (Post-Isolde): @((stats.ZefraathAndSHS / totalCount) * 100)% <br /> -->
-                            <br />
-                            Obtain Trap (Any Xyz): @((stats.ZefraComboWithTrap / totalCount) * 100)%
-                            <!-- Pendulumn (NS Available): N/A--> <br />
-                            <!-- Pendulumn (NS/Zefraath/SHS): N/A--> <br />
+                    <div class="row" style="margin-right: -15px; margin-left: -15px;"> <!-- Adjusted margin for the row -->
+                        <div class="box" style="border-radius: 10px; margin-right: 15px; flex-basis: 0; flex-grow: 1;">
+                            <!-- Adjusted margin for the box -->
+                            <div style="margin-top: 5px; margin-bottom: 14.25px;">
+                                <b>Xyz Stats:</b> <br />
+                                Xyz Summon (0 Tellars): @((stats.AverageXyzNoTellar / totalCount) * 100)% <br />
+                                Xyz Summon (1 Tellars): @(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100)% <br />
+                                Xyz Summon (2 Tellars): @((stats.AverageXyzTwoTellars / totalCount) * 100)% <br />
+                                <!--Xyz Summon (Unknown): @((stats.AverageXyzUnknown / totalCount) * 100)% -->
+                                <br />
+                                Xyz Summon (Spell/GY) @((stats.AverageXyzSpellOrAltairan / totalCount) * 100)% <br />
+                                (Both Spell & Altairan Obtained &commat; Xyz)
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                        <div class="box" style="border-radius: 10px; margin-right: 15px; flex-basis: 0; flex-grow: 1;">
+                            <!-- Adjusted margin for the box -->
+                            <div style="margin-top: 5px; margin-bottom: 14.25px;">
+                                <b>Other Stats:</b> <br />
+                                Average # Tellars: @(stats.AverageTellars / totalCount) <br />
+                                Average # Hand Traps: @(stats.AverageHandTraps / totalCount) <br />
+                                Isolde Brick Chance: @((stats.IsoldeBrick / totalCount) * 100)% <br />
+                                <br />
+                                Turn Skip FTK (2 Cards): N/A <br />
+                                Turn Skip FTK (3 Cards): N/A <br />
+                                Turn Skip FTK (4 Cards): N/A <br />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="box" style="border-radius: 10px;">
-                        <div style="margin-top: 5px; margin-bottom: 5px;">
-                            <b>Xyz Stats:</b> <br />
-                            Xyz Summon (0 Tellars): @((stats.AverageXyzNoTellar / totalCount) * 100)% <br />
-                            Xyz Summon (1 Tellars): @(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100)% <br />
-                            Xyz Summon (2 Tellars): @((stats.AverageXyzTwoTellars / totalCount) * 100)% <br />
-                            <!--Xyz Summon (Unknown): @((stats.AverageXyzUnknown / totalCount) * 100)% -->
-                            <br />
-                            Xyz Summon (Spell/GY) @((stats.AverageXyzSpellOrAltairan / totalCount) * 100)% <br />
-                            (Both Spell & Altairan Obtained &commat; Xyz)
-                            <br />
-                            <br />
-                            <br />
-                        </div>
+                <!-- Column End -->
+            </td>
 
-                    </div>
-                    <div class="box" style="border-radius: 10px;">
-                        <div style="margin-top: 5px; margin-bottom: 5px;">
-                            <b>Other Stats:</b> <br />
-                            Average # Tellars: @(stats.AverageTellars / totalCount) <br />
-                            Average # Hand Traps: @(stats.AverageHandTraps / totalCount) <br />
-                            Isolde Brick Chance: @((stats.IsoldeBrick / totalCount) * 100)% <br />
-
-                            <br />
-                            Turn Skip FTK (2 Cards): N/A <br />
-                            Turn Skip FTK (3 Cards): N/A <br />
-                            Turn Skip FTK (4 Cards): N/A <br />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="right" style="width: 50%; padding: 1px;">
+            <td style="width: 50%; background-color: transparent; border: none;">
+                <!-- Column Start -->
                 <div class="container" style="width: 95%; max-width: 100%; overflow: hidden; border-radius: 10px; background-color: #f8f8f8; padding: 20px;">
                     <table class="table table-bordered table-striped custom-table" style="width: 100%; background-color: #fff; border: 1px #ddd;">
                         <tbody>
@@ -78,10 +87,10 @@
                                 for (int pageIndex = 0; pageIndex < totalPages; pageIndex++)
                                 {
                                     var chunk = supportedCards.Cards
-                                    .Skip(pageIndex * pageSize)
-                                    .Take(pageSize)
-                                    .Select((value, index) => new { Index = index, Value = value })
-                                    .GroupBy(x => x.Index / 9);
+                                        .Skip(pageIndex * pageSize)
+                                        .Take(pageSize)
+                                        .Select((value, index) => new { Index = index, Value = value })
+                                        .GroupBy(x => x.Index / 9);
 
                                     if (pageIndex + 1 == currentPage)
                                     {
@@ -92,7 +101,7 @@
                                                 {
                                                     <td style="max-width: 20%; width: auto; text-align: center; border: 1px solid #ddd; background-color: #f8f8f8; padding: 2px; border-radius: 2px;">
                                                         <img src="@card.Image" alt="@card.Name" style="display: block; margin: 0 auto; width: 100%;">
-                                                        <input type="text" style="width: 100%; text-align: center;" @bind-value="card.Quantity">
+                                                                                                                <input type="text" style="width: 100%; text-align: center;" @bind-value="card.Quantity">
                                                     </td>
                                                 }
                                             </tr>
@@ -103,29 +112,32 @@
                         </tbody>
                     </table>
 
-                    <div style="text-align: center">
-                        <button class="btn btn-primary" @onclick="PreviousPage">&lt;</button>
-                        <span>@currentPage / @totalPages</span>
-                        <button class="btn btn-primary" @onclick="NextPage">&gt;</button>
-                    </div>
-                    <div style="text-align: center; margin-top: 5px;">
-                        <b>Hand Size:</b>
-                        <input type="text" style="width: 12%; text-align: center;" @bind-value="startingHand">
-                        <button class="btn btn-primary" @onclick="@(() => { if (!active) CheckDeck(); })">Check Deck</button>
-                        <div>Hands Tested: @totalCount</div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="width: 48%;">
+                            <div style="text-align: center; margin-top: 5px;">
+                                <b>Hand Size:</b>
+                                <input type="text" style="width: 12%; text-align: center;" @bind-value="startingHand">
+                                <button class="btn btn-primary" @onclick="@(() => { if (!active) CheckDeck(); })">Check Deck</button>
+                                <div>Hands Tested: @totalCount</div>
+                            </div>
+                        </div>
+                        <div style="width: 48%;">
+                            <div style="text-align: center">
+                                <button class="btn btn-primary" @onclick="PreviousPage">&lt;</button>
+                                <span>@currentPage / @totalPages</span>
+                                <button class="btn btn-primary" @onclick="NextPage">&gt;</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
-        </div>
-        <div style="text-align: center; margin-top: 10px;">
-            <button class="btn btn-primary" @onclick="NextPage">Next Page</button>
-        </div>
-        <div id="bottom" style="clear: both; text-align: center; color: white;">
-            Bottom Options Here
-        </div>
+                <!-- Column End -->
+            </td>
+        </tr>
+    </table>
+    <div id="bottom" style="clear: both; text-align: center; color: white;">
+        Created By: Metalkon
     </div>
+    <p class="bottom-right-text" style="clear: both; text-align: center; color: white;">v1.0.0</p>
 </div>
 
 <style>
@@ -164,6 +176,7 @@
         height: 100vh;
     }
 </style>
+
 
 @code {
     private int totalPages;

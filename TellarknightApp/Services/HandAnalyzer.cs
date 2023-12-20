@@ -6,6 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using TellarknightApp.Models;
 
+/*
+ 
+ NOTES:
+- Add pend stats for two tellars
+- Add double zefraath to summon a tellar or zefraniu with lv4 in hand
+- Add Skybridge/Lyran/Deneb activated effects instead of just normal summon, so card searcher can include those to grab a zefrathuban.
+- Add zefra providence boolean
+- Add stats for unuk that tags altair being unusable later
+
+- Old Notes:
+- "Add Skybridge Swap For Unuk/Lyran Stats" (found in the skybridge section)
+- "Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell"
+
+ 
+ */
+
+
+
+
 namespace TellarknightApp.Services
 {
     internal class HandAnalyzer
@@ -95,6 +114,14 @@ namespace TellarknightApp.Services
                         localStats.AverageXyzWithTellar = true;
                     }
                 }
+                if (hand.Any(x => x.Name == "The Phantom Knights of Shade Brigandine") && CountCards(hand, "The Phantom Knights of Shade Brigandine", 4, "Any") >= 1)
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                    }
+                }
                 if ((hand.Any(x => x.Name == "Fire Flint Lady") || (hand.Any(x => x.Name == "Infernoble Arms - Durendal") && deck.Any(x => x.Name == "Fire Flint Lady")))
                     && hand.Where(x => x.Type.Contains("Warrior") && x.Level == 4).Count() >= 2)
                 {
@@ -118,11 +145,15 @@ namespace TellarknightApp.Services
                 {
                     localStats.AverageXyzWithTellar = true;
                 }
-
+                if (hand.Any(x => x.Name == "Aratama")
+                    && (hand.Any(x => x.Name == "Sakitama") || deck.Any(x => x.Name == "Sakitama")))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                }
             }
 
             // Tellarknight/Constellars
-            if (hand.Any(x => x.Archetype.Contains("Tellarknight")))
+            if (hand.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")))
             {                
                 // Continuous Spell
                 if (hand.Any(x => x.Name == "Constellar Tellarknights") && CountCards(hand, 4, "Tellarknight", "Constellar") >= 1 && CountCards(hand, 4, "Any") >= 2)
@@ -184,10 +215,7 @@ namespace TellarknightApp.Services
                     }
                 }
 
-                // Add Skybridge Swap For Unuk/Lyran Stats
-
-
-                // Monster Effects
+                // Tellarknight/Constellar Monster Effects
 
                 if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1 && hand.Any(x => x.Role.Contains("Extender") && x.Level == 4))
                 {
@@ -226,60 +254,206 @@ namespace TellarknightApp.Services
                     localStats.AverageXyzSpellOrAltairan = true;
                     localStats.AverageXyzTwoTellars = true;
                 }
+
+                // Constellar-Specific Monster Effects
+                if (hand.Any(x => x.Name == "Constellar Pollux") && hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4))
+                {
+                    localStats.AverageXyzTwoTellars = true;
+                }
+                if (hand.Any(x => x.Name == "Constellar Algiedi") && hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4))
+                {
+                    localStats.AverageXyzTwoTellars = true;
+                }
+                if (hand.Any(x => x.Name == "Constellar Sheratan") 
+                    && (deck.Any(x => x.Name == "Constellar Twinkle") || hand.Any(x => x.Name == "Constellar Twinkle"))
+                    && (deck.Any(x => x.Name == "Constellar Caduceus" && x.Level == 4) || hand.Any(x => x.Name == "Constellar Caduceus")))
+                {
+                    localStats.AverageXyzTwoTellars = true;
+                }
             }
 
-            // Zefra Pendulumns            
+            // Zefra Pendulumns (No SHS)         
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {
                 if (!CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Satellarknight Zefrathuban"))
                 {
                     AddScale(hand, scales, "Satellarknight Zefrathuban");
                     localStats.ZefraathAndThuban = true;
-                    if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
-                    {
-                        localStats.AverageXyzSpellOrAltairan = true;
-                    }
-                    if ((CountCards(hand, 4, "Tellarknight", "Zefra") >= 1 && hand.Count(x => x.Level == 4) >= 2) || CountCards(hand, 4, "Tellarknight", "Zefra") >= 2)
-                    {
-                        localStats.ZefraComboWithTrap = true;
-                    }
-                    if ((CountCards(hand, 4, "Tellarknight", "Constellar") >= 2) && (CountCards(hand, 4, "Tellarknight") >= 1))
+
+                    // Normal Summoned, Tellar/Zefra/Extender In Hand
+                    if (normalSummon == true && (CountCards(hand, 4, "Tellarknight", "Zefra") >= 1 || hand.Any(x => x.Role.Contains("Extender"))))
                     {
                         localStats.AverageXyzWithTellar = true;
-                        localStats.ZefraComboWithTrap = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if (CountCards(hand, 4, "Tellarknight") >= 1)
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if (hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
                     }
-                    if (CountCards(hand, 4, "Tellarknight") >= 2)
+                    // Normal Summoned, Lyran/Unuk In Hand
+                    if (normalSummon == true && hand.Any(x => x.Name == "Tellarknight Lyran") || hand.Any(x => x.Name == "Satellarknight Unukalhai"))
+                    {
+                        localStats.AverageXyzSpellOrAltairan = true;
+                        localStats.AverageXyzTwoTellars = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    // Normal Summoned, Zefraniu In Hand
+                    if (normalSummon == true && hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+
+                    // Didn't Normal, Double Zefraath 
+                    if (normalSummon == false && hand.Count(x => x.Name == "Zefraath") >= 2 && deck.Count(x => x.Archetype.Contains("Satellarknight Zefrathuban")) >= 1 && (hand.Any(x => x.Level == 4)))
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+
+                    // Didn't Summoned, With Extender
+                    if (hand.Any(x => x.Role.Contains("Extender")))
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    // Didn't Normal, Deneb In Hand
+                    if (normalSummon == false && hand.Any(x => x.Name == "Tellarknight Deneb") && CountCards(deck, 4, "Tellarknight") >= 1)
+                    {
+                        localStats.AverageXyzSpellOrAltairan = true;
+                        normalSummon = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if (deck.Any(x => x.Name == "Satellarknight Unukalhai"))
+                        {
+                            localStats.AverageXyzSpellOrAltairan = true;
+                        }                        
+                    }
+                    // Didn't Normal, Lyran In Hand (Search Skybridge, Summon Deneb)
+                    if (normalSummon == false && hand.Any(x => x.Name == "Tellarknight Lyran") 
+                        && deck.Any(x => x.Name == "Satellarknight Skybridge") 
+                        && deck.Any(x => x.Name == "Satellarknight Deneb") 
+                        && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1)
                     {
                         localStats.AverageXyzTwoTellars = true;
-                        localStats.ZefraComboWithTrap = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if (deck.Any(x => x.Name == "Satellarknight Unukalhai"))
+                        {
+                            localStats.AverageXyzSpellOrAltairan = true;
+                        }
                     }
-                    if (hand.Any(x => x.Name == "Zefra Divine Strike"))
+                    // Didn't Normal, Tellar & Skybridge In Hand for Deneb
+                    if (normalSummon == false && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4)
+                        && hand.Any(x => x.Name == "Satellarknight Skybridge") 
+                        && deck.Any(x => x.Name == "Satellarknight Deneb") 
+                        && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1)
                     {
-                        localStats.ZefraComboWithTrap = true;
+                        localStats.AverageXyzTwoTellars = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if (deck.Any(x => x.Name == "Satellarknight Unukalhai"))
+                        {
+                            localStats.AverageXyzSpellOrAltairan = true;
+                        }
+                    }
+
+                    // Didn't Normal, Tellar & Any Lv4 In Hand
+                    if (normalSummon == false 
+                        && (CountCards(hand, 4, "Tellarknight", "Zefra") >= 1 && hand.Count(x => x.Level == 4) >= 2) 
+                        || CountCards(hand, 4, "Tellarknight", "Zefra") >= 2)
+                    {
+                        normalSummon = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if (deck.Any(x => x.Archetype.Contains("Tellarknight")))
+                        {
+                            localStats.AverageXyzWithTellar = true;
+                        }
+                        if (deck.Any(x => x.Name == "Satellarknight Unukalhai" || x.Name == "Tellarknight Lyran"))
+                        {
+                            localStats.AverageXyzSpellOrAltairan = true;
+                        }
+                    }
+                    // Didn't Normal, 2 Tellarknight And 1 Constellars
+                    if (normalSummon == false 
+                        && (CountCards(hand, 4, "Tellarknight", "Constellar") >= 2) && (CountCards(hand, 4, "Tellarknight") >= 1))
+                    {
+                        localStats.AverageXyzTwoTellars = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+
+                    // Trap Counting Extenders
+                    if (normalSummon == false
+                        && (CountCards(hand, 4, "Tellarknight", "Zefra") >= 2)
+                        || (CountCards(hand, 4, "Tellarknight", "Zefra") >= 1 && hand.Any(x => x.Role.Contains("Extender")))
+                        || CheckUniqueCards(hand, "Min", 2, "Sakitama", "ZS - Ascended Sage", "Photon Thrasher", "The Phantom Knights of Shade Brigandine", "Madolche Petingcessoeur")
+                        || (CheckUniqueCards(hand, "Min", 1, "Sakitama", "ZS - Ascended Sage", "Photon Thrasher", "The Phantom Knights of Shade Brigandine", "Madolche Petingcessoeur") && hand.Any(x => x.Name == "Zoodiac Barrage") && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4))
+                        || (CountCards(hand, 4, "Tellarknight", "Zefra") >= 1 && hand.Any(x => x.Name == "Zoodiac Barrage") && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4)))
+                    {
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if (CountCards(hand, 4, "Tellarknight") >= 1)
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
                     }
                     RemoveScale(hand, scales, "Satellarknight Zefrathuban");
                 }
 
+
+
+                // Zefra SHS
                 if (CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath"))
                 {
                     localStats.ZefraathAndSHS = true;
                     if (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4))
                     {
-                        localStats.ZefraComboWithTrap = true;
                         localStats.ZefraComboWithNormalAvailable = true;
-                    }
-                    if (hand.Any(x => x.Name == "Zefra Divine Strike"));
-                    {
-                        localStats.ZefraComboWithTrap = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
                     }
                 }
                 if (CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath"))
                 {
                     localStats.ZefraathAndSHS = true;
                 }
-                // Add Skybridge Swap For Deneb Stats
-                // Add pend stats for two tellars
-                // Add Normal Summons
+
+
             }
 
             // Corrections
@@ -324,6 +498,11 @@ namespace TellarknightApp.Services
                 localStats.BrickChance = true;
             }
 
+            if (localStats.BrickChance == false && hand.Any(x => x.Name == "Zefra Divine Strike"))
+            {
+                localStats.ZefraComboWithTrap = true;
+            }
+
             string test = string.Join(", ", hand.Select(x => x.Name));
 
             // Isolde Bricking
@@ -334,14 +513,8 @@ namespace TellarknightApp.Services
                 localStats.IsoldeBrick = true;
             }
 
-
-            // Note: Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell
-            // Note: Add stats for unuk that tags altair being unusable later
-
             stats.AverageHandTraps = stats.AverageHandTraps + hand.Count(x => x.Role == "HandTrap");
             stats.AverageTellars = stats.AverageTellars + hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
-
-
 
             stats = UpdateStats(localStats, stats);
 
