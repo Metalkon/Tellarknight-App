@@ -75,6 +75,10 @@ namespace TellarknightApp.Services
                 {
                     localStats.AverageXyzNoTellar = true;
                 }
+                if (hand.Any(x => x.Name == "Mathmech Nabla") && hand.Any(x => x.Name == "Mathmech Equation") && CountCards(deck, "Mathmech Nabla", 4, "Mathmech") >= 1)
+                {
+                    localStats.AverageXyzNoTellar = true;
+                }
                 if (hand.Any(x => x.Name == "Zoodiac Barrage") && CountCards(hand, 4, "Any") >= 1 && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4))
                 {
                     localStats.AverageXyzNoTellar = true;

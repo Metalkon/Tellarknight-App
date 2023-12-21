@@ -18,6 +18,12 @@ namespace TellarknightApp.Services
                 (hand, deck, gy, normalSummon, onField, scales) = SuperheavySamurai(hand, deck, gy, normalSummon, onField, scales);
             }
 
+            // Cynet Mining
+            if (hand.Any(x => x.Name == "Cynet Mining") && deck.Any(x => x.Archetype.Contains("Mathmech") && x.Level == 4))
+            {
+                (hand, deck, gy, normalSummon, onField, scales) = Mathmech(hand, deck, gy, normalSummon, onField, scales);
+            }
+
             // Add Small World
             // Automatically Adds +1 Lv4 & +1 HT
             // Does Calculation based on statistics to draw the bridge with lv4's and ht's in hand, if it will skip the search or not
@@ -146,6 +152,29 @@ namespace TellarknightApp.Services
 
             return (hand, deck, gy, normalSummon, onField, scales);
         }
+
+        public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) Mathmech(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
+        {
+            if (deck.Any(x => x.Name == "Mathmech Circular") && deck.Any(x => x.Name != "Mathmech Circular" && x.Archetype.Contains("Mathmech") && x.Level == 4))
+            {
+                (hand, deck, gy) = UpdateCards(hand, deck, gy, "Cynet Mining", "Mathmech Circular");
+                return (hand, deck, gy, normalSummon, onField, scales);
+            }
+            if (hand.Any(x => x.Name == "Mathmech Equation") && deck.Any(x => x.Name == "Mathmech Nabla") && deck.Any(x => x.Name != "Mathmech Nabla" && x.Archetype.Contains("Mathmech") && x.Level == 4))
+            {
+                (hand, deck, gy) = UpdateCards(hand, deck, gy, "Cynet Mining", "Mathmech Nabla");
+                return (hand, deck, gy, normalSummon, onField, scales);
+            }
+            if (deck.Any(x => x.Archetype.Contains("Mathmech") && x.Level == 4))
+            {
+                string mathName = deck.First(x => x.Archetype.Contains("Mathmech") && x.Level == 4).Name;
+                (hand, deck, gy) = UpdateCards(hand, deck, gy, "Cynet Mining", mathName);
+                return (hand, deck, gy, normalSummon, onField, scales);
+            }
+
+            return (hand, deck, gy, normalSummon, onField, scales);
+        }
+
         public static (List<Card>, List<Card>, List<Card>, bool, List<Card>, List<Card>) ZefraRota(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales)
         {
             string searchCard = "Reinforcement of the Army";
