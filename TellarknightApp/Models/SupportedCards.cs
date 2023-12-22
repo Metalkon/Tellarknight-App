@@ -69,10 +69,10 @@ namespace TellarknightApp.Models
                 new Card() { Name = "Mathmech Equation", Type = "Spell", Level = null, Archetype = "Mathmech", Image = "./CardArt/Equation.png", Role = "None" },
                 new Card() { Name = "Mathmech Superfactorial", Type = "Trap", Level = null, Archetype = "Mathmech", Image = "./CardArt/Superfactorial.png", Role = "None" },
 
+                new Card() { Name = "Madolche Petingcessoeur", Type = "Fairy", Level = 4, Archetype = "None/Any", Image = "./CardArt/Peting.png", Role = "Extender/Bridge" },
                 new Card() { Name = "Zoodiac Thoroughblade", Type = "Beast-Warrior", Level = 4, Archetype = "Zoodiac/Any", Image = "./CardArt/Thoroughblade.png", Role = "Extender" },
                 new Card() { Name = "Zoodiac Barrage", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/Barrage.png", Role = "Extender" },
 
-                //new Card() { Name = "Madolche Petingcessoeur", Type = "Fairy", Level = 4, Archetype = "None/Any", Image = "./CardArt/Peting.png", Role = "Extender/Bridge" },
                 //new Card() { Name = "Ghost Ogre & Snow Rabbit", Type = "", Level = 3, Archetype = "None", Image = "./CardArt/GhostOgre.png", Role = "HandTrap" },
                 //new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
 
