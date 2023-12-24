@@ -533,6 +533,8 @@ namespace TellarknightApp.Services
             }
 
             stats.AverageHandTraps = stats.AverageHandTraps + hand.Count(x => x.Role == "HandTrap");
+            stats.AverageBystials = stats.AverageBystials + hand.Count(x => x.Archetype.Contains("Bystial"));
+
             stats.AverageTellars = stats.AverageTellars + hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
 
             stats = UpdateStats(localStats, stats);

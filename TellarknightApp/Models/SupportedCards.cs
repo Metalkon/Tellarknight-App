@@ -92,9 +92,22 @@ namespace TellarknightApp.Models
                 new Card() { Name = "PSY-Framegear Gamma", Type = "Psychic", Level = 2, Archetype = "None", Image = "./CardArt/Gamma.png", Role = "HandTrap" },
                 //new Card() { Name = "PSY-Frame Driver", Type = "Psychic", Level = 7, Archetype = "None", Image = "./CardArt/Driver.png", Role = "None" },
                 new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
+                new Card() { Name = "Called by the Grave", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/CalledBy.png", Role = "" },
+                new Card() { Name = "Crossout Designator", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/Crossout.png", Role = "" },
                 new Card() { Name = "Zoodiac Barrage", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/Barrage.png", Role = "Extender" },
                 new Card() { Name = "Zoodiac Thoroughblade", Type = "Beast-Warrior", Level = 4, Archetype = "Zoodiac/Any", Image = "./CardArt/Thoroughblade.png", Role = "Extender" },
                 new Card() { Name = "Madolche Petingcessoeur", Type = "Fairy", Level = 4, Archetype = "None/Any", Image = "./CardArt/Peting.png", Role = "Extender/Bridge" },
+                new Card() { Name = "Amorphage Pride", Level = 4, Type = "Dragon", Archetype = "None", Image = "./CardArt/Pride.png", Role = "" },
+                new Card() { Name = "Ignis Phoenix, the Dracoslayer", Level = 4, Type = "Warrior", Archetype = "Dracoslayer", Image = "./CardArt/Ignis.png", Role = "" },
+                new Card() { Name = "Majesty Pegasus, the Dracoslayer", Level = 4, Type = "Spellcaster", Archetype = "Dracoslayer", Image = "./CardArt/Majesty.png", Role = "" },
+                new Card() { Name = "Chaos Angel", Level = 10, Type = "Fiend", Archetype = "None", Image = "./CardArt/ChaosAngel.png", Role = "ExtraDeck" },
+                new Card() { Name = "The Bystial Lubellion", Level = 8, Type = "Dragon", Archetype = "Bystial", Image = "./CardArt/Lubellion.png", Role = "" },
+                new Card() { Name = "Bystial Magnamhut", Level = 6, Type = "Dragon", Archetype = "Bystial", Image = "./CardArt/Magnamhut.png", Role = "" },
+                new Card() { Name = "Bystial Druiswurm", Level = 6, Type = "Dragon", Archetype = "Bystial", Image = "./CardArt/Druiswurm.png", Role = "" },
+                new Card() { Name = "Bystial Baldrake", Level = 6, Type = "Dragon", Archetype = "Bystial", Image = "./CardArt/Baldrake.png", Role = "" },
+                new Card() { Name = "Bystial Saronir", Level = 6, Type = "Dragon", Archetype = "Bystial", Image = "./CardArt/Saronir.png", Role = "" },
+
+
             };
         }
     }

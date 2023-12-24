@@ -24,11 +24,12 @@
                                         <text>
                                             Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
                                             Total Monsters: @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
-                                            Combo Chance: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
-                                            Brick Chance: @((stats.BrickChance / totalCount) * 100)%  <br />
-                                            (1 In @(totalCount / stats.BrickChance))
+                                            Combo Chance: @(Math.Round(((totalCount - stats.BrickChance) / totalCount) * 100, 2))% <br />
+                                            Brick Chance: @(Math.Round((stats.BrickChance / totalCount) * 100, 2))% <br />
+                                            (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))
                                             TEST: @extraDeck.Count()
                                         </text>
+
                                     }
                                     else
                                     {
@@ -52,10 +53,10 @@
                                     @if (totalCount != 0)
                                     {
                                         <text>
-                                            Xyz Summon (0 Tellars): @((stats.AverageXyzNoTellar / totalCount) * 100)% <br />
-                                            Xyz Summon (1 Tellars): @(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100)% <br />
-                                            Xyz Summon (2 Tellars): @((stats.AverageXyzTwoTellars / totalCount) * 100)% <br />
-                                            Xyz Summon (Spell/GY): @((stats.AverageXyzSpellOrAltairan / totalCount) * 100)% <br />
+                                            Xyz Summon (0 Tellars): @(Math.Round((stats.AverageXyzNoTellar / totalCount) * 100, 2))% <br />
+                                            Xyz Summon (1 Tellars): @(Math.Round(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100, 2))% <br />
+                                            Xyz Summon (2 Tellars): @(Math.Round((stats.AverageXyzTwoTellars / totalCount) * 100, 2))% <br />
+                                            Xyz Summon (Spell/GY): @(Math.Round((stats.AverageXyzSpellOrAltairan / totalCount) * 100, 2))% <br />
                                             (Both Spell & Altairan Obtained &commat; Xyz)
                                         </text>
                                     }
@@ -86,12 +87,13 @@
                                     @if (totalCount != 0)
                                     {
                                         <text>
-                                            Pendulumn Chance (Any): @((stats.PendulumnSummon / totalCount) * 100)% <br />
-                                            Pendulumn (Zefraath/Thuban): @((stats.ZefraathAndThuban / totalCount) * 100)% <br />
-                                            Pendulumn (Zefraath/SHS): @((stats.ZefraathAndSHS / totalCount) * 100)% <br />
-                                            Obtain Trap (Any Xyz): @((stats.ZefraComboWithTrap / totalCount) * 100)% <br />
+                                            Pendulumn Chance (Any): @(Math.Round((stats.PendulumnSummon / totalCount) * 100, 2))% <br />
+                                            Pendulumn (Zefraath/Thuban): @(Math.Round((stats.ZefraathAndThuban / totalCount) * 100, 2))% <br />
+                                            Pendulumn (Zefraath/SHS): @(Math.Round((stats.ZefraathAndSHS / totalCount) * 100, 2))% <br />
+                                            Obtain Trap (Any Xyz): @(Math.Round((stats.ZefraComboWithTrap / totalCount) * 100, 2))% <br />
                                         </text>
                                     }
+
                                     else
                                     {
                                         <text>
@@ -113,9 +115,10 @@
                                     @if (totalCount != 0)
                                     {
                                         <text>
-                                            Average # Tellars: @(stats.AverageTellars / totalCount) <br />
-                                            Average # Hand Traps: @(stats.AverageHandTraps / totalCount) <br />
-                                            Isolde Brick Chance: @((stats.IsoldeBrick / totalCount) * 100)%
+                                            Average # Tellars: @(Math.Round(stats.AverageTellars / totalCount, 2)) <br />
+                                            Average # Hand Traps: @(Math.Round(stats.AverageHandTraps / totalCount, 2)) <br />
+                                            Average # Bystials: @(Math.Round(stats.AverageBystials / totalCount, 2)) <br />
+                                            Isolde Brick Chance: @(Math.Round((stats.IsoldeBrick / totalCount) * 100, 2))%
                                         </text>
                                     }
                                     else
@@ -124,6 +127,7 @@
                                             <!-- Text remains, but numbers are not displayed -->
                                             Average # Tellars: 0<br />
                                             Average # Hand Traps: 0<br />
+                                            Average # Bystials: 0<br />
                                             Isolde Brick Chance: 100%<br />
                                         </text>
                                     }
