@@ -37,8 +37,8 @@ namespace TellarknightApp.Models
                 
                 new Card() { Name = "Reinforcement of the Army", Type = "Spell", Level = null, Archetype = "None/Any", Image = "./CardArt/Rota.png", Role = "Search" },
                 new Card() { Name = "Constellar Twinkle", Type = "Spell", Level = null, Archetype = "Constellar", Image = "./CardArt/Twinkle.png", Role = "None" },
-                new Card() { Name = "The Phantom Knights of Shade Brigandine", Level = 4, Type = "Spell", Archetype = "None", Image = "./CardArt/Brigandine.png", Role = "Extender" },
 
+                new Card() { Name = "The Phantom Knights of Shade Brigandine", Level = 4, Type = "Spell", Archetype = "None", Image = "./CardArt/Brigandine.png", Role = "Extender" },
                 new Card() { Name = "Photon Thrasher", Type = "Warrior", Level = 4, Archetype = "None/Any", Image = "./CardArt/Thrasher.png", Role = "Extender" },
                 new Card() { Name = "ZS - Ascended Sage", Type = "Warrior", Level = 4, Archetype = "None/Any", Image = "./CardArt/AscendedSage.png", Role = "Extender" },
 
@@ -69,16 +69,32 @@ namespace TellarknightApp.Models
                 new Card() { Name = "Mathmech Equation", Type = "Spell", Level = null, Archetype = "Mathmech", Image = "./CardArt/Equation.png", Role = "None" },
                 new Card() { Name = "Mathmech Superfactorial", Type = "Trap", Level = null, Archetype = "Mathmech", Image = "./CardArt/Superfactorial.png", Role = "None" },
 
-                new Card() { Name = "Madolche Petingcessoeur", Type = "Fairy", Level = 4, Archetype = "None/Any", Image = "./CardArt/Peting.png", Role = "Extender/Bridge" },
-                new Card() { Name = "Zoodiac Thoroughblade", Type = "Beast-Warrior", Level = 4, Archetype = "Zoodiac/Any", Image = "./CardArt/Thoroughblade.png", Role = "Extender" },
-                new Card() { Name = "Zoodiac Barrage", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/Barrage.png", Role = "Extender" },
-
-                //new Card() { Name = "Ghost Ogre & Snow Rabbit", Type = "", Level = 3, Archetype = "None", Image = "./CardArt/GhostOgre.png", Role = "HandTrap" },
-                //new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
+                new Card() { Name = "Runick Tip", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickTip.png", Role = "Extender" },
+                new Card() { Name = "Runick Freezing Curses", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickFreezingCurses.png", Role = "Extender" },
+                new Card() { Name = "Runick Destruction", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickDestruction.png", Role = "Extender" },
+                new Card() { Name = "Runick Flashing Fire", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickFlashingFire.png", Role = "Extender" },
+                new Card() { Name = "Runick Slumber", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickSlumber.png", Role = "Extender" },
+                
+                new Card() { Name = "Runick Smiting Storm", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickSmitingStorm.png", Role = "Extender" },
+                new Card() { Name = "Runick Dispelling", Type = "Spell", Level = null, Archetype = "Runick", Image = "./CardArt/RunickDispelling.png", Role = "Extender" },
+                new Card() { Name = "Geri the Runick Fangs", Type = "Beast", Level = 4, Archetype = "Runick", Image = "./CardArt/Geri.png", Role = "ExtraDeck" },                
 
                 new Card() { Name = "Cynet Mining", Type = "", Level = null, Archetype = "None", Image = "./CardArt/CynetMining.png", Role = "Search" },
+
                 new Card() { Name = "Hand Trap", Type = "", Level = null, Archetype = "None", Image = "./CardArt/HandTrap.png", Role = "HandTrap" },
-                new Card() { Name = "Empty Card", Type = "", Level = null, Archetype = "None", Image = "./CardArt/CardBack.png", Role = "None" },
+                new Card() { Name = "Infinite Impermanence", Type = "Trap", Level = null, Archetype = "None", Image = "./CardArt/Imperm.png", Role = "HandTrap" },
+                new Card() { Name = "Ash Blossom & Joyous Spring", Type = "Zombie", Level = 3, Archetype = "None", Image = "./CardArt/Ash.png", Role = "HandTrap" },
+                new Card() { Name = "Effect Veiler", Type = "Zombie", Level = 3, Archetype = "None", Image = "./CardArt/Veiler.png", Role = "HandTrap" },
+                new Card() { Name = "Droll & Lock Bird", Type = "Spellcaster", Level = 1, Archetype = "None", Image = "./CardArt/Droll.png", Role = "HandTrap" },
+                new Card() { Name = "Ghost Ogre & Snow Rabbit", Type = "Psychic", Level = 3, Archetype = "None", Image = "./CardArt/GhostOgre.png", Role = "HandTrap" },
+                new Card() { Name = "Maxx \"C\"", Type = "Insect", Level = 2, Archetype = "None", Image = "./CardArt/MaxxC.png", Role = "HandTrap" },
+                new Card() { Name = "Nibiru, the Primal Being", Type = "Rock", Level = 11, Archetype = "None", Image = "./CardArt/Nibiru.png", Role = "HandTrap" },
+                new Card() { Name = "PSY-Framegear Gamma", Type = "Psychic", Level = 2, Archetype = "None", Image = "./CardArt/Gamma.png", Role = "HandTrap" },
+                //new Card() { Name = "PSY-Frame Driver", Type = "Psychic", Level = 7, Archetype = "None", Image = "./CardArt/Driver.png", Role = "None" },
+                new Card() { Name = "Small World", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/SmallWorld.png", Role = "" },
+                new Card() { Name = "Zoodiac Barrage", Level = null, Type = "Spell", Archetype = "None", Image = "./CardArt/Barrage.png", Role = "Extender" },
+                new Card() { Name = "Zoodiac Thoroughblade", Type = "Beast-Warrior", Level = 4, Archetype = "Zoodiac/Any", Image = "./CardArt/Thoroughblade.png", Role = "Extender" },
+                new Card() { Name = "Madolche Petingcessoeur", Type = "Fairy", Level = 4, Archetype = "None/Any", Image = "./CardArt/Peting.png", Role = "Extender/Bridge" },
             };
         }
     }

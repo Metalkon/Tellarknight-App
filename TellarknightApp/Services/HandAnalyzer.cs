@@ -29,7 +29,7 @@ namespace TellarknightApp.Services
 {
     internal class HandAnalyzer
     {
-        public static DeckStatistics HandCheck(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales, DeckStatistics stats)
+        public static DeckStatistics HandCheck(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummon, List<Card> onField, List<Card> scales, List<Card> extraDeck, DeckStatistics stats)
         {
             LocalStats localStats = new LocalStats();
             
@@ -79,7 +79,8 @@ namespace TellarknightApp.Services
                 {
                     localStats.AverageXyzNoTellar = true;
                 }
-                if (hand.Any(x => x.Name == "Zoodiac Barrage") && CountCards(hand, 4, "Any") >= 1 && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4))
+                if (hand.Any(x => x.Name == "Zoodiac Barrage") && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4)
+                    && (CountCards(hand, 4, "Any") >= 1 || (hand.Any(x => x.Name == "The Phantom Knights of Shade Brigandine") || ((hand.Any(x => x.Archetype.Contains("Runick") && x.Type == "Spell") && extraDeck.Any(x => x.Name == "Geri the Runick Fangs"))))))
                 {
                     localStats.AverageXyzNoTellar = true;
                     if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
@@ -151,6 +152,20 @@ namespace TellarknightApp.Services
                 }
                 if (hand.Any(x => x.Name == "Aratama")
                     && (hand.Any(x => x.Name == "Sakitama") || deck.Any(x => x.Name == "Sakitama")))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                }
+                if (hand.Any(x => x.Archetype.Contains("Runick") && x.Type == "Spell") && extraDeck.Any(x => x.Name == "Geri the Runick Fangs") 
+                    && (CountCards(hand, 4, "Any") >= 1 || (hand.Any(x => x.Name == "The Phantom Knights of Shade Brigandine") || (hand.Any(x => x.Name == "Zoodiac Barrage") && deck.Any(x => x.Name == "Zoodiac Thoroughblade" && x.Level == 4)))))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (CountCards(hand, 4, "Tellarknight", "Constellar") >= 1)
+                    {
+                        localStats.AverageXyzWithTellar = true;
+                    }
+                }
+                if (CheckUniqueCards(hand, "Min", 2, "Runick Tip", "Runick Freezing Curses", "Runick Destruction", "Runick Flashing Fire", "Runick Slumber")
+                    && extraDeck.Count(x => x.Name == "Geri the Runick Fangs") >= 2)
                 {
                     localStats.AverageXyzNoTellar = true;
                 }

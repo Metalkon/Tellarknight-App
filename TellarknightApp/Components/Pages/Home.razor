@@ -27,6 +27,7 @@
                                             Combo Chance: @(((totalCount - stats.BrickChance) / totalCount) * 100)% <br />
                                             Brick Chance: @((stats.BrickChance / totalCount) * 100)%  <br />
                                             (1 In @(totalCount / stats.BrickChance))
+                                            TEST: @extraDeck.Count()
                                         </text>
                                     }
                                     else
@@ -142,6 +143,7 @@
                                     <table class="table table-bordered table-striped custom-table" style="width: 100%; background-color: #fff; border: 1px transparent; padding-top: 20px">
                                         <tbody>
                                             @{
+                                                bool IsReadOnly(Card card) => card.Name == "Small World";
                                                 var totalPages = (int)Math.Ceiling((double)supportedCards.Cards.Count / pageSize);
                                                 for (int pageIndex = 0; pageIndex < totalPages; pageIndex++)
                                                 {
@@ -159,8 +161,8 @@
                                                                 @foreach (var card in row.Select(x => x.Value))
                                                                 {
                                                                     <td style="max-width: 20%; width: auto; text-align: center; border: 1px transparent; background-color: #f8f8f8; padding: 2px; border-radius: 2px;">
-                                                                        <img src="@card.Image" alt="@card.Name" style="display: block; margin: 0 auto; width: 100%;">
-                                                                        <input type="text" style="width: 100%; text-align: center;" @bind-value="card.Quantity">
+                                                                        <img src="@card.Image" title="@card.Name" style="display: block; margin: 0 auto; width: 100%">
+                                                                        <input type="text" style="width: 100%; text-align: center;" @bind="card.Quantity" readonly="@IsReadOnly(card)" />
                                                                     </td>
                                                                 }
                                                             </tr>
@@ -264,6 +266,7 @@
     private int totalCount;
     private int startingHand = 5;
     private bool normalSummon = false;
+    private List<Card> extraDeck = new List<Card>();
     private List<Card> onField = new List<Card>();
     private List<Card> scales = new List<Card>();
     private DeckStatistics stats = new DeckStatistics();
@@ -271,7 +274,6 @@
     private List<Card> hand = new List<Card>();
     private List<Card> gy = new List<Card>();
     private SupportedCards supportedCards = new SupportedCards();
-
 
     // Test
     //List<Card> startingHandTest = new List<Card>();
@@ -293,6 +295,7 @@
             int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
 
             // Reset Everything
+            extraDeck.Clear();
             deck.Clear();
             hand.Clear();
             onField.Clear();
@@ -312,7 +315,7 @@
             (hand, deck, gy, normalSummon, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummon, onField, scales);
 
             // Analyze Hand & Update Hand Statistics
-            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, stats);
+            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, extraDeck, stats);
 
 
             totalCount++;
@@ -335,11 +338,19 @@
             {
                 card.Quantity = 3;
             }
-            if (card.Quantity > 0)
+
+            if (card.Quantity > 0 && card.Role != "ExtraDeck")
             {
                 for (int i = 0; i < card.Quantity; i++)
                 {
                     deck.Add(card);
+                }
+            }
+            if (card.Quantity > 0 && card.Role == "ExtraDeck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    extraDeck.Add(card);
                 }
             }
         }
