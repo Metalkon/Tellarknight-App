@@ -164,11 +164,6 @@ namespace TellarknightApp.Services
                         localStats.AverageXyzWithTellar = true;
                     }
                 }
-                if (CheckUniqueCards(hand, "Min", 2, "Runick Tip", "Runick Freezing Curses", "Runick Destruction", "Runick Flashing Fire", "Runick Slumber")
-                    && extraDeck.Count(x => x.Name == "Geri the Runick Fangs") >= 2)
-                {
-                    localStats.AverageXyzNoTellar = true;
-                }
             }
 
             // Tellarknight/Constellars

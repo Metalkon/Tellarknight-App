@@ -27,9 +27,7 @@
                                             Combo Chance: @(Math.Round(((totalCount - stats.BrickChance) / totalCount) * 100, 2))% <br />
                                             Brick Chance: @(Math.Round((stats.BrickChance / totalCount) * 100, 2))% <br />
                                             (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))
-                                            TEST: @extraDeck.Count()
                                         </text>
-
                                     }
                                     else
                                     {
@@ -149,17 +147,22 @@
                                             @{
                                                 bool IsReadOnly(Card card) => card.Name == "Small World";
                                                 var totalPages = (int)Math.Ceiling((double)supportedCards.Cards.Count / pageSize);
+
+                                                // Precompute chunks outside the loop
+                                                var chunks = Enumerable.Range(0, totalPages)
+                                                .Select(pageIndex => supportedCards.Cards
+                                                .Skip(pageIndex * pageSize)
+                                                .Take(pageSize)
+                                                .Select((value, index) => new { Index = index, Value = value })
+                                                .GroupBy(x => x.Index / 9)
+                                                )
+                                                .ToList();
+
                                                 for (int pageIndex = 0; pageIndex < totalPages; pageIndex++)
                                                 {
-                                                    var chunk = supportedCards.Cards
-                                                    .Skip(pageIndex * pageSize)
-                                                    .Take(pageSize)
-                                                    .Select((value, index) => new { Index = index, Value = value })
-                                                    .GroupBy(x => x.Index / 9);
-
                                                     if (pageIndex + 1 == currentPage)
                                                     {
-                                                        foreach (var row in chunk)
+                                                        foreach (var row in chunks[pageIndex])
                                                         {
                                                             <tr>
                                                                 @foreach (var card in row.Select(x => x.Value))
@@ -176,6 +179,7 @@
                                             }
                                         </tbody>
                                     </table>
+
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.5%">
                                         <div style="width: 17.5%;">
                                             <div><b>Hand Size:</b></div>
@@ -262,7 +266,7 @@
 
 
 @code {
-    private int totalPages;
+    private int totalPages = 3;
     private int pageSize = 27;
     private int currentPage = 1;
     private bool active = false;
