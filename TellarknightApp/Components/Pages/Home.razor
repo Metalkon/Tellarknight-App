@@ -54,8 +54,8 @@
                                             Xyz Summon (0 Tellars): @(Math.Round((stats.AverageXyzNoTellar / totalCount) * 100, 2))% <br />
                                             Xyz Summon (1 Tellars): @(Math.Round(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100, 2))% <br />
                                             Xyz Summon (2 Tellars): @(Math.Round((stats.AverageXyzTwoTellars / totalCount) * 100, 2))% <br />
-                                            Xyz Summon (Spell/GY): @(Math.Round((stats.AverageXyzSpellOrAltairan / totalCount) * 100, 2))% <br />
-                                            (Both Spell & Altairan Obtained &commat; Xyz)
+                                            <!-- Xyz Summon (Spell/GY): @(Math.Round((stats.AverageXyzSpellOrAltairan / totalCount) * 100, 2))% <br />
+                                            (Both Spell & Altairan Obtained &commat; Xyz)-->
                                         </text>
                                     }
                                     else
@@ -65,8 +65,6 @@
                                             Xyz Summon (0 Tellars): 0%<br />
                                             Xyz Summon (1 Tellars): 0%<br />
                                             Xyz Summon (2 Tellars): 0%<br />
-                                            Xyz Summon (Spell/GY): 0%<br />
-                                            (Both Spell & Altairan Obtained &commat; Xyz)
                                         </text>
                                     }
                                 </div>
@@ -273,7 +271,7 @@
     private int checkCount = 25000;
     private int totalCount;
     private int startingHand = 5;
-    private bool normalSummon = false;
+    private bool normalSummoned = false;
     private List<Card> extraDeck = new List<Card>();
     private List<Card> onField = new List<Card>();
     private List<Card> scales = new List<Card>();
@@ -309,7 +307,7 @@
             onField.Clear();
             scales.Clear();
             gy.Clear();
-            bool normalSummon = false;
+            bool normalSummoned = false;
 
             // Build Deck & Hand
             BuildDeck();
@@ -320,10 +318,10 @@
             //startingHandTest = hand.ToList();
 
             // Check Hand & Deck For Optimal Searches
-            (hand, deck, gy, normalSummon, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummon, onField, scales);
+            (hand, deck, gy, normalSummoned, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummoned, onField, scales);
 
             // Analyze Hand & Update Hand Statistics
-            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummon, onField, scales, extraDeck, stats);
+            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummoned, onField, scales, extraDeck, stats);
 
 
             totalCount++;
