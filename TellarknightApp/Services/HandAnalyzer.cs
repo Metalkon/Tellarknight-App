@@ -6,24 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using TellarknightApp.Models;
 
-/*
- 
+/* 
  NOTES:
-- Add pend stats for two tellars
-- Add Skybridge/Lyran/Deneb activated effects instead of just normal summon, so card searcher can include those to grab a zefrathuban.
-- Add zefra providence boolean
-- Add stats for unuk that tags altair being unusable later
+- Add Skybridge/Lyran/Deneb activated effects instead of just normal summon, for more accurate checks as well as CardSearcher for pend scales.
+- Add stats for unuk that tags altair being unusable later for more accurate skybridge checks
 - Add check at end for unuk/lyran stuff to require altairan or cont spell in deck, may become complicated
-
-- Old Notes:
-- "Add Skybridge Swap For Unuk/Lyran Stats" (found in the skybridge section)
-- "Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell"
-
- 
+- Clean up pends with skybridge that check for deneb and a non-deneb tellar (so it doesn't hit the zefraath deck target also)
+- Include lyran with skybridge->deneb stats (have it as an alt condition on deneb, include divine strike if not using zefra tellar from deck)
+- Add oracle field zone instead of placing in gy for better zefra shs tellar stats
+- Add temporary placement for deck target with zefraath similar to addscale.
+- Add more temporary placements for deneb search and other cards
+- Add more temporary booleans for card conditions (like zoodiac barrage)
+- "Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell
  */
-
-
-
 
 namespace TellarknightApp.Services
 {
@@ -285,9 +280,10 @@ namespace TellarknightApp.Services
                 }
             }
 
-            // Zefra Pendulumns (No SHS)         
+            // Zefra Pendulumns      
             if (hand.Any(x => x.Archetype.Contains("Zefra")))
             {
+                // Zefraath + Thuban Combo's
                 if (!CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Satellarknight Zefrathuban"))
                 {
                     AddScale(hand, scales, "Satellarknight Zefrathuban");
@@ -403,7 +399,31 @@ namespace TellarknightApp.Services
                     RemoveScale(hand, scales, "Satellarknight Zefrathuban");
                 }
 
-                // --------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 // Zefra SHS
                 if (CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath"))
@@ -411,6 +431,7 @@ namespace TellarknightApp.Services
                     localStats.ZefraathAndSHS = true;
                     if (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4))
                     {
+                        localStats.PendulumnSummon = true;
                         localStats.ZefraComboWithNormalAvailable = true;
                         if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing") || deck.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
                         {
@@ -418,50 +439,255 @@ namespace TellarknightApp.Services
                         }
                     }
                 }
-                if (CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath"))
-                {
-                    localStats.ZefraathAndSHS = true;
-                }
 
-                // Double Zefraath --- FIX ASAP
-                if (normalSummoned == false && hand.Count(x => x.Name == "Zefraath") >= 2 && deck.Count(x => x.Archetype.Contains("Satellarknight Zefrathuban")) >= 1 && (hand.Any(x => x.Level == 4)))
+                // Double Zefraath
+                if (!CheckSHS(onField, scales) && hand.Count(x => x.Name == "Zefraath") >= 2)
                 {
-                    localStats.AverageXyzWithTellar = true;
-                    if (hand.Any(x => x.Name == "Zefra Divine Strike") || deck.Any(x => x.Name == "Zefra Divine Strike"))
+                    if(hand.Any(x => x.Level == 4) && deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale <= 3))
                     {
-                        localStats.ZefraComboWithTrap = true;
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzNoTellar = true;
+                        if(hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
+                        {
+                            localStats.AverageXyzWithTellar = true;
+                        }
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if ((hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight"))) 
+                            || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x.Name == "Satellarknight Skybridge")) && (hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight"))))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                    }
+                    if (hand.Any(x => x.Name == "Satellarknight Skybridge") && deck.Any(x => x.Name == "Satellarknight Zefrathuban") && deck.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
                     }
                 }
 
-                // Add more to double zefraath and other pend combos
+                // Zefraath + Zefraxciton
+                if (!CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Stellarknight Zefraxciton"))
+                {
+                    string scaleName = "Stellarknight Zefraxciton";
+                    AddScale(hand, scales, scaleName);
+                    if (hand.Any(x => x.Level == 4) && deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzWithTellar = true;
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) || hand.Any(x => x.Name == "Shaddoll Zefracore"))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                        if ((hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                            || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x.Name == "Satellarknight Skybridge")) && (hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight"))))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                    }
+                    if (hand.Any(x => x.Name == "Satellarknight Skybridge") && deck.Any(x => x.Name == "Satellarknight Zefrathuban") && deck.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    RemoveScale(hand, scales, scaleName);
+                }
 
+                // Zefraath + Zefracore
+                if (!CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Name == "Shaddoll Zefracore"))
+                {
+                    string scaleName = "Shaddoll Zefracore";
+                    AddScale(hand, scales, scaleName);
+                    if (hand.Any(x => x.Level == 4) && deck.Any(x => x.Name == "Satellarknight Zefrathuban"))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzWithTellar = true;
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    if (hand.Any(x => x.Name == "Satellarknight Skybridge") && deck.Any(x => x.Name == "Satellarknight Zefrathuban") && deck.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    RemoveScale(hand, scales, scaleName);
+                }
+
+                // Zefraath + LowScale
+                if (!CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath") && hand.Any(x => x.Scale <= 3 && !x.Archetype.Contains("Zefra")))
+                {
+                    string scaleName = hand.FirstOrDefault(x => x.Scale < 4 && !x.Archetype.Contains("Zefra"))?.Name;
+                    AddScale(hand, scales, scaleName);
+                    bool comboCheck = false;
+
+                    if (hand.Any(x => x.Level == 4) && deck.Any(x => x.Level ==4 && x.Scale >= 5 && x.Archetype.Contains("Zefra")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzNoTellar = true;
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Name == "Stellarknight Zefraxciton"))
+                        {
+                            localStats.AverageXyzWithTellar = true;
+                        }
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && deck.Any(x => x.Name == "Stellarknight Zefraxciton"))
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing")))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    if ((hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Name == "Stellarknight Zefraxciton")) && hand.Any(x => x.Name == "Satellarknight Skybridge") && deck.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        comboCheck = true;
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (comboCheck && deck.Any(x => x.Name == "Zefra Divine Strike" && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing") || deck.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))                   
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.ZefraComboWithTrap = true;
+                    }
+                    RemoveScale(hand, scales, scaleName);
+                }
+
+                // Zefrathuban + Zefraxciton  (Or Pend Tellar + Other Non-Archetype)
+                if (!CheckSHS(onField, scales) && !hand.Any(x => x.Name == "Zefraath")
+                    && (hand.Any(x => x.Name == "Satellarknight Zefrathuban") && hand.Any(x => x.Name == "Stellarknight Zefraxciton"))
+                    || (hand.Any(x => x.Name == "Satellarknight Zefrathuban") && hand.Any(x => x.Scale >= 5 && !x.Archetype.Contains("Zefra")))
+                    || (hand.Any(x => x.Name == "Stellarknight Zefraxciton") && hand.Any(x => x.Scale <= 3 && !x.Archetype.Contains("Zefra"))))
+                {
+                    string scaleName1 = "";
+                    string scaleName2 = "";
+                    if (hand.Any(x => x.Name == "Satellarknight Zefrathuban") && hand.Any(x => x.Name == "Stellarknight Zefraxciton"))
+                    {
+                        scaleName1 = "Satellarknight Zefrathuban";
+                        scaleName2 = "Stellarknight Zefraxciton";
+                    }
+                    if(hand.Any(x => x.Name == "Satellarknight Zefrathuban") && hand.Any(x => x.Scale >= 5 && !x.Archetype.Contains("Zefra")))
+                    {
+                        scaleName1 = "Satellarknight Zefrathuban";
+                        scaleName2 = hand.FirstOrDefault(x => x.Scale >= 5 && !x.Archetype.Contains("Zefra"))?.Name;
+                    }
+                    if (hand.Any(x => x.Name == "Stellarknight Zefraxciton") && hand.Any(x => x.Scale <= 3 && !x.Archetype.Contains("Zefra")))
+                    {
+                        scaleName1 = "Stellarknight Zefraxciton";
+                        scaleName2 = hand.FirstOrDefault(x => x.Scale <= 3 && !x.Archetype.Contains("Zefra"))?.Name;
+                    }
+                    AddScale(hand, scales, scaleName1);
+                    AddScale(hand, scales, scaleName2);
+                    bool comboCheck = false;
+
+                    if (hand.Count(x => x.Level == 4) >= 2 && hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra"))))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzNoTellar = true;
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
+                        {
+                            localStats.AverageXyzWithTellar = true;
+                        }
+                        if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) >= 2)
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing")))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x.Name == "Satellarknight Skybridge") && deck.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        comboCheck = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (comboCheck && deck.Any(x => x.Name == "Zefra Divine Strike" && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing") || deck.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.ZefraComboWithTrap = true;
+                    }
+                    RemoveScale(hand, scales, scaleName1);
+                    RemoveScale(hand, scales, scaleName2);
+                }
+
+                // Double Non-Zefra Pend Scales
+                if (!CheckSHS(onField, scales) && !hand.Any(x => x.Name == "Zefraath")
+                    && (hand.Any(x => x.Scale >= 5 && !x.Archetype.Contains("Zefra")) && hand.Any(x => x.Scale <= 3 && !x.Archetype.Contains("Zefra"))))
+                {
+                    string scaleName1 = hand.FirstOrDefault(x => x.Scale >= 5 && !x.Archetype.Contains("Zefra"))?.Name;
+                    string scaleName2 = hand.FirstOrDefault(x => x.Scale <= 3 && !x.Archetype.Contains("Zefra"))?.Name;
+                    
+                    AddScale(hand, scales, scaleName1);
+                    AddScale(hand, scales, scaleName2);
+                    bool comboCheck = false;
+
+                    if (hand.Count(x => x.Level == 4) >= 2)
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzNoTellar = true;
+                        if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
+                        {
+                            localStats.AverageXyzWithTellar = true;
+                        }
+                        if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) >= 2)
+                        {
+                            localStats.AverageXyzTwoTellars = true;
+                        }
+                        if (hand.Any(x => x.Name == "Zefra Divine Strike") || (deck.Any(x => x.Name == "Zefra Divine Strike") && hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing")))
+                        {
+                            localStats.ZefraComboWithTrap = true;
+                        }
+                    }
+                    if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x.Name == "Satellarknight Skybridge") && deck.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (hand.Any(x => x.Name == "Satellarknight Deneb") && deck.Any(x => x.Name != "Satellarknight Deneb" && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+                    {
+                        localStats.PendulumnSummon = true;
+                        comboCheck = true;
+                        localStats.AverageXyzTwoTellars = true;
+                    }
+                    if (comboCheck && deck.Any(x => x.Name == "Zefra Divine Strike" && (hand.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing") || deck.Any(x => x.Name == "Zefraniu, Secret of the Yang Zing"))))
+                    {
+                        localStats.PendulumnSummon = true;
+                        localStats.ZefraComboWithTrap = true;
+                    }
+                    RemoveScale(hand, scales, scaleName1);
+                    RemoveScale(hand, scales, scaleName2);
+                }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             // Corrections
             if (localStats.AverageXyzSpellOrAltairan || localStats.AverageXyzTwoTellars)
