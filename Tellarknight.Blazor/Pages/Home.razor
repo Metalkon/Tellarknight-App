@@ -1,0 +1,427 @@
+﻿@page "/"
+@using Tellarknight.Blazor.Models;
+@using Services;
+
+<div class="page-background-class">
+    <div>
+        <a style="text-align: center; color: black;">.</a>
+        <h2 style="text-align: center; margin-bottom: 1%; color: white;">Tellarknight Deck Statistics App</h2>
+    </div>
+
+    <div style="width: 95vw; height: 80vh; min-width: 1120px; min-height: 576px; margin: 0 auto;">
+        <table border="1" style="width: 100%; height: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 25%; border: 1px solid transparent; height: 400px;">
+                    <!-- First column -->
+                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 10px; height: 50%;">
+                                <div style="background-color: white; height: 100%; box-sizing: border-box; padding: 10px; border-radius: 10px;">
+                                    <b>Basic Stats:</b> <br />
+
+                                    @if (totalCount != 0)
+                                    {
+                                        <text>
+                                            Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
+                                            Total Monsters: @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
+                                            Combo Chance: @(Math.Round(((totalCount - stats.BrickChance) / totalCount) * 100, 2))% <br />
+                                            Brick Chance: @(Math.Round((stats.BrickChance / totalCount) * 100, 2))% <br />
+                                            (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))
+                                        </text>
+                                    }
+                                    else
+                                    {
+                                        <text>
+                                            <!-- Text remains, but numbers are not displayed -->
+                                            Deck Size: 40<br />
+                                            Total Monsters: 0<br />
+                                            Combo Chance: 0%<br />
+                                            Brick Chance: 100%<br />
+                                            (1 In 1)
+                                        </text>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; height: 50%;">
+                                <div style="background-color: white; height: 100%; box-sizing: border-box; padding: 10px; border-radius: 10px;">
+                                    <b>Xyz Stats:</b> <br />
+
+                                    @if (totalCount != 0)
+                                    {
+                                        <text>
+                                            Xyz Summon (0 Tellars): @(Math.Round((stats.AverageXyzNoTellar / totalCount) * 100, 2))% <br />
+                                            Xyz Summon (1 Tellars): @(Math.Round(((stats.AverageXyzWithTellar - stats.AverageXyzTwoTellars) / totalCount) * 100, 2))% <br />
+                                            Xyz Summon (2 Tellars): @(Math.Round((stats.AverageXyzTwoTellars / totalCount) * 100, 2))% <br />
+                                            <!-- Xyz Summon (Spell/GY): @(Math.Round((stats.AverageXyzSpellOrAltairan / totalCount) * 100, 2))% <br />
+                                            (Both Spell & Altairan Obtained &commat; Xyz)-->
+                                        </text>
+                                    }
+                                    else
+                                    {
+                                        <text>
+                                            <!-- Text remains, but numbers are not displayed -->
+                                            Xyz Summon (0 Tellars): 0%<br />
+                                            Xyz Summon (1 Tellars): 0%<br />
+                                            Xyz Summon (2 Tellars): 0%<br />
+                                        </text>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 25%; border: 1px solid transparent; height: 400px;">
+                    <!-- Second column -->
+                    <table style="width: 100%; height: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 10px; height: 50%;">
+                                <div style="background-color: white; height: 100%; box-sizing: border-box; padding: 10px; border-radius: 10px;">
+                                    <b>Zefra Stats:</b> <br />
+
+                                    @if (totalCount != 0)
+                                    {
+                                        <text>
+                                            Pendulumn Chance (Any): @(Math.Round((stats.PendulumnSummon / totalCount) * 100, 2))% <br />
+                                            Pendulumn (Zefraath/Thuban): @(Math.Round((stats.ZefraathAndThuban / totalCount) * 100, 2))% <br />
+                                            Pendulumn (Zefraath/SHS): @(Math.Round((stats.ZefraathAndSHS / totalCount) * 100, 2))% <br />
+                                            Obtain Trap (Any Xyz): @(Math.Round((stats.ZefraComboWithTrap / totalCount) * 100, 2))% <br />
+                                        </text>
+                                    }
+
+                                    else
+                                    {
+                                        <text>
+                                            <!-- Text remains, but numbers are not displayed -->
+                                            Pendulumn Chance (Any): 0%<br />
+                                            Pendulumn (Zefraath/Thuban): 0%<br />
+                                            Pendulumn (Zefraath/SHS): 0%<br />
+                                            Obtain Trap (Any Xyz): 0%<br />
+                                        </text>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; height: 50%;">
+                                <div style="background-color: white; height: 100%; box-sizing: border-box; padding: 10px; border-radius: 10px;">
+                                    <b>Other Stats:</b> <br />
+
+                                    @if (totalCount != 0)
+                                    {
+                                        <text>
+                                            Average # Tellars: @(Math.Round(stats.AverageTellars / totalCount, 2)) <br />
+                                            Average # Hand Traps: @(Math.Round(stats.AverageHandTraps / totalCount, 2)) <br />
+                                            Average # Bystials: @(Math.Round(stats.AverageBystials / totalCount, 2)) <br />
+                                            Isolde Brick Chance: @(Math.Round((stats.IsoldeBrick / totalCount) * 100, 2))%
+                                        </text>
+                                    }
+                                    else
+                                    {
+                                        <text>
+                                            <!-- Text remains, but numbers are not displayed -->
+                                            Average # Tellars: 0<br />
+                                            Average # Hand Traps: 0<br />
+                                            Average # Bystials: 0<br />
+                                            Isolde Brick Chance: 100%<br />
+                                        </text>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width: 50%; border: 1px solid transparent;">
+                    <!-- Third column -->
+                    <table style="width: 100%; height: 100%;">
+                        <tr>
+                            <td style="padding: 10px;">
+                                <div style="background-color: white; height: 100%; box-sizing: border-box; padding: 10px; border-radius: 10px;">
+
+
+                                    <table class="table table-bordered table-striped custom-table" style="width: 100%; background-color: #fff; border: 1px transparent; padding-top: 20px">
+                                        <tbody>
+                                            @{
+                                                bool IsReadOnly(Card card) => card.Name == "Small World";
+                                                var totalPages = (int)Math.Ceiling((double)supportedCards.Cards.Count / pageSize);
+
+                                                // Precompute chunks outside the loop
+                                                var chunks = Enumerable.Range(0, totalPages)
+                                                .Select(pageIndex => supportedCards.Cards
+                                                .Skip(pageIndex * pageSize)
+                                                .Take(pageSize)
+                                                .Select((value, index) => new { Index = index, Value = value })
+                                                .GroupBy(x => x.Index / 9)
+                                                )
+                                                .ToList();
+
+                                                for (int pageIndex = 0; pageIndex < totalPages; pageIndex++)
+                                                {
+                                                    if (pageIndex + 1 == currentPage)
+                                                    {
+                                                        foreach (var row in chunks[pageIndex])
+                                                        {
+                                                            <tr>
+                                                                @foreach (var card in row.Select(x => x.Value))
+                                                                {
+                                                                    <td style="max-width: 20%; width: auto; text-align: center; border: 1px transparent; background-color: #f8f8f8; padding: 2px; border-radius: 2px;">
+                                                                        <img src="@card.Image" title="@card.Name" style="display: block; margin: 0 auto; width: 100%">
+                                                                        <input type="text" style="width: 100%; text-align: center;" @bind="card.Quantity" readonly="@IsReadOnly(card)" />
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.5%">
+                                        <div style="width: 17.5%;">
+                                            <div><b>Hand Size:</b></div>
+                                            <div><b>Sample Size:</b></div>
+                                        </div>
+                                        <div style="width: 15%;">
+                                            <input type="text" style="width: 90%; text-align: center;" @bind-value="startingHand">
+                                            <input type="text" style="width: 90%; text-align: center;" @bind-value="checkCount">
+                                        </div>
+                                        <div style="width: 20%; text-align: left;">
+                                            <button class="btn btn-primary" @onclick="@(() => { if (!active) CheckDeck(); })">Check Deck</button>
+                                            <div>Tested: @totalCount</div>
+                                        </div>
+                                        <div style="width: 23.75%; text-align: center;">
+                                            <button class="btn btn-primary" @onclick="@(() => { if (!active) ResetCards(); })">Reset</button>
+                                            <div style="color: white">Reset</div>
+                                        </div>
+                                        <div style="width: 23.75%; text-align: center;">
+                                            <button class="btn btn-primary" @onclick="PreviousPage">&lt;</button>
+                                            <span>@currentPage / @totalPages</span>
+                                            <button class="btn btn-primary" @onclick="NextPage">&gt;</button> <br />
+                                            <div style="color: white">Pages</div>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 70%;">
+                                        <br />
+                                        <b>Note:</b> Keep in mind that results may change by at least 0.5% for each test due to RNG. <br />
+                                        Small World will be added in a future update, should provide an extra 6-10% increased combo chance depending on the deck. <br />
+                                    </div>
+
+
+
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="bottom" style="clear: both; text-align: center; color: white;">
+        Created By: Metalkon
+    </div>
+    <p class="bottom-right-text" style="clear: both; text-align: center; color: white;">v1.0.0</p>
+</div>
+
+<style>
+    .row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .box {
+        flex: 1;
+        min-height: 150px;
+        padding: 2%;
+        background-color: #f8f8f8;
+        color: #333;
+        margin-bottom: 21px;
+        margin-right: 6px;
+        margin-right: 6px;
+    }
+
+    #left {
+        width: 50%;
+        margin-right: 5px;
+        margin-left: 15px;
+    }
+
+    #right {
+        width: 50%;
+        padding: 1px;
+    }
+
+    .page-background-class {
+        background-image: url(../background.png);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+    }
+</style>
+
+
+@code {
+    private int totalPages = 3;
+    private int pageSize = 27;
+    private int currentPage = 1;
+    private bool active = false;
+    private int checkCount = 25000;
+    private int totalCount;
+    private int startingHand = 5;
+    private bool normalSummoned = false;
+    private List<Card> extraDeck = new List<Card>();
+    private List<Card> onField = new List<Card>();
+    private List<Card> scales = new List<Card>();
+    private DeckStatistics stats = new DeckStatistics();
+    private List<Card> deck = new List<Card>();
+    private List<Card> hand = new List<Card>();
+    private List<Card> gy = new List<Card>();
+    private SupportedCards supportedCards = new SupportedCards();
+
+    // Test
+    //List<Card> startingHandTest = new List<Card>();
+
+    private async Task CheckDeck()
+    {
+        checkCount = (checkCount > 100000) ? 100000 : (checkCount < 15000 ? 15000 : checkCount);
+        startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
+
+        active = true;
+        stats = new DeckStatistics();
+        totalCount = 0;
+        int tempCount = 0;
+        int tempCountNext = (int)(checkCount * 0.001);
+        Random random = new Random();
+
+        for (int i = 0; i < checkCount; i++)
+        {
+            int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
+
+            // Reset Everything
+            extraDeck.Clear();
+            deck.Clear();
+            hand.Clear();
+            onField.Clear();
+            scales.Clear();
+            gy.Clear();
+            bool normalSummoned = false;
+
+            // Build Deck & Hand
+            BuildDeck();
+            ShuffleDeck();
+            DrawHand();
+
+            // tests only
+            //startingHandTest = hand.ToList();
+
+            // Check Hand & Deck For Optimal Searches
+            (hand, deck, gy, normalSummoned, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummoned, onField, scales);
+
+            // Analyze Hand & Update Hand Statistics
+            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummoned, onField, scales, extraDeck, stats);
+
+
+            totalCount++;
+            tempCount++;
+            if (tempCount >= tempCountNext)
+            {
+                tempCountNext = tempCountNext + random.Next((int)(checkCount * 0.0005), (int)(checkCount * 0.015));
+                await InvokeAsync(StateHasChanged);
+            }
+            active = false;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void BuildDeck()
+    {
+        foreach (Card card in supportedCards.Cards)
+        {
+            if (card.Quantity > 3 && card.Name != "Hand Trap" && card.Name != "Level 4" && card.Name != "Empty Card")
+            {
+                card.Quantity = 3;
+            }
+
+            if (card.Quantity > 0 && card.Role != "ExtraDeck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    deck.Add(card);
+                }
+            }
+            if (card.Quantity > 0 && card.Role == "ExtraDeck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    extraDeck.Add(card);
+                }
+            }
+        }
+        while (deck.Count < 40)
+        {
+            deck.Add(new Card()
+                {
+                    Name = "Empty Card",
+                    Archetype = "None",
+                    Type = "None",
+                    Role = "None"
+                });
+        }
+    }
+
+    private void ShuffleDeck()
+    {
+        var random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            int deckCount = deck.Count;
+            while (deckCount > 1)
+            {
+                deckCount--;
+                int randomIndex = random.Next(deckCount + 1);
+                var tempCard = deck[randomIndex];
+                deck[randomIndex] = deck[deckCount];
+                deck[deckCount] = tempCard;
+            }
+        }
+    }
+
+    public void DrawHand()
+    {
+        Random random = new Random();
+        for (int i = 0; i < startingHand; i++)
+        {
+            hand.Add(deck[0]);
+            deck.RemoveAt(0);
+        }
+    }
+
+    private async Task NextPage()
+    {
+        if (currentPage != totalPages)
+        {
+            currentPage++;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage != 1)
+        {
+            currentPage--;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void ResetCards()
+    {
+        totalCount = 0;
+        stats = new DeckStatistics();
+        supportedCards = new SupportedCards();
+        InvokeAsync(StateHasChanged);
+    }
+}
