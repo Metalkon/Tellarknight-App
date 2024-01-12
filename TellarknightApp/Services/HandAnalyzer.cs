@@ -24,7 +24,7 @@ namespace TellarknightApp.Services
 {
     internal class HandAnalyzer
     {
-        public static DeckStatistics HandCheck(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummoned, List<Card> onField, List<Card> scales, List<Card> extraDeck, DeckStatistics stats)
+        public static DeckStatistics HandCheck(List<Card> hand, List<Card> deck, List<Card> gy, bool normalSummoned, List<Card> onField, List<Card> scales, List<Card> extraDeck, DeckStatistics statsThread)
         {
             LocalStats localStats = new LocalStats();
             
@@ -746,14 +746,14 @@ namespace TellarknightApp.Services
                 localStats.IsoldeBrick = true;
             }
 
-            stats.AverageHandTraps = stats.AverageHandTraps + hand.Count(x => x.Role == "HandTrap");
-            stats.AverageBystials = stats.AverageBystials + hand.Count(x => x.Archetype.Contains("Bystial"));
+            statsThread.AverageHandTraps = statsThread.AverageHandTraps + hand.Count(x => x.Role == "HandTrap");
+            statsThread.AverageBystials = statsThread.AverageBystials + hand.Count(x => x.Archetype.Contains("Bystial"));
 
-            stats.AverageTellars = stats.AverageTellars + hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
+            statsThread.AverageTellars = statsThread.AverageTellars + hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
 
-            stats = UpdateStats(localStats, stats);
+            statsThread = UpdateStats(localStats, statsThread);
 
-            return stats;
+            return statsThread;
         }
 
         public static (List<Card>, List<Card>) AddScale(List<Card> hand, List<Card> scales, string targetCard)
@@ -813,24 +813,24 @@ namespace TellarknightApp.Services
             return false;
         }
 
-        public static DeckStatistics UpdateStats(LocalStats localStats, DeckStatistics stats)
+        private static DeckStatistics UpdateStats(LocalStats localStats, DeckStatistics statsThread)
         {
-            if (localStats.BrickChance) stats.BrickChance++;
-            if (localStats.AverageTellars) stats.AverageTellars++;
-            if (localStats.AverageXyzNoTellar) stats.AverageXyzNoTellar++;
-            if (localStats.AverageXyzWithTellar) stats.AverageXyzWithTellar++;
-            if (localStats.AverageXyzSpellOrAltairan) stats.AverageXyzSpellOrAltairan++;
-            if (localStats.AverageXyzTwoTellars) stats.AverageXyzTwoTellars++;
-            if (localStats.ZefraathAndSHS) stats.ZefraathAndSHS++;
-            if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;
-            if (localStats.ZefraComboWithTrap) stats.ZefraComboWithTrap++;
-            if (localStats.ZefraComboWithNormalAvailable) stats.ZefraComboWithNormalAvailable++;
-            if (localStats.AverageHandTraps) stats.AverageHandTraps++;
-            if (localStats.IsoldeBrick) stats.IsoldeBrick++;
-            if (localStats.PendulumnSummon) stats.PendulumnSummon++;
-            if (localStats.AverageXyzUnknown) stats.AverageXyzUnknown++;
+            if (localStats.BrickChance) statsThread.BrickChance++;
+            if (localStats.AverageTellars) statsThread.AverageTellars++;
+            if (localStats.AverageXyzNoTellar) statsThread.AverageXyzNoTellar++;
+            if (localStats.AverageXyzWithTellar) statsThread.AverageXyzWithTellar++;
+            if (localStats.AverageXyzSpellOrAltairan) statsThread.AverageXyzSpellOrAltairan++;
+            if (localStats.AverageXyzTwoTellars) statsThread.AverageXyzTwoTellars++;
+            if (localStats.ZefraathAndSHS) statsThread.ZefraathAndSHS++;
+            if (localStats.ZefraathAndThuban) statsThread.ZefraathAndThuban++;
+            if (localStats.ZefraComboWithTrap) statsThread.ZefraComboWithTrap++;
+            if (localStats.ZefraComboWithNormalAvailable) statsThread.ZefraComboWithNormalAvailable++;
+            if (localStats.AverageHandTraps) statsThread.AverageHandTraps++;
+            if (localStats.IsoldeBrick) statsThread.IsoldeBrick++;
+            if (localStats.PendulumnSummon) statsThread.PendulumnSummon++;
+            if (localStats.AverageXyzUnknown) statsThread.AverageXyzUnknown++;
 
-            return stats;
+            return statsThread;
         }
 
         public class LocalStats

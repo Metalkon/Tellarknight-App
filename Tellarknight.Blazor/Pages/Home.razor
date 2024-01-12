@@ -22,11 +22,12 @@
                                     @if (totalCount != 0)
                                     {
                                         <text>
-                                            Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
-                                            Total Monsters: @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
+                                            Deck Size: @deckOriginal.Count <br />
+                                            Total Monsters: @deckOriginal.Count(x => x.Level != null) <br />
                                             Combo Chance: @(Math.Round(((totalCount - stats.BrickChance) / totalCount) * 100, 2))% <br />
                                             Brick Chance: @(Math.Round((stats.BrickChance / totalCount) * 100, 2))% <br />
-                                            (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))
+                                            (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))<br />
+                                            TEST: RAWR (@totalCount)
                                         </text>
                                     }
                                     else
@@ -264,41 +265,57 @@
 
 
 @code {
+    private List<Card> deckOriginal = new List<Card>();
+    private List<Card> extraDeckOriginal = new List<Card>();
+    private DeckStatistics stats = new DeckStatistics();
+    private SupportedCards supportedCards = new SupportedCards();
     private int totalPages = 3;
     private int pageSize = 27;
     private int currentPage = 1;
     private bool active = false;
-    private int checkCount = 25000;
+    private int checkCount = 10;
     private int totalCount;
     private int startingHand = 5;
-    private bool normalSummoned = false;
-    private List<Card> extraDeck = new List<Card>();
-    private List<Card> onField = new List<Card>();
-    private List<Card> scales = new List<Card>();
-    private DeckStatistics stats = new DeckStatistics();
-    private List<Card> deck = new List<Card>();
-    private List<Card> hand = new List<Card>();
-    private List<Card> gy = new List<Card>();
-    private SupportedCards supportedCards = new SupportedCards();
-
-    // Test
-    //List<Card> startingHandTest = new List<Card>();
+    Random random = new Random();
 
     private async Task CheckDeck()
     {
-        checkCount = (checkCount > 100000) ? 100000 : (checkCount < 15000 ? 15000 : checkCount);
+        checkCount = (checkCount > 100000) ? 100000 : (checkCount < 10 ? 10 : checkCount);
         startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
 
-        active = true;
+        extraDeckOriginal.Clear();
+        deckOriginal.Clear();
         stats = new DeckStatistics();
         totalCount = 0;
-        int tempCount = 0;
-        int tempCountNext = (int)(checkCount * 0.001);
-        Random random = new Random();
+
+        (deckOriginal, extraDeckOriginal) = BuildDeck(deckOriginal, extraDeckOriginal);
+
+        Console.WriteLine("LoopMethod About To Start");
+
+        Task.Run(() => LoopMethod());
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void LoopMethod()
+    {
+        bool normalSummoned = false;
+        List<Card> deck = new List<Card>();
+        List<Card> hand = new List<Card>();
+        List<Card> gy = new List<Card>();
+        List<Card> extraDeck = new List<Card>();
+        List<Card> onField = new List<Card>();
+        List<Card> scales = new List<Card>();
+        DeckStatistics statsThread = new DeckStatistics();
+
+        Console.WriteLine("LoopMethod Started");
 
         for (int i = 0; i < checkCount; i++)
         {
             int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
+            totalCount++;
+            Console.WriteLine("A");
+
 
             // Reset Everything
             extraDeck.Clear();
@@ -307,36 +324,26 @@
             onField.Clear();
             scales.Clear();
             gy.Clear();
-            bool normalSummoned = false;
+            normalSummoned = false;
+            statsThread = new DeckStatistics();
 
             // Build Deck & Hand
-            BuildDeck();
-            ShuffleDeck();
-            DrawHand();
+            (deck, extraDeck) = BuildDeck(deck, extraDeck);
+            (hand, deck) = ShuffleDeck(hand, deck);
+            (hand, deck) = DrawHand(hand, deck);
 
-            // tests only
-            //startingHandTest = hand.ToList();
 
             // Check Hand & Deck For Optimal Searches
             (hand, deck, gy, normalSummoned, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummoned, onField, scales);
 
             // Analyze Hand & Update Hand Statistics
-            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummoned, onField, scales, extraDeck, stats);
-
-
-            totalCount++;
-            tempCount++;
-            if (tempCount >= tempCountNext)
-            {
-                tempCountNext = tempCountNext + random.Next((int)(checkCount * 0.0005), (int)(checkCount * 0.015));
-                await InvokeAsync(StateHasChanged);
-            }
-            active = false;
+            statsThread = HandAnalyzer.HandCheck(hand, deck, gy, normalSummoned, onField, scales, extraDeck, statsThread);
+            Console.WriteLine("B");
+            UpdateStats(statsThread);
         }
-        await InvokeAsync(StateHasChanged);
     }
 
-    private void BuildDeck()
+    private (List<Card>, List<Card>) BuildDeck(List<Card> deck, List<Card> extraDeck)
     {
         foreach (Card card in supportedCards.Cards)
         {
@@ -370,9 +377,10 @@
                     Role = "None"
                 });
         }
+        return (deck, extraDeck);
     }
 
-    private void ShuffleDeck()
+    private (List<Card>, List<Card>) ShuffleDeck(List<Card> hand, List<Card> deck)
     {
         var random = new Random();
         for (int i = 0; i < 10; i++)
@@ -387,9 +395,10 @@
                 deck[deckCount] = tempCard;
             }
         }
+        return (hand, deck);
     }
 
-    public void DrawHand()
+    private (List<Card>, List<Card>) DrawHand(List<Card> hand, List<Card> deck)
     {
         Random random = new Random();
         for (int i = 0; i < startingHand; i++)
@@ -397,6 +406,28 @@
             hand.Add(deck[0]);
             deck.RemoveAt(0);
         }
+        return (hand, deck);
+    }
+
+
+    private void UpdateStats(DeckStatistics statsThread)
+    {    
+        if (statsThread.BrickChance != 0) stats.BrickChance++;
+        if (statsThread.AverageTellars != 0) stats.AverageTellars = stats.AverageTellars + statsThread.AverageTellars;
+        if (statsThread.AverageXyzNoTellar != 0) stats.AverageXyzNoTellar++;
+        if (statsThread.AverageXyzWithTellar != 0) stats.AverageXyzWithTellar++;
+        if (statsThread.AverageXyzSpellOrAltairan != 0) stats.AverageXyzSpellOrAltairan++;
+        if (statsThread.AverageXyzTwoTellars != 0) stats.AverageXyzTwoTellars++;
+        if (statsThread.ZefraathAndSHS != 0) stats.ZefraathAndSHS++;
+        if (statsThread.ZefraathAndThuban != 0) stats.ZefraathAndThuban++;
+        if (statsThread.ZefraComboWithTrap != 0) stats.ZefraComboWithTrap++;
+        if (statsThread.ZefraComboWithNormalAvailable != 0) stats.ZefraComboWithNormalAvailable++;
+        if (statsThread.AverageHandTraps != 0) stats.AverageHandTraps = stats.AverageHandTraps + statsThread.AverageHandTraps;
+        if (statsThread.IsoldeBrick != 0) stats.IsoldeBrick++;
+        if (statsThread.PendulumnSummon != 0) stats.PendulumnSummon++;
+        if (statsThread.AverageXyzUnknown != 0) stats.AverageXyzUnknown++;
+        Console.WriteLine("C");
+
     }
 
     private async Task NextPage()
