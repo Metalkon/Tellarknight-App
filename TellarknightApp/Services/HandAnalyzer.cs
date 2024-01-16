@@ -264,11 +264,7 @@ namespace TellarknightApp.Services
                 }
 
                 // Constellar-Specific Monster Effects
-                if (hand.Any(x => x.Name == "Constellar Pollux") && hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4))
-                {
-                    localStats.AverageXyzTwoTellars = true;
-                }
-                if (hand.Any(x => x.Name == "Constellar Algiedi") && hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4))
+                if (hand.Any(x => (x.Name == "Constellar Pollux" || x.Name == "Constellar Algiedi")) && hand.Count(x => x.Archetype.Contains("Constellar") && x.Level == 4) >= 2)
                 {
                     localStats.AverageXyzTwoTellars = true;
                 }
