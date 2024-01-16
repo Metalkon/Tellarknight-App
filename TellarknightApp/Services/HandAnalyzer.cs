@@ -399,32 +399,6 @@ namespace TellarknightApp.Services
                     RemoveScale(hand, scales, "Satellarknight Zefrathuban");
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 // Zefra SHS
                 if (CheckSHS(onField, scales) && hand.Any(x => x.Name == "Zefraath"))
                 {
