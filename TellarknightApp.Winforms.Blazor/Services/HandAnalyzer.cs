@@ -18,6 +18,8 @@ using TellarknightApp.Winforms.Blazor.Models;
 - Add more temporary placements for deneb search and other cards
 - Add more temporary booleans for card conditions (like zoodiac barrage)
 - "Add stats for hands that can achieve both unuk effect and have the spell by the xyz, that covers when lyran cannot search cont spell
+
+- Fix zefracore not doing much to stats where a deck with thuban as the only monster other than zefraath giving results.
  */
 
 namespace TellarknightApp.Winforms.Blazor.Services
