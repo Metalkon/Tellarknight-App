@@ -1,5 +1,5 @@
 # Tellarknight App
-This is a personal project intended to be shared with a small community for the Yu-Gi-Oh Card Game.
+This is a personal project intended to be shared with a small community for the Yu-Gi-Oh Card Game, the original project in the solution is created with .NET MAUI (.NET8) and the current beta release is running on Winforms with Blazor WebAssembly due to some issues with MAUI.
 
 The project is used for creating Tellarknight Decklists and testing their consistency and statistics.
 
