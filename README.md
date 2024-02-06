@@ -17,5 +17,7 @@ Main
 
 The app is heavy on cpu load and uses a lot of if statements in it's services due to a lot of custom checks that requires game knowledge for combo's.
 
+Beta Release:
+- https://github.com/Metalkon/Tellarknight-App/releases/tag/v0.1.0beta
 
 ![Example Image](tellar_app_window.PNG)
