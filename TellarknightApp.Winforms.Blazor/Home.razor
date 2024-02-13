@@ -286,7 +286,7 @@
     private async Task CheckDeck()
     {
         checkCount = (checkCount > 100000) ? 100000 : (checkCount < 15000 ? 15000 : checkCount);
-        startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
+        startingHand = (startingHand < 1) ? 1 : (startingHand > 7 ? 7 : startingHand);
 
         active = true;
         stats = new DeckStatistics();

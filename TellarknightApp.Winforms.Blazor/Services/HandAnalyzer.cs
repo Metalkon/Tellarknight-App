@@ -219,8 +219,8 @@ namespace TellarknightApp.Winforms.Blazor.Services
                 }
                 if (hand.Any(x => x.Name == "Satellarknight Skybridge") && hand.Any(x => x.Name == "Constellar Tellarknights") && CountCards(hand, 4, "Tellarknight") >= 1)
                 {
-                    if ((hand.Any(x => x.Name == "Satellarknight Deneb" && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1))
-                        || (hand.Any(x => x.Name == "Satellarknight Unukalhai" && CountCards(deck, "Satellarknight Unukalhai", 4, "Tellarknight") >= 1)))
+                    if ((deck.Any(x => x.Name == "Satellarknight Deneb") && CountCards(deck, "Satellarknight Deneb", 4, "Tellarknight") >= 1)
+                        || (deck.Any(x => x.Name == "Satellarknight Unukalhai") && CountCards(deck, "Satellarknight Unukalhai", 4, "Tellarknight") >= 1))
                     {
                         localStats.AverageXyzTwoTellars = true;
                     }
