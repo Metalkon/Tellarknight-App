@@ -17,10 +17,9 @@ namespace TellarknightApp.Models
         public string? Image { get; set; }
         public int Quantity { get; set; }
 
-        public virtual void AnalyzeHand(string name)
+        public virtual GameState AnalyzeHand(GameState gameState)
         {
-            string result = $"CardClass: {name}";
-            Console.WriteLine(result);
+            return gameState;
         }
     }
 }

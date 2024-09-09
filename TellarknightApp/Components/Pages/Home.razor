@@ -206,10 +206,6 @@
                                         <br />
                                         <b>Notes:</b> Results may change by about 0.5% for each test due to RNG. Small World will be added in a future update, along with any bug fixes and improvements for more accurate results (mainly pendulumns). <br />
                                     </div>
-
-
-
-
                                 </div>
                             </td>
                         </tr>
@@ -223,44 +219,6 @@
     </div>
     <p class="bottom-right-text" style="clear: both; text-align: center; color: white;">v0.1.0 Beta </p>
 </div>
-
-<style>
-    .row {
-        display: flex;
-        gap: 15px;
-    }
-
-    .box {
-        flex: 1;
-        min-height: 150px;
-        padding: 2%;
-        background-color: #f8f8f8;
-        color: #333;
-        margin-bottom: 21px;
-        margin-right: 6px;
-        margin-right: 6px;
-    }
-
-    #left {
-        width: 50%;
-        margin-right: 5px;
-        margin-left: 15px;
-    }
-
-    #right {
-        width: 50%;
-        padding: 1px;
-    }
-
-    .page-background-class {
-        background-image: url(../background.png);
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100vh;
-    }
-</style>
-
 
 @code {
     private int totalPages = 3;
@@ -295,6 +253,7 @@
         int tempCountNext = (int)(checkCount * 0.001);
         Random random = new Random();
 
+
         for (int i = 0; i < checkCount; i++)
         {
             int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
@@ -313,14 +272,24 @@
             ShuffleDeck();
             DrawHand();
 
-            // tests only
-            //startingHandTest = hand.ToList();
+            LocalStats localStats = new LocalStats();
+            GameState gameState = new GameState()
+                {
+                    LocalStats = localStats,
+                    Hand = hand,
+                    Deck = deck,
+                    Gy = gy,
+                    OnField = onField,
+                    Scales = scales,
+                    ExtraDeck = extraDeck,
+                    NormalSummoned = normalSummoned
+                };
 
             // Check Hand & Deck For Optimal Searches
-            (hand, deck, gy, normalSummoned, onField, scales) = CardSearcher.CardSearch(hand, deck, gy, normalSummoned, onField, scales);
+            gameState = CardSearcher.CardSearch(gameState);
 
             // Analyze Hand & Update Hand Statistics
-            stats = HandAnalyzer.HandCheck(hand, deck, gy, normalSummoned, onField, scales, extraDeck, stats);
+            stats = HandAnalyzer.HandCheck(gameState, stats);
 
 
             totalCount++;

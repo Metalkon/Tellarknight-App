@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TellarknightApp.Models;
+using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
@@ -20,10 +21,10 @@ namespace TellarknightApp.Cards
             Role = "Search";
         }
 
-        public override GameState AnalyzeHand(string name)
+        public override GameState AnalyzeHand(GameState gameState)
         {
-            string result = $"Deneb: {name}";
-            Console.WriteLine(result);
+            CardHelper _cardHelper = new CardHelper();
+            return gameState;
         }
     }
 }
