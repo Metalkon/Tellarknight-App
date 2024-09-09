@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TellarknightApp.Services;
 
 namespace TellarknightApp
 {
@@ -13,6 +14,9 @@ namespace TellarknightApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
+
+            builder.Services
+                .AddScoped<CardHelper>();
 
             builder.Services.AddMauiBlazorWebView();
 
