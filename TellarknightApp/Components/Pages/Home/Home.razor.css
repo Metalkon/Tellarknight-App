@@ -1,0 +1,34 @@
+﻿.container {
+    display: grid;
+    height: 100vh; /* This ensures the grid takes the full height of the screen */
+    width: 100vw; /* This ensures the grid takes the full width of the screen */
+    grid-template-rows: 4fr 1fr; /* The grid will be divided into two rows: 4/5 height and 1/5 height */
+    grid-template-columns: 1fr 1fr 1fr; /* Three equal columns */
+    grid-gap: 5px; /* Spacing between the grid items */
+}
+
+.item {
+    border: 5px solid black;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.materials {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+}
+
+.recipes {
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 1;
+}
+
+.crafting {
+    grid-row: 1 / span 1;
+    grid-column: 3 / span 1;
+}
+
+.history {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 3;
+}

@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/old"
 @using TellarknightApp.Models;
 @using Services;
 
@@ -22,8 +22,8 @@
                                     @if (totalCount != 0)
                                     {
                                         <text>
-                                            Deck Size: @(deck.Count + hand.Count + onField.Count + gy.Count + scales.Count) <br />
-                                            Total Monsters: @(hand.Count(x => x.Level != null) + deck.Count(x => x.Level != null)) <br />
+                                            Deck Size: @(gameState.Deck.Count + gameState.Hand.Count + gameState.OnField.Count + gameState.Gy.Count + gameState.Scales.Count) <br />
+                                            Total Monsters: @(gameState.Hand.Count(x => x.Level != null) + gameState.Deck.Count(x => x.Level != null)) <br />
                                             Combo Chance: @(Math.Round(((totalCount - stats.BrickChance) / totalCount) * 100, 2))% <br />
                                             Brick Chance: @(Math.Round((stats.BrickChance / totalCount) * 100, 2))% <br />
                                             (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))
@@ -228,14 +228,8 @@
     private int checkCount = 25000;
     private int totalCount;
     private int startingHand = 5;
-    private bool normalSummoned = false;
-    private List<Card> extraDeck = new List<Card>();
-    private List<Card> onField = new List<Card>();
-    private List<Card> scales = new List<Card>();
+    private GameState gameState = new GameState();
     private DeckStatistics stats = new DeckStatistics();
-    private List<Card> deck = new List<Card>();
-    private List<Card> hand = new List<Card>();
-    private List<Card> gy = new List<Card>();
     private SupportedCards supportedCards = new SupportedCards();
 
     // Test
@@ -256,15 +250,15 @@
 
         for (int i = 0; i < checkCount; i++)
         {
-            int deckSizePostSearch = hand.Count + deck.Count + gy.Count + onField.Count + scales.Count;
+            int deckSizePostSearch = gameState.Hand.Count + gameState.Deck.Count + gameState.Gy.Count + gameState.OnField.Count + gameState.Scales.Count;
 
             // Reset Everything
-            extraDeck.Clear();
-            deck.Clear();
-            hand.Clear();
-            onField.Clear();
-            scales.Clear();
-            gy.Clear();
+            gameState.ExtraDeck.Clear();
+            gameState.Deck.Clear();
+            gameState.Hand.Clear();
+            gameState.OnField.Clear();
+            gameState.Scales.Clear();
+            gameState.Gy.Clear();
             bool normalSummoned = false;
 
             // Build Deck & Hand
@@ -273,18 +267,6 @@
             DrawHand();
 
             LocalStats localStats = new LocalStats();
-            GameState gameState = new GameState()
-                {
-                    LocalStats = localStats,
-                    Hand = hand,
-                    Deck = deck,
-                    Gy = gy,
-                    OnField = onField,
-                    Scales = scales,
-                    ExtraDeck = extraDeck,
-                    NormalSummoned = normalSummoned
-                };
-
             // Check Hand & Deck For Optimal Searches
             gameState = CardSearcher.CardSearch(gameState);
 
@@ -317,20 +299,20 @@
             {
                 for (int i = 0; i < card.Quantity; i++)
                 {
-                    deck.Add(card);
+                    gameState.Deck.Add(card);
                 }
             }
             if (card.Quantity > 0 && card.Role == "ExtraDeck")
             {
                 for (int i = 0; i < card.Quantity; i++)
                 {
-                    extraDeck.Add(card);
+                    gameState.ExtraDeck.Add(card);
                 }
             }
         }
-        while(deck.Count < 40)
+        while (gameState.Deck.Count < 40)
         {
-            deck.Add(new Card() 
+            gameState.Deck.Add(new Card() 
             { 
                 Name = "Empty Card",
                 Archetype = "None",
@@ -345,14 +327,14 @@
         var random = new Random();
         for (int i = 0; i < 10; i++)
         {
-            int deckCount = deck.Count;
+            int deckCount = gameState.Deck.Count;
             while (deckCount > 1)
             {
                 deckCount--;
                 int randomIndex = random.Next(deckCount + 1);
-                var tempCard = deck[randomIndex];
-                deck[randomIndex] = deck[deckCount];
-                deck[deckCount] = tempCard;
+                var tempCard = gameState.Deck[randomIndex];
+                gameState.Deck[randomIndex] = gameState.Deck[deckCount];
+                gameState.Deck[deckCount] = tempCard;
             }
         }
     }
@@ -362,8 +344,8 @@
         Random random = new Random();
         for (int i = 0; i < startingHand; i++)
         {
-            hand.Add(deck[0]);
-            deck.RemoveAt(0);
+            gameState.Hand.Add(gameState.Deck[0]);
+            gameState.Deck.RemoveAt(0);
         }
     }
 
