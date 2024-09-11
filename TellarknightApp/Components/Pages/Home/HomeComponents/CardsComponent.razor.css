@@ -1,0 +1,66 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.app-grid-container {
+    display: grid;
+    grid-template-rows: 1fr 8fr;
+    grid-template-columns: 3fr 1fr;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.item {
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.grid-search {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+}
+
+.grid-search-other {
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 1;
+}
+
+.grid-cards {
+    grid-row: 2 / span 1;
+    grid-column: 1 / span 2;
+    overflow: auto;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 5px;
+    width: 100%;
+    height: auto;
+}
+
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    max-height: 100%;
+}
+
+.item-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.item-input {
+    width: 100%;
+    border: 1px solid #ccc;
+}

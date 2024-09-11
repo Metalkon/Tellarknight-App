@@ -1,0 +1,59 @@
+﻿<div class="app-grid-container">
+    <div class="item grid-search">
+        grid-searchbar
+    </div>
+    <div class="item grid-search-other">
+        grid-search-other
+    </div>
+    <div class="item grid-cards">
+
+        <div class="card-container">
+            @foreach (var card in Items)
+            {
+                <div class="grid-item">
+                    <img src="@card.ImageUrl" alt="@card.Name" class="item-image" />
+                    <input type="text" class="item-input" />
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@code {
+    List<Card> Items = new List<Card>()
+    {
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+
+    };
+
+    public class Card
+    {
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
+    }
+}
