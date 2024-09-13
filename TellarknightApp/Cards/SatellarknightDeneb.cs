@@ -8,17 +8,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    internal class SatellarknightDeneb : Card
+    public class SatellarknightDeneb : Card
     {
-        SatellarknightDeneb() 
+        public SatellarknightDeneb() 
         {
             Name = "Satellarknight Deneb";
             Type = "Warrior";
+            Attribute = "Light";
             Level = 4;
+            Attack = 1500;
+            Defense = 1000;
             Scale = null;
-            Archetype = "Tellarknight/Any";
+            Role = null;
+            Archetype = "Tellarknight";
             Image = "./CardArt/Deneb.png";
-            Role = "Search";
         }
 
         public override GameState AnalyzeHand(GameState gameState)

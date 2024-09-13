@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TellarknightApp.Services
+namespace TellarknightApp.Models
 {
-    internal class LocalStats
+    public class LocalStats
     {
         public bool BrickChance { get; set; } = false;
         public bool AverageTellars { get; set; } = false;
