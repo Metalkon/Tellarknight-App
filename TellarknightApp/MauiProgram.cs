@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TellarknightApp.Models;
 using TellarknightApp.Services;
 
 namespace TellarknightApp
@@ -16,6 +17,7 @@ namespace TellarknightApp
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddSingleton<SupportedCards>();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();

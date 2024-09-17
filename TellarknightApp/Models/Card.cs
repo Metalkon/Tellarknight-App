@@ -15,7 +15,7 @@ namespace TellarknightApp.Models
         public int? Attack { get; set; }
         public int? Defense { get; set; }
         public int? Scale { get; set; }
-        public string? Archetype { get; set; }
+        public List<string>? Archetype { get; set; }
         public string? Role { get; set; }
         public string Image { get; set; }
         public int Quantity { get; set; }
@@ -25,6 +25,8 @@ namespace TellarknightApp.Models
             Name = string.Empty;
             Type = string.Empty;
             Attribute = string.Empty;
+            Archetype = new List<string> { "None" };
+            Role = string.Empty;
             Image = "./CardArt/CardBack.png";
             Quantity = 0;
         }

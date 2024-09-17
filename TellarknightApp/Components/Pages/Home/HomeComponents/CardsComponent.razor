@@ -1,6 +1,11 @@
-﻿<div class="app-grid-container">
-    <div class="item grid-search">
-        grid-searchbar
+﻿@using TellarknightApp.Services
+@using TellarknightApp.Models
+@inject SupportedCards supportedCards
+
+<div class="app-grid-container">
+    <div class="grid-search">
+        <input id="searchQuery" type="text" @bind-value="searchQuery" class="search-input" />
+        <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
     </div>
     <div class="item grid-search-other">
         grid-search-other
@@ -8,11 +13,11 @@
     <div class="item grid-cards">
 
         <div class="card-container">
-            @foreach (var card in Items)
+            @foreach (Card card in supportedCards.Cards.Where(x => x.Name.ToLower().Contains(searchQuery.ToLower())))
             {
                 <div class="grid-item">
-                    <img src="@card.ImageUrl" alt="@card.Name" class="item-image" />
-                    <input type="text" class="item-input" />
+                    <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    <input type="text" class="item-input" @bind="card.Quantity" />
                 </div>
             }
         </div>
@@ -21,39 +26,10 @@
 </div>
 
 @code {
-    List<Card> Items = new List<Card>()
-    {
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
-        new Card() { Name = "Satellarknight Deneb", ImageUrl = "./CardArt/FullSize/Deneb.png" },
+    private string searchQuery = "unuk";
 
-    };
-
-    public class Card
+    public async void CardSearch()
     {
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        await OnInitializedAsync();
     }
 }

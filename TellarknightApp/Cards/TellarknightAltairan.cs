@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class SatellarknightDeneb : Card
+    public class TellarknightAltairan : Card
     {
-        public SatellarknightDeneb() 
+        public TellarknightAltairan() 
         {
-            Name = "Satellarknight Deneb";
+            Name = "Tellarknight Altairan";
             Type = "Warrior";
             Attribute = "Light";
             Level = 4;
-            Attack = 1500;
-            Defense = 1000;
+            Attack = 1700;
+            Defense = 1300;
             Scale = null;
             Role = string.Empty;
-            Archetype = new List<string> { "Tellarknight" };
-            Image = "./CardArt/Deneb.png";
+            Archetype = new List<string> { "Tellarknight", "Constellar" };
+            Image = "./CardArt/Altairan.png";
         }
 
         public override GameState AnalyzeHand(GameState gameState)
