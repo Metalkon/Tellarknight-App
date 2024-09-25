@@ -1,6 +1,7 @@
 ﻿html, body {
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .app-grid-container {
@@ -10,7 +11,7 @@
     grid-gap: 10px;
     padding: 10px;
     height: 100vh;
-    width: 100vw;
+    width: calc(100vw - 10px);
     box-sizing: border-box;
 }
 
@@ -33,3 +34,10 @@
     grid-row: 1 / span 1;
     grid-column: 2 / span 1;
 }
+
+.page-background-class {
+    background-image: url(../background.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;

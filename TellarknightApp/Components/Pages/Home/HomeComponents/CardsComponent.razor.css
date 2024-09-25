@@ -7,7 +7,7 @@
 
 .app-grid-container {
     display: grid;
-    grid-template-rows: 1fr 8fr;
+    grid-template-rows: 1fr 9fr;
     grid-template-columns: 3fr 1fr;
     height: 100%;
     width: 100%;
@@ -24,17 +24,24 @@
 .grid-search {
     grid-row: 1 / span 1;
     grid-column: 1 / span 1;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .grid-search-other {
     grid-row: 1 / span 1;
     grid-column: 2 / span 1;
+    background-color: white;
+    border-radius: 5px;
 }
 
 .grid-cards {
     grid-row: 2 / span 1;
     grid-column: 1 / span 2;
     overflow: auto;
+    background-color: white;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .card-container {
@@ -50,20 +57,42 @@
     flex-direction: column;
     align-items: center;
     border: 1px solid #ccc;
-    border-radius: 10px;
     max-height: 100%;
+    border-radius: 5px;
 }
 
 .item-image {
     width: 100%;
     height: auto;
     object-fit: contain;
+    border-radius: 5px;
 }
 
-.item-input {
+.quantity-control {
+    display: flex;
+    align-items: center;
     width: 100%;
+}
+
+/* Quantity input */
+.item-input {
+    width: 34%; /* Adjust to fit buttons */
+    text-align: center;
     border: 1px solid #ccc;
 }
+
+/* Buttons for quantity control */
+.btn-quantity {
+    width: 33%; /* Adjust based on preference */
+    height: 100%; /* Match input height */
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+    .btn-quantity:hover {
+        background-color: #e0e0e0;
+    }
 
 .grid-search {
     grid-row: 1 / span 1;
@@ -71,6 +100,7 @@
     display: flex;
     height: 100%;
     width: 100%;
+    font-size: 1.75vw;
 }
 
 .search-input {

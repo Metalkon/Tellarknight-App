@@ -1,14 +1,18 @@
 ﻿@page "/"
 @using TellarknightApp.Components.Pages.Home.HomeComponents;
+<div class="page-background-class">
 
-<div class="app-grid-container">
-    <div class="item grid-statistics">
-        <StatisticsComponent></StatisticsComponent>
+    <div class="app-grid-container">
+        <div class="item grid-statistics">
+            <StatisticsComponent></StatisticsComponent>
+        </div>
+        <div class="item grid-cards">
+            <CardsComponent></CardsComponent>
+        </div>
     </div>
-    <div class="item grid-cards">
-        <CardsComponent></CardsComponent>
-    </div>
+
 </div>
+
 
 
 @code {

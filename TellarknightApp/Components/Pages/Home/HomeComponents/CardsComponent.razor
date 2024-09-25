@@ -17,7 +17,11 @@
             {
                 <div class="grid-item">
                     <img src="@card.Image" alt="@card.Name" class="item-image" />
-                    <input type="text" class="item-input" @bind="card.Quantity" />
+                    <div class="quantity-control">
+                        <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
+                        <input type="text" class="item-input" @bind="card.Quantity" />
+                        <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
+                    </div>
                 </div>
             }
         </div>
@@ -26,10 +30,20 @@
 </div>
 
 @code {
-    private string searchQuery = "unuk";
+    private string searchQuery = string.Empty;
 
     public async void CardSearch()
     {
         await OnInitializedAsync();
+    }
+
+    public void IncreaseQuantity(Card card)
+    {
+        card.Quantity++;
+    }
+
+    public void DecreaseQuantity(Card card)
+    {
+        card.Quantity--;
     }
 }

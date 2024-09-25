@@ -1,12 +1,189 @@
-﻿<div class="app-grid-container">
+﻿@using TellarknightApp.Services
+@using TellarknightApp.Models
+@inject DeckStatistics deckStatistics
+@inject SupportedCards supportedCards
+@inject Decklist decklist
+
+
+
+
+<div class="app-grid-container">
     <div class="item grid-options">
         grid-options
     </div>
     <div class="item grid-statistics">
-        grid-statistics
+        <b>Basic Stats:</b> <br />
+
+        @if (totalCount != 0)
+        {
+            <text>
+                Deck Size: @(gameState.Deck.Count + gameState.Hand.Count + gameState.OnField.Count + gameState.Gy.Count + gameState.Scales.Count) <br />
+                Total Monsters: @(gameState.Hand.Count(x => x.Level != null) + gameState.Deck.Count(x => x.Level != null)) <br />
+                Combo Chance: @(Math.Round(((totalCount - stats.BrickChance) / totalCount) * 100, 2))% <br />
+                Brick Chance: @(Math.Round((stats.BrickChance / totalCount) * 100, 2))% <br />
+                (1 In @(Math.Round(totalCount / (double)stats.BrickChance, 2)))
+            </text>
+        }
+        else
+        {
+            <text>
+                <!-- Text remains, but numbers are not displayed -->
+                Deck Size: 40<br />
+                Total Monsters: 0<br />
+                Combo Chance: 0%<br />
+                Brick Chance: 100%<br />
+                (1 In 1)
+            </text>
+        }
     </div>
 </div>
 
 @code {
+    private bool active = false;
+    private int checkCount = 25000;
+    private int totalCount;
+    private int startingHand = 5;
+    private GameState gameState = new GameState();
 
+    private async Task CheckDeck()
+    {
+        checkCount = (checkCount > 100000) ? 100000 : (checkCount < 15000 ? 15000 : checkCount);
+        startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
+
+        active = true;
+        deckStatistics = new DeckStatistics();
+        totalCount = 0;
+        int tempCount = 0;
+        int tempCountNext = (int)(checkCount * 0.001);
+        Random random = new Random();
+
+
+        for (int i = 0; i < checkCount; i++)
+        {
+            int deckSizePostSearch = gameState.Hand.Count + gameState.Deck.Count + gameState.Gy.Count + gameState.OnField.Count + gameState.Scales.Count;
+
+            // Reset Everything
+            gameState.ExtraDeck.Clear();
+            gameState.Deck.Clear();
+            gameState.Hand.Clear();
+            gameState.OnField.Clear();
+            gameState.Scales.Clear();
+            gameState.Gy.Clear();
+            bool normalSummoned = false;
+
+            // Build Deck & Hand
+            BuildDeck();
+            ShuffleDeck();
+            DrawHand();
+
+            LocalStats localStats = new LocalStats();
+            // Check Hand & Deck For Optimal Searches
+            gameState = CardSearcher.CardSearch(gameState);
+
+            // Analyze Hand & Update Hand Statistics
+            stats = HandAnalyzer.HandCheck(gameState, stats);
+
+
+            totalCount++;
+            tempCount++;
+            if (tempCount >= tempCountNext)
+            {
+                tempCountNext = tempCountNext + random.Next((int)(checkCount * 0.0005), (int)(checkCount * 0.015));
+                await InvokeAsync(StateHasChanged);
+            }
+            active = false;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void BuildDeck()
+    {
+        foreach (Card card in supportedCards.Cards)
+        {
+            if (card.Quantity > 3 && card.Name != "Hand Trap" && card.Name != "Level 4" && card.Name != "Empty Card")
+            {
+                card.Quantity = 3;
+            }
+
+            if (card.Quantity > 0 && card.Role != "ExtraDeck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    gameState.Deck.Add(card);
+                }
+            }
+            if (card.Quantity > 0 && card.Role == "ExtraDeck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    gameState.ExtraDeck.Add(card);
+                }
+            }
+        }
+        while (gameState.Deck.Count < 40)
+        {
+            gameState.Deck.Add(new Card()
+                {
+                    Name = "Empty Card",
+                    Archetype = "None",
+                    Type = "None",
+                    Role = "None"
+                });
+        }
+    }
+
+    private void ShuffleDeck()
+    {
+        var random = new Random();
+        for (int i = 0; i < 10; i++)
+        {
+            int deckCount = gameState.Deck.Count;
+            while (deckCount > 1)
+            {
+                deckCount--;
+                int randomIndex = random.Next(deckCount + 1);
+                var tempCard = gameState.Deck[randomIndex];
+                gameState.Deck[randomIndex] = gameState.Deck[deckCount];
+                gameState.Deck[deckCount] = tempCard;
+            }
+        }
+    }
+
+    public void DrawHand()
+    {
+        Random random = new Random();
+        for (int i = 0; i < startingHand; i++)
+        {
+            gameState.Hand.Add(gameState.Deck[0]);
+            gameState.Deck.RemoveAt(0);
+        }
+    }
+
+    private async Task NextPage()
+    {
+        if (currentPage != totalPages)
+        {
+            currentPage++;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task PreviousPage()
+    {
+        if (currentPage != 1)
+        {
+            currentPage--;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void ResetCards()
+    {
+        totalCount = 0;
+        stats = new DeckStatistics();
+        supportedCards = new SupportedCards();
+        InvokeAsync(StateHasChanged);
+    }
+    */
 }
+
