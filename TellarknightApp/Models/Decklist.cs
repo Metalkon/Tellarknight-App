@@ -8,11 +8,13 @@ namespace TellarknightApp.Models
 {
     public class Decklist
     {
-        public List<Card> Cards { get; set; }
+        public List<Card> MainDeck { get; set; }
+        public List<Card> ExtraDeck { get; set; }
 
         public Decklist()
         {
-            Cards = new List<Card>();
+            MainDeck = new List<Card>();
+            ExtraDeck = new List<Card>();
         }
     }
 }
