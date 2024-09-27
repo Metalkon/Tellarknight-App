@@ -1,49 +1,87 @@
-﻿@using TellarknightApp.Services
-@using TellarknightApp.Models
-@using TellarknightApp.Cards
-@inject DeckStatistics deckStatistics
+﻿@inject DeckStatistics deckStatistics
 @inject SupportedCards supportedCards
 @inject GameState gameState
 @inject Decklist decklist
 
 <div class="app-grid-container">
+    <!-- Options & Start Button -->
     <div class="item grid-options">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.5%">
-            <div style="width: 17.5%;">
-                <div><b>Hand Size:</b></div>
-                <div><b>Sample Size:</b></div>
+        <div class="grid-options-container">
+            <div class="grid-options-1">
+                <b>Hand Size:</b>
             </div>
-            <div style="width: 15%;">
+            <div class="grid-options-2">
                 <input type="text" style="width: 90%; text-align: center;" @bind-value="startingHand">
+            </div>
+            <div class="grid-options-3">
+                <b>Sample Size:</b>
+            </div>
+            <div class="grid-options-4">
                 <input type="text" style="width: 90%; text-align: center;" @bind-value="maximumCount">
             </div>
-            <div style="width: 20%; text-align: left;">
-                <button class="btn btn-primary" @onclick="@(() => { if (!active) CheckDeck(); })">Check Deck</button>
-                <div>Tested: @currentCount</div>
+            <div class="grid-options-5">
+                <b>Tested:</b>
             </div>
-            <div style="width: 23.75%; text-align: center;">
-                <button class="btn btn-primary" @onclick="@(() => { if (!active) ResetCards(); })">Reset</button>
-                <div style="color: white">Reset</div>
+            <div class="grid-options-6">
+                @currentCount
+            </div>
+            <div class="grid-options-7">
+                <button class="btn btn-primary" @onclick="@(() => CheckDeck())">Search</button>
             </div>
         </div>
     </div>
+    <!-- Deck Statistics -->
     <div class="item grid-statistics">
-        <b>Basic Stats:</b> <br />
+        <div class="grid-statistics-container">
+            <div class="grid-statistics-1">
+                <div class="title">
+                    <b>Basic Stats:</b>
+                </div>
+                <div class="stats">
+                    Deck Size: @decklist.MainDeck.Count() <br />
+                    Total Monsters: @decklist.MainDeck.Count(x => x.Level != null) <br />
+                    Combo Chance: @(Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2))% <br />
+                    Brick Chance: @(Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2))% <br />
+                    (1 In @(Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)))
+                </div>
+            </div>
+            <div class="grid-statistics-2">
+                <b>Untitled Stats:</b> <br />
+                <text>
 
-        
-            <text>
-                Deck Size: @decklist.MainDeck.Count() <br />
-                Total Monsters: @decklist.MainDeck.Count(x => x.Level != null)) <br />
-                Combo Chance: @(Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2))% <br />
-                Brick Chance: @(Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2))% <br />
-                (1 In @(Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)))
-            </text>
-        
+                </text>
+            </div>
+            <div class="grid-statistics-3">
+                <b>Untitled Stats:</b> <br />
+                <text>
 
+                </text>
+            </div>
+            <div class="grid-statistics-4">
+                <b>Untitled Stats:</b> <br />
+                <text>
+
+                </text>
+            </div>
+            <div class="grid-statistics-5">
+                <b>Untitled Stats:</b> <br />
+                <text>
+
+                </text>
+            </div>
+            <div class="grid-statistics-6">
+                <b>Untitled Stats:</b> <br />
+                <text>
+
+                </text>
+            </div>
+        </div>
     </div>
 </div>
 
 @code{
+    [Parameter]
+    public EventCallback UpdateState { get; set; }
     private bool active = false;
     private int startingHand = 5;
     private int maximumCount = 15000;
@@ -62,6 +100,7 @@
         Random random = new Random();
 
         BuildDecklist();
+        await UpdateState.InvokeAsync();
 
         // Main Loop
         for (int i = 0; i < maximumCount; i++)
@@ -170,5 +209,10 @@
         gameState = new GameState();
         decklist = new Decklist();
         InvokeAsync(StateHasChanged);
+    }
+
+    public async Task UpdateStateChild()
+    {
+        await UpdateState.InvokeAsync();
     }
 }

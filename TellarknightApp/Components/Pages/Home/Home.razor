@@ -1,20 +1,21 @@
 ﻿@page "/"
 @using TellarknightApp.Components.Pages.Home.HomeComponents;
-<div class="page-background-class">
 
+
+<div class="page-background-class">
     <div class="app-grid-container">
         <div class="item grid-statistics">
-            <StatisticsComponent></StatisticsComponent>
+            <StatisticsComponent UpdateState="UpdateState"></StatisticsComponent>
         </div>
         <div class="item grid-cards">
-            <CardsComponent></CardsComponent>
+            <CardsComponent UpdateState="UpdateState"></CardsComponent>
         </div>
     </div>
-
 </div>
 
-
-
 @code {
-
+    public async Task UpdateState()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
 }

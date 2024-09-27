@@ -30,6 +30,8 @@
 </div>
 
 @code {
+    [Parameter]
+    public EventCallback UpdateState { get; set; }
     private string searchQuery = string.Empty;
 
     public async void CardSearch()
@@ -45,5 +47,10 @@
     public void DecreaseQuantity(Card card)
     {
         card.Quantity--;
+    }
+
+    public async Task UpdateStateChild()
+    {
+        await UpdateState.InvokeAsync();
     }
 }
