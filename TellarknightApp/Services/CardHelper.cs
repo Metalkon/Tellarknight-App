@@ -7,7 +7,7 @@ using TellarknightApp.Models;
 
 namespace TellarknightApp.Services
 {
-    internal class CardHelper
+    public class CardHelper
     {
         public static bool CheckUniqueCards(List<Card> hand, string minMax, int targetNumber, params string[] cards)
         {

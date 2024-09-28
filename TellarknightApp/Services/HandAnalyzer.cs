@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-using TellarknightApp.Models;
-
-/* 
- NOTES:
-- Transfer all of the helper methods into a service that can be used within the card classes
-
- */
+﻿using TellarknightApp.Models;
 
 namespace TellarknightApp.Services
 {
@@ -18,22 +6,13 @@ namespace TellarknightApp.Services
     {
         public static DeckStatistics HandCheck(GameState gameState, DeckStatistics stats)
         {
-            // New Code Goes Here
             // Loop over each card in hand with their own AnalyzeHand methods
+            foreach (Card card in gameState.Hand)
+            {
+                gameState.LocalStats = card.AnalyzeHand(gameState.LocalStats, gameState.Hand, gameState.Deck, gameState.Gy, gameState.OnField, gameState.Scales, gameState.ExtraDeck, gameState.NormalSummoned);
+            }
 
             // Corrections
-            if (gameState.LocalStats.AverageXyzSpellOrAltairan || gameState.LocalStats.AverageXyzTwoTellars)
-            {
-                gameState.LocalStats.AverageXyzWithTellar = true;
-            }
-            if (gameState.LocalStats.AverageXyzNoTellar && (gameState.LocalStats.AverageXyzWithTellar || gameState.LocalStats.AverageXyzSpellOrAltairan))
-            {
-                gameState.LocalStats.AverageXyzNoTellar = false;
-            }
-            if (gameState.LocalStats.AverageXyzWithTellar && (gameState.Hand.Any(x => x.Name == "Satellarknight Unukalhai") || gameState.Hand.Any(x => x.Name == "Tellarknight Altairan") || gameState.Hand.Any(x => x.Name == "Constellar Tellarknights")))
-            {
-                gameState.LocalStats.AverageXyzSpellOrAltairan = true;
-            }
             if (gameState.LocalStats.ZefraathAndSHS || gameState.LocalStats.ZefraathAndThuban || gameState.LocalStats.ZefraComboWithTrap)
             {
                 gameState.LocalStats.PendulumnSummon = true;
@@ -47,13 +26,10 @@ namespace TellarknightApp.Services
                 gameState.LocalStats.AverageXyzWithTellar = true;
             }
 
-
             // Check For Hand Brick
             if (!gameState.LocalStats.AverageXyzNoTellar
                 && !gameState.LocalStats.AverageXyzWithTellar
-                && !gameState.LocalStats.AverageXyzSpellOrAltairan
                 && !gameState.LocalStats.AverageXyzTwoTellars
-                && !gameState.LocalStats.AverageXyzUnknown
                 && !gameState.LocalStats.PendulumnSummon
                 && !gameState.LocalStats.ZefraathAndSHS
                 && !gameState.LocalStats.ZefraathAndThuban
@@ -63,12 +39,12 @@ namespace TellarknightApp.Services
                 gameState.LocalStats.BrickChance = true;
             }
 
+            // Zefra Trap
             if (gameState.LocalStats.BrickChance == false && gameState.Hand.Any(x => x.Name == "Zefra Divine Strike"))
             {
                 gameState.LocalStats.ZefraComboWithTrap = true;
             }
 
-            string test = string.Join(", ", gameState.Hand.Select(x => x.Name));
 
             // Isolde Bricking
             if (
@@ -78,11 +54,17 @@ namespace TellarknightApp.Services
                 gameState.LocalStats.IsoldeBrick = true;
             }
 
+            // Drawing An Armored Xyz Card / Not Being Able to Search x2
+            // - Add Later
+
+            // Average Hand Traps/Bystials
             stats.AverageHandTraps = stats.AverageHandTraps + gameState.Hand.Count(x => x.Role == "HandTrap");
             stats.AverageBystials = stats.AverageBystials + gameState.Hand.Count(x => x.Archetype.Contains("Bystial"));
 
+            // Average # Tellars
             stats.AverageTellars = stats.AverageTellars + gameState.Hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
 
+            // Update DeckStatistics "stats" From gameData.LocalStats
             stats = UpdateStats(gameState.LocalStats, stats);
 
             return stats;
@@ -94,16 +76,15 @@ namespace TellarknightApp.Services
             if (localStats.AverageTellars) stats.AverageTellars++;
             if (localStats.AverageXyzNoTellar) stats.AverageXyzNoTellar++;
             if (localStats.AverageXyzWithTellar) stats.AverageXyzWithTellar++;
-            if (localStats.AverageXyzSpellOrAltairan) stats.AverageXyzSpellOrAltairan++;
             if (localStats.AverageXyzTwoTellars) stats.AverageXyzTwoTellars++;
+            if (localStats.PendulumnSummon) stats.PendulumnSummon++;
             if (localStats.ZefraathAndSHS) stats.ZefraathAndSHS++;
             if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;
             if (localStats.ZefraComboWithTrap) stats.ZefraComboWithTrap++;
             if (localStats.ZefraComboWithNormalAvailable) stats.ZefraComboWithNormalAvailable++;
             if (localStats.AverageHandTraps) stats.AverageHandTraps++;
+            if (localStats.AverageBystials) stats.AverageBystials++;
             if (localStats.IsoldeBrick) stats.IsoldeBrick++;
-            if (localStats.PendulumnSummon) stats.PendulumnSummon++;
-            if (localStats.AverageXyzUnknown) stats.AverageXyzUnknown++;
 
             return stats;
         }

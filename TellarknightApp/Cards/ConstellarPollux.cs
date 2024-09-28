@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class SatellarknightVega : Card
+    public class ConstellarPollux : Card
     {
-        public SatellarknightVega() 
+        public ConstellarPollux() 
         {
-            Name = "Satellarknight Vega";
+            Name = "Constellar Pollux";
             Type = "Warrior";
             Attribute = "Light";
             Level = 4;
-            Attack = 1200;
-            Defense = 1600;
+            Attack = 1700;
+            Defense = 600;
             Scale = null;
             Role = string.Empty;
-            Archetype = new List<string> { "Tellarknight" };
-            Image = "./CardArt/Vega.png";
+            Archetype = new List<string> { "Constellar" };
+            Image = "./CardArt/Pollux.png";
         }
 
         public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)

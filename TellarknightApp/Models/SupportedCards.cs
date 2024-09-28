@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TellarknightApp.Cards;
+﻿using TellarknightApp.Cards;
 
 namespace TellarknightApp.Models
 {
@@ -23,34 +18,40 @@ namespace TellarknightApp.Models
                 new TellarknightLyran(),
                 new TellarknightAltairan(),
 
+                new SatellarknightSkybridge(),
+                new ConstellarTellarknights(),
+
+                new ConstellarCaduceus(),
+                new ConstellarSheratan(),
+                new ConstellarPollux(),
+                new ConstellarAlgiedi(),
+                new ConstellarSombre(),
+                new ConstellarTwinkle(),
+
+                new Level4(),
+                new EmptyCard(),
             };
         }
     }
 }
 
 /*
+                new ReinforcementOfTheArmy(),
+                new SmallWorld(),
+                new ThePhantomKnightsOfShadeBrigandine(),
+                new PhotonThrasher(),
+                new ZSAscendedSage(),
+                new Sakitama(),
+                new Aratama(),
 
 
-new ConstellarSheratan(),
-new ConstellarCaduceus(),
-new SatellarknightSkybridge(),
-new ConstellarTellarknights(),
 new LivingFossil(),
 new InfernobleArmsDurendal(),
 new InfernobleKnightRenaud(),
 new FireFlintLady(),
-new ConstellarPollux(),
-new ConstellarAlgiedi(),
-new ConstellarSombre(),
-new ReinforcementOfTheArmy(),
-new ConstellarTwinkle(),
-new ThePhantomKnightsOfShadeBrigandine(),
-new PhotonThrasher(),
-new ZSAscendedSage(),
-new Sakitama(),
-new Aratama(),
-new Level4(),
-new EmptyCard(),
+
+
+
 new Terraforming(),
 new OracleOfZefra(),
 new ZefraProvidence(),
@@ -88,7 +89,6 @@ new MaxxC(),
 new NibiruThePrimalBeing(),
 new PSY-FramegearGamma(),
 new PSY-FrameDriver(),
-new SmallWorld(),
 new CalledByTheGrave(),
 new CrossoutDesignator(),
 new ZoodiacBarrage(),

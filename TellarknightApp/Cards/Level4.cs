@@ -7,6 +7,7 @@ namespace TellarknightApp.Cards
     {
         public Level4() 
         {
+            Name = "Level 4 Monster";
             Level = 4;
             Image = "./CardArt/CelticGuardian.png";
         }

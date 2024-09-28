@@ -31,9 +31,9 @@ namespace TellarknightApp.Models
             Quantity = 0;
         }
 
-        public virtual GameState AnalyzeHand(GameState gameState)
+        public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
-            return gameState;
+            return localStats;
         }
     }
 }

@@ -19,10 +19,11 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Deneb.png";
         }
 
-        public override GameState AnalyzeHand(GameState gameState)
+        public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
-            CardHelper _cardHelper = new CardHelper();
-            return gameState;
+            CardHelper helper = new CardHelper();
+
+            return localStats;
         }
     }
 }
