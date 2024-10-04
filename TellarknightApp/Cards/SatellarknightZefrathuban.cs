@@ -3,28 +3,25 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class ConstellarPollux : Card
+    public class SatellarknightZefrathuban : Card
     {
-        public ConstellarPollux() 
+        public SatellarknightZefrathuban() 
         {
-            Name = "Constellar Pollux";
+            Name = "Satellarknight Zefrathuban";
             Type = "Warrior";
             Attribute = "Light";
             Level = 4;
-            Attack = 1700;
-            Defense = 600;
-            Scale = null;
+            Attack = 0;
+            Defense = 2100;
+            Scale = 1;
             Role = string.Empty;
-            Archetype = new List<string> { "Constellar" };
-            Image = "./CardArt/Pollux.png";
+            Archetype = new List<string> { "Tellarknight", "Zefra" };
+            Image = "./CardArt/Zefrathuban.png";
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
-            if (hand.Any(x => x is not ConstellarPollux && x.Level == 4 && x.Archetype.Contains("Constellar")))
-            {
-                localStats.AverageXyzTwoTellars = true;
-            }
+
 
             return localStats;
         }

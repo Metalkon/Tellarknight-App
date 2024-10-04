@@ -9,7 +9,17 @@ namespace TellarknightApp.Services
             // Loop over each card in hand with their own AnalyzeHand methods
             foreach (Card card in gameState.Hand)
             {
-                gameState.LocalStats = card.AnalyzeHand(gameState.LocalStats, gameState.Hand, gameState.Deck, gameState.Gy, gameState.OnField, gameState.Scales, gameState.ExtraDeck, gameState.NormalSummoned);
+                if (card.Analyzed == false)
+                {
+                    gameState.LocalStats = card.AnalyzeHand(gameState.LocalStats, gameState.Hand, gameState.Deck, gameState.Gy, gameState.OnField, gameState.Scales, gameState.ExtraDeck, gameState.NormalSummoned);
+                    card.Analyzed = true;
+                }
+            }
+
+            // Undo Analyzed Boolean After AnalyzeHand Loop
+            foreach (Card card in gameState.Hand)
+            {
+                card.Analyzed = false;
             }
 
             // Corrections

@@ -19,9 +19,13 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Algiedi.png";
         }
 
-        public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
-            CardHelper helper = new CardHelper();
+            // Algiedi + Any Lv4 Constellar
+            if (hand.Any(x => x is not ConstellarAlgiedi && x.Level == 4 && x.Archetype.Contains("Constellar")))
+            {
+                localStats.AverageXyzTwoTellars = true;
+            }
 
             return localStats;
         }

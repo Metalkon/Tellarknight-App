@@ -9,5 +9,10 @@ namespace TellarknightApp.Cards
         {
             Name = "Empty/Blank/Filler Card Back";
         }
+
+        public override Card Clone()
+        {
+            return this;
+        }
     }
 }

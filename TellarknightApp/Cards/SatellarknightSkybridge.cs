@@ -19,9 +19,20 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Skybridge.png";
         }
 
-        public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
-            CardHelper helper = new CardHelper();
+            // Two Tellars -> Skybridge -> Vega
+
+            // Two Tellars -> Skybridge -> Lyran
+
+            // Unuk -> Skybridge -> Altair / Lyran
+
+            // Unuk -> Skybridge -> Lyran -> Cont. Spell
+
+            // Deneb -> Skybridge -> Vega / Lyran+
+
+            // Deneb -> Skybridge -> Lyran -> Cont. Spell
+
 
             return localStats;
         }

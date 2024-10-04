@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class SatellarknightVega : Card
+    public class ShaddollZefracore : Card
     {
-        public SatellarknightVega() 
+        public ShaddollZefracore() 
         {
-            Name = "Satellarknight Vega";
-            Type = "Warrior";
-            Attribute = "Light";
+            Name = "Shaddoll Zefracore";
+            Type = "Rock";
+            Attribute = "Dark";
             Level = 4;
-            Attack = 1200;
-            Defense = 1600;
-            Scale = null;
+            Attack = 450;
+            Defense = 1950;
+            Scale = 7;
             Role = string.Empty;
-            Archetype = new List<string> { "Tellarknight" };
-            Image = "./CardArt/Vega.png";
+            Archetype = new List<string> { "Shaddoll", "Zefra" };
+            Image = "./CardArt/Zefracore.png";
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)

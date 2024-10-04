@@ -38,12 +38,22 @@
                     <b>Basic Stats:</b>
                 </div>
                 <div class="stats">
-                    Deck Size: @decklist.MainDeck.Count() <br />
+                    Deck Size: @(decklist.MainDeck.Count() > 40 ? decklist.MainDeck.Count() : 40) <br />
                     Total Monsters: @decklist.MainDeck.Count(x => x.Level != null) <br />
-                    Combo Chance: @(Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2))% <br />
-                    Brick Chance: @(Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2))% <br />
-                    (1 In @(Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)))
+
+                    Combo Chance: @((currentCount > 0 && currentCount != deckStatistics.BrickChance)
+                    ? Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2)
+                    : 0)% <br />
+
+                    Brick Chance: @((currentCount > 0 && deckStatistics.BrickChance > 0)
+                    ? Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2)
+                    : 100)% <br />
+
+                    (1 In @((currentCount > 0 && deckStatistics.BrickChance > 0)
+                    ? Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)
+                    : 1))
                 </div>
+
             </div>
             <div class="grid-statistics-2">
                 <b>Untitled Stats:</b> <br />
@@ -64,15 +74,36 @@
                 </text>
             </div>
             <div class="grid-statistics-5">
-                <b>Untitled Stats:</b> <br />
+                <b>Test Stats:</b> <br />
                 <text>
+                    <div>
+                        <!-- TESTING PURPOSES ONLY -->
+                        @code {
+                            private DateTime testTimeStart;
+                            private DateTime testTimeEnd;
 
+                            private double millisecondsDifference => (testTimeEnd - testTimeStart).TotalMilliseconds;
+                            private double secondsDifference => (testTimeEnd - testTimeStart).TotalSeconds;
+
+                            public StatisticsComponent()
+                            {
+                                testTimeStart = DateTime.Now;
+                                testTimeEnd = testTimeStart.AddMilliseconds(0);
+                            }
+                        }
+                        <p>Test Time(sec): @secondsDifference sec</p>
+                        <p>Test Time(ms): @millisecondsDifference ms</p>
+                    </div>
                 </text>
             </div>
             <div class="grid-statistics-6">
-                <b>Untitled Stats:</b> <br />
+                <!-- TESTING PURPOSES ONLY -->
+                <b>Test Stats:</b> <br />
                 <text>
-
+                    Brick#: @deckStatistics.BrickChance<br />
+                    Combo#: @(currentCount - deckStatistics.BrickChance)<br />
+                    Test#: @currentCount
+                    Time: 
                 </text>
             </div>
         </div>
@@ -94,6 +125,7 @@
 
         active = true;
         currentCount = 0;
+        deckStatistics = new DeckStatistics();
 
         int tempCount = 0;
         int tempCountNext = (int)(maximumCount * 0.001);
@@ -101,6 +133,9 @@
 
         BuildDecklist();
         await UpdateState.InvokeAsync();
+
+        // Testing
+        testTimeStart = DateTime.UtcNow;
 
         // Main Loop
         for (int i = 0; i < maximumCount; i++)
@@ -124,6 +159,7 @@
                 await InvokeAsync(StateHasChanged);
             }
         }
+        testTimeEnd = DateTime.UtcNow;
         active = false;
         await InvokeAsync(StateHasChanged);
     }
@@ -153,9 +189,9 @@
                 }
             }
         }
-        while (gameState.Deck.Count < 40)
+        while (decklist.MainDeck.Count < 40)
         {
-            gameState.Deck.Add(new EmptyCard());
+            decklist.MainDeck.Add(new EmptyCard());
         }
     }
 
@@ -166,11 +202,11 @@
         gameState = new GameState();
         foreach (Card card in decklist.MainDeck)
         {
-            gameState.Deck.Add(card);
+            gameState.Deck.Add(card.Clone());
         }
         foreach (Card card in decklist.ExtraDeck)
         {
-            gameState.ExtraDeck.Add(card);
+            gameState.ExtraDeck.Add(card.Clone());
         }
     }
 
