@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using TellarknightApp.Models;
+using TellarknightApp.Services;
 
 namespace TellarknightApp
 {
@@ -15,6 +17,11 @@ namespace TellarknightApp
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services
+                .AddSingleton<Decklist>()
+                .AddSingleton<GameState>()
+                .AddSingleton<SupportedCards>()
+                .AddSingleton<DeckStatistics>();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();

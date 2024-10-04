@@ -1,0 +1,254 @@
+﻿@inject DeckStatistics deckStatistics
+@inject SupportedCards supportedCards
+@inject GameState gameState
+@inject Decklist decklist
+
+<div class="app-grid-container">
+    <!-- Options & Start Button -->
+    <div class="item grid-options">
+        <div class="grid-options-container">
+            <div class="grid-options-1">
+                <b>Hand Size:</b>
+            </div>
+            <div class="grid-options-2">
+                <input type="text" style="width: 90%; text-align: center;" @bind-value="startingHand">
+            </div>
+            <div class="grid-options-3">
+                <b>Sample Size:</b>
+            </div>
+            <div class="grid-options-4">
+                <input type="text" style="width: 90%; text-align: center;" @bind-value="maximumCount">
+            </div>
+            <div class="grid-options-5">
+                <b>Tested:</b>
+            </div>
+            <div class="grid-options-6">
+                @currentCount
+            </div>
+            <div class="grid-options-7">
+                <button class="btn btn-primary" @onclick="@(() => CheckDeck())">Start</button>
+            </div>
+        </div>
+    </div>
+    <!-- Deck Statistics -->
+    <div class="item grid-statistics">
+        <div class="grid-statistics-container">
+            <div class="grid-statistics-1">
+                <div class="title">
+                    <b>Basic Stats:</b>
+                </div>
+                <div class="stats">
+                    Deck Size: @(decklist.MainDeck.Count() > 40 ? decklist.MainDeck.Count() : 40) <br />
+                    Total Monsters: @decklist.MainDeck.Count(x => x.Level != null) <br />
+
+                    Combo Chance: @((currentCount > 0 && currentCount != deckStatistics.BrickChance)
+                    ? Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2)
+                    : 0)% <br />
+
+                    Brick Chance: @((currentCount > 0 && deckStatistics.BrickChance > 0)
+                    ? Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2)
+                    : 100)% <br />
+
+                    (1 In @((currentCount > 0 && deckStatistics.BrickChance > 0)
+                    ? Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)
+                    : 1))
+                </div>
+
+            </div>
+            <div class="grid-statistics-2">
+                <b>Untitled Stats:</b> <br />
+                <text>
+
+                </text>
+            </div>
+            <div class="grid-statistics-3">
+                <b>Untitled Stats:</b> <br />
+                <text>
+
+                </text>
+            </div>
+            <div class="grid-statistics-4">
+                <b>Untitled Stats:</b> <br />
+                <text>
+
+                </text>
+            </div>
+            <div class="grid-statistics-5">
+                <b>Test Stats:</b> <br />
+                <text>
+                    <div>
+                        <!-- TESTING PURPOSES ONLY -->
+                        @code {
+                            private DateTime testTimeStart;
+                            private DateTime testTimeEnd;
+
+                            private double millisecondsDifference => (testTimeEnd - testTimeStart).TotalMilliseconds;
+                            private double secondsDifference => (testTimeEnd - testTimeStart).TotalSeconds;
+
+                            public StatisticsComponent()
+                            {
+                                testTimeStart = DateTime.Now;
+                                testTimeEnd = testTimeStart.AddMilliseconds(0);
+                            }
+                        }
+                        <p>Test Time(sec): @secondsDifference sec</p>
+                        <p>Test Time(ms): @millisecondsDifference ms</p>
+                    </div>
+                </text>
+            </div>
+            <div class="grid-statistics-6">
+                <!-- TESTING PURPOSES ONLY -->
+                <b>Test Stats:</b> <br />
+                <text>
+                    Brick#: @deckStatistics.BrickChance<br />
+                    Combo#: @(currentCount - deckStatistics.BrickChance)<br />
+                    Test#: @currentCount
+                    Time: 
+                </text>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public EventCallback UpdateState { get; set; }
+    private bool active = false;
+    private int startingHand = 5;
+    private int maximumCount = 15000;
+    private int currentCount;
+
+    private async Task CheckDeck()
+    {
+        maximumCount = (maximumCount > 100000) ? 100000 : (maximumCount < 5000 ? 5000 : maximumCount);
+        startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
+
+        active = true;
+        currentCount = 0;
+        deckStatistics = new DeckStatistics();
+
+        int tempCount = 0;
+        int tempCountNext = (int)(maximumCount * 0.001);
+        Random random = new Random();
+
+        BuildDecklist();
+        await UpdateState.InvokeAsync();
+
+        // Testing
+        testTimeStart = DateTime.UtcNow;
+
+        // Main Loop
+        for (int i = 0; i < maximumCount; i++)
+        {
+            RefreshGameState();
+            ShuffleDeck();
+            DrawHand();
+
+            // Check Hand & Deck For Optimal Searches
+            gameState = CardSearcher.CardSearch(gameState);
+
+            // Analyze Hand & Update Hand Statistics
+            deckStatistics = HandAnalyzer.HandCheck(gameState, deckStatistics);
+
+            // Visual updates
+            currentCount++;
+            tempCount++;
+            if (tempCount >= tempCountNext)
+            {
+                tempCountNext = tempCountNext + random.Next((int)(maximumCount * 0.0005), (int)(maximumCount * 0.015));
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        testTimeEnd = DateTime.UtcNow;
+        active = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // Filter cards and quantities in supportedcards to fill the contents of the decklist
+    private void BuildDecklist()
+    {
+        decklist = new Decklist();
+        foreach (Card card in supportedCards.Cards)
+        {
+            if (card.Quantity > 3 && card is not Level4 && card is not EmptyCard)
+            {
+                card.Quantity = 3;
+            }
+            if (card.Quantity > 0 && card.Role != "Extra Deck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    decklist.MainDeck.Add(card);
+                }
+            }
+            if (card.Quantity > 0 && card.Role == "Extra Deck")
+            {
+                for (int i = 0; i < card.Quantity; i++)
+                {
+                    decklist.ExtraDeck.Add(card);
+                }
+            }
+        }
+        while (decklist.MainDeck.Count < 40)
+        {
+            decklist.MainDeck.Add(new EmptyCard());
+        }
+    }
+
+
+    // Clears the gamestate and transfer decklist contents to gamestate
+    private void RefreshGameState()
+    {
+        gameState = new GameState();
+        foreach (Card card in decklist.MainDeck)
+        {
+            gameState.Deck.Add(card.Clone());
+        }
+        foreach (Card card in decklist.ExtraDeck)
+        {
+            gameState.ExtraDeck.Add(card.Clone());
+        }
+    }
+
+    // Shuffles the deck fisher-yates style
+    private void ShuffleDeck()
+    {
+        var random = new Random();
+        int deckCount = gameState.Deck.Count;
+        for (int i = 0; i < 3; i++)
+        {
+            while (deckCount > 1)
+            {
+                deckCount--;
+                int randomIndex = random.Next(deckCount + 1);
+                var tempCard = gameState.Deck[randomIndex];
+                gameState.Deck[randomIndex] = gameState.Deck[deckCount];
+                gameState.Deck[deckCount] = tempCard;
+            }
+        }
+    }
+
+    public void DrawHand()
+    {
+        for (int i = 0; i < startingHand; i++)
+        {
+            gameState.Hand.Add(gameState.Deck[0]);
+            gameState.Deck.RemoveAt(0);
+        }
+    }
+
+    private void ResetCards()
+    {
+        currentCount = 0;
+        deckStatistics = new DeckStatistics();
+        supportedCards = new SupportedCards();
+        gameState = new GameState();
+        decklist = new Decklist();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public async Task UpdateStateChild()
+    {
+        await UpdateState.InvokeAsync();
+    }
+}

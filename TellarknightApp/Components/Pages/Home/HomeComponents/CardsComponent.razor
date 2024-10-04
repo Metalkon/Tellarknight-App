@@ -1,0 +1,56 @@
+﻿@using TellarknightApp.Services
+@using TellarknightApp.Models
+@inject SupportedCards supportedCards
+
+<div class="app-grid-container">
+    <div class="grid-search">
+        <input id="searchQuery" type="text" @bind-value="searchQuery" class="search-input" />
+        <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
+    </div>
+    <div class="item grid-search-other">
+        grid-search-other
+    </div>
+    <div class="item grid-cards">
+
+        <div class="card-container">
+            @foreach (Card card in supportedCards.Cards.Where(x => x.Name.ToLower().Contains(searchQuery.ToLower())))
+            {
+                <div class="grid-item">
+                    <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    <div class="quantity-control">
+                        <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
+                        <input type="text" class="item-input" @bind="card.Quantity" />
+                        <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback UpdateState { get; set; }
+    private string searchQuery = string.Empty;
+
+    public async void CardSearch()
+    {
+        await OnInitializedAsync();
+    }
+
+    public void IncreaseQuantity(Card card)
+    {
+        card.Quantity++;
+    }
+
+    public void DecreaseQuantity(Card card)
+    {
+        card.Quantity--;
+    }
+
+    public async Task UpdateStateChild()
+    {
+        await UpdateState.InvokeAsync();
+    }
+}
