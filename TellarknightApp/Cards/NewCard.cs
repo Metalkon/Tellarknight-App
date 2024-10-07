@@ -3,24 +3,26 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class ConstellarTwinkle : Card
+    public class NewCard : Card
     {
-        public ConstellarTwinkle() 
+        public NewCard() 
         {
-            Name = "Constellar Twinkle";
-            Type = "Spell";
-            Attribute = string.Empty;
-            Level = null;
-            Attack = null;
-            Defense = null;
+            Name = "Card";
+            Type = "Warrior";
+            Attribute = "Light";
+            Level = 4;
+            Attack = 1700;
+            Defense = 1300;
             Scale = null;
             Role = string.Empty;
-            Archetype = new List<string> { "Constellar" };
-            Image = "./CardArt/Twinkle.png";
+            Archetype = new List<string> { "None" };
+            Image = "./CardArt/CardBack.png";
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
+
+
             return localStats;
         }
     }

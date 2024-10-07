@@ -21,7 +21,11 @@ namespace TellarknightApp.Cards
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
-
+            // Vega + Any Other Lv4 Tellarknight
+            if (hand.Any(x => x is not SatellarknightVega && x.Level == 4 && x.Archetype.Contains("Tellarknight")))
+            {
+                localStats.AverageXyzTwoTellars = true;
+            }
 
             return localStats;
         }

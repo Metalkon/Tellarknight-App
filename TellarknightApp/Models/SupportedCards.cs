@@ -10,6 +10,11 @@ namespace TellarknightApp.Models
         {
             Cards = new List<Card>()
             {
+                // Neutral Cards && Hand Traps
+                new EmptyCard(),
+                new Level4(),
+
+                // Tellarknights & Constellars
                 new SatellarknightDeneb(), // Incomplete (Pends)
                 new SatellarknightAltair(),
                 new SatellarknightVega(),
@@ -17,10 +22,8 @@ namespace TellarknightApp.Models
                 new SatellarknightSirius(),
                 new TellarknightLyran(),// Incomplete (Pends)
                 new TellarknightAltairan(),
-
                 new SatellarknightSkybridge(), // Incomplete (All)
                 new ConstellarTellarknights(), // Incomplete (Random Lv4)
-
                 new ConstellarCaduceus(),
                 new ConstellarSheratan(),
                 new ConstellarPollux(),
@@ -28,31 +31,52 @@ namespace TellarknightApp.Models
                 new ConstellarSombre(),
                 new ConstellarTwinkle(),
 
-                new Level4(),
-                new EmptyCard(),
+                // Extenders
+                new ThePhantomKnightsOfShadeBrigandine(),
+                new PhotonThrasher(),
+                new ZSAscendedSage(),
+                new Sakitama(),
+                new Aratama(),
 
+                // Zefra
                 new Zefraath(),
                 new SatellarknightZefrathuban(),
                 new StellarknightZefraxciton(),
                 new ShaddollZefracore(),
                 new ZefraniuSecretOfTheYangZing(),
+                new OracleOfZefra(),
+                new ZefraProvidence(),
                 new ZefraDivineStrike(),
+
+                // Superheavy Samurai                
+                new SuperheavySamuraiProdigyWakaushi(),
+                new SuperheavySamuraiMonkBigBenkei(),
+                new SuperheavySamuraiMotorbike(),
+                new SuperheavySamuraiSoulgaiaBooster(),
             };
         }
     }
 }
 
 /*
- *                 new OracleOfZefra(),
-                new ZefraProvidence(),
+ * new HandTrap(),
+new InfiniteImpermanence(),
+new AshBlossomJoyousSpring(),
+new EffectVeiler(),
+new DrollLockBird(),
+new GhostOgreSnowRabbit(),
+new MaxxC(),
+new NibiruThePrimalBeing(),
+new PSY-FramegearGamma(),
+new PSY-FrameDriver(),
+new CalledByTheGrave(),
+new CrossoutDesignator(),
+
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
                 new SmallWorld(),
-                new ThePhantomKnightsOfShadeBrigandine(),
-                new PhotonThrasher(),
-                new ZSAscendedSage(),
-                new Sakitama(),
-                new Aratama(),
+
+
 
 
 new LivingFossil(),
@@ -60,10 +84,6 @@ new InfernobleArmsDurendal(),
 new InfernobleKnightRenaud(),
 new FireFlintLady(),
 
-new SuperheavySamuraiProdigyWakaushi(),
-new SuperheavySamuraiMonkBig Benkei(),
-new SuperheavySamuraiMotorbike(),
-new SuperheavySamuraiSoulgaiaBooster(),
 new MathmechCircular(),
 new MathmechNabla(),
 new MathmechDiameter(),
@@ -78,18 +98,9 @@ new RunickSmitingStorm(),
 new RunickDispelling(),
 new GeriTheRunickFangs(),
 new CynetMining(),
-new HandTrap(),
-new InfiniteImpermanence(),
-new AshBlossomJoyousSpring(),
-new EffectVeiler(),
-new DrollLockBird(),
-new GhostOgreSnowRabbit(),
-new MaxxC(),
-new NibiruThePrimalBeing(),
-new PSY-FramegearGamma(),
-new PSY-FrameDriver(),
-new CalledByTheGrave(),
-new CrossoutDesignator(),
+
+
+
 new ZoodiacBarrage(),
 new ZoodiacThoroughblade(),
 new MadolchePetingcessoeur(),

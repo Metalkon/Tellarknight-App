@@ -3,24 +3,26 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class SatellarknightSirius : Card
+    public class SuperheavySamuraiProdigyWakaushi : Card
     {
-        public SatellarknightSirius() 
+        public SuperheavySamuraiProdigyWakaushi() 
         {
-            Name = "Satellarknight Sirius";
-            Type = "Warrior";
-            Attribute = "Light";
+            Name = "Superheavy Samurai Prodigy Wakaushi";
+            Type = "Machine";
+            Attribute = "Dark";
             Level = 4;
-            Attack = 1600;
-            Defense = 900;
-            Scale = null;
+            Attack = 1000;
+            Defense = 1500;
+            Scale = 8;
             Role = string.Empty;
-            Archetype = new List<string> { "Tellarknight" };
-            Image = "./CardArt/Sirius.png";
+            Archetype = new List<string> { "SHS" };
+            Image = "./CardArt/Wakaushi.png";
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
+
+
             return localStats;
         }
     }
