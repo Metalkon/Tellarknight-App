@@ -29,17 +29,17 @@ namespace TellarknightApp.Services
             }
             if (gameState.LocalStats.ZefraathAndThuban)
             {
-                gameState.LocalStats.AverageXyzWithTellar = true;
+                gameState.LocalStats.AverageXyzOneTellar = true;
             }
             if (gameState.LocalStats.ZefraathAndSHS || gameState.LocalStats.ZefraathAndThuban)
             {
-                gameState.LocalStats.AverageXyzWithTellar = true;
+                gameState.LocalStats.AverageXyzOneTellar = true;
             }
 
             // Check For Hand Brick
             if (!gameState.LocalStats.AverageXyzNoTellar
-                && !gameState.LocalStats.AverageXyzWithTellar
-                && !gameState.LocalStats.AverageXyzTwoTellars
+                && !gameState.LocalStats.AverageXyzOneTellar
+                && !gameState.LocalStats.AverageXyzTwoTellar
                 && !gameState.LocalStats.PendulumnSummon
                 && !gameState.LocalStats.ZefraathAndSHS
                 && !gameState.LocalStats.ZefraathAndThuban
@@ -85,8 +85,8 @@ namespace TellarknightApp.Services
             if (localStats.BrickChance) stats.BrickChance++;
             if (localStats.AverageTellars) stats.AverageTellars++;
             if (localStats.AverageXyzNoTellar) stats.AverageXyzNoTellar++;
-            if (localStats.AverageXyzWithTellar) stats.AverageXyzWithTellar++;
-            if (localStats.AverageXyzTwoTellars) stats.AverageXyzTwoTellars++;
+            if (localStats.AverageXyzOneTellar) stats.AverageXyzOneTellar++;
+            if (localStats.AverageXyzTwoTellar) stats.AverageXyzTwoTellar++;
             if (localStats.PendulumnSummon) stats.PendulumnSummon++;
             if (localStats.ZefraathAndSHS) stats.ZefraathAndSHS++;
             if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;

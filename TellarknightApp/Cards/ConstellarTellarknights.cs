@@ -24,7 +24,7 @@ namespace TellarknightApp.Cards
             // Any 2 Tellars
             if (hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 return localStats;
             }
             // Unuk Revive (Also Skybridge)
@@ -32,7 +32,7 @@ namespace TellarknightApp.Cards
                 || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x is SatellarknightSkybridge) && deck.Any(x => x is SatellarknightUnukalhai)))
                 && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightUnukalhai))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 return localStats;
             }
             // Deneb Search (Also Skybridge)
@@ -40,11 +40,17 @@ namespace TellarknightApp.Cards
                 || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x is SatellarknightSkybridge) && deck.Any(x => x is SatellarknightDeneb)))
                 && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 return localStats;
             }
 
             // Tellar + Random Level 4
+            if (hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4)
+                && hand.Any(x => !x.Archetype.Contains("Tellarknight") && !x.Archetype.Contains("Constellar") && x.Level == 4))
+            {
+                localStats.AverageXyzOneTellar = true;
+                return localStats;
+            }
 
             return localStats;
         }

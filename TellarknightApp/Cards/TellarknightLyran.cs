@@ -25,14 +25,14 @@ namespace TellarknightApp.Cards
             if (hand.Any(x => x is not TellarknightLyran && x.Level == 4 
                 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
             }
 
             // x2 Lyran, Continuous Spell Search
             if (hand.Count(x => x is TellarknightLyran) >= 2 
                 && (hand.Any(x => x is ConstellarTellarknights) || deck.Any(x => x is ConstellarTellarknights)))                
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
             }
 
             // x2 Lyran, Skybridge->Vega
@@ -40,7 +40,7 @@ namespace TellarknightApp.Cards
                 && (hand.Any(x => x is SatellarknightSkybridge) || deck.Any(x => x is SatellarknightSkybridge))
                 && (hand.Any(x => x is SatellarknightVega) || deck.Any(x => x is SatellarknightVega)))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
             }
 
             // Lyran and Zefraath, Skybridge->Deneb->Thuban
@@ -48,7 +48,7 @@ namespace TellarknightApp.Cards
                 && deck.Any(x => x is SatellarknightSkybridge) 
                 && deck.Any(x => x is SatellarknightDeneb))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 localStats.ZefraathAndThuban = true;
             }
             // Lyran and Other Pend, Search Pend Tellar With Deneb

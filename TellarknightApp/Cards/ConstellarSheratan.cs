@@ -26,7 +26,7 @@ namespace TellarknightApp.Cards
                 && (hand.Any(x => x is ConstellarCaduceus) || deck.Any(x => x is ConstellarCaduceus))
                 && (hand.Any(x => x is ConstellarTellarknights) || deck.Any(x => x is ConstellarTellarknights)))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 return localStats;
             }
 
@@ -34,7 +34,7 @@ namespace TellarknightApp.Cards
             if ((hand.Any(x => x is ConstellarTwinkle) || deck.Any(x => x is ConstellarTwinkle))
                 && (hand.Any(x => x is ConstellarCaduceus) || deck.Any(x => x is ConstellarCaduceus)))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 return localStats;
             }
 
@@ -42,7 +42,7 @@ namespace TellarknightApp.Cards
             if ((hand.Any(x => x is ConstellarPollux) || hand.Any(x => x is ConstellarAlgiedi) || hand.Any(x => x.Role == "Extender" && x.Level == 4 /*&& x is not PhotonThrasher*/))
                 && (hand.Any(x => x is ConstellarCaduceus) || deck.Any(x => x is ConstellarCaduceus)))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
                 return localStats;
             }
 
@@ -54,7 +54,7 @@ namespace TellarknightApp.Cards
                 Random random = new Random();
                 if (random.Next(1, 9) <= 7)
                 {
-                    localStats.AverageXyzWithTellar = true;
+                    localStats.AverageXyzOneTellar = true;
                 }
             }
 

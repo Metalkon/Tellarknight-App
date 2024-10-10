@@ -11,8 +11,8 @@ namespace TellarknightApp.Models
         public float BrickChance { get; set; } = 0;
         public float AverageTellars { get; set; } = 0;
         public float AverageXyzNoTellar { get; set; } = 0;
-        public float AverageXyzWithTellar { get; set; } = 0;
-        public float AverageXyzTwoTellars { get; set; } = 0;
+        public float AverageXyzOneTellar { get; set; } = 0;
+        public float AverageXyzTwoTellar { get; set; } = 0;
         public float PendulumnSummon { get; set; } = 0;
         public float ZefraathAndSHS { get; set; } = 0;
         public float ZefraathAndThuban { get; set; } = 0;

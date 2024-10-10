@@ -22,9 +22,9 @@ namespace TellarknightApp.Cards
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
         {
             // Algiedi + Any Lv4 Constellar
-            if (hand.Any(x => x is not ConstellarAlgiedi && x.Level == 4 && x.Archetype.Contains("Constellar")))
+            if (hand.Any(x => x != this && x.Level == 4 && x.Archetype.Contains("Constellar")))
             {
-                localStats.AverageXyzTwoTellars = true;
+                localStats.AverageXyzTwoTellar = true;
             }
 
             return localStats;
