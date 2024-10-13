@@ -38,7 +38,7 @@ namespace TellarknightApp.Cards
             }
 
             // Tellar Spell
-            if (hand.Any(x => x is ConstellarTellarknights) && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && )
+            if (hand.Any(x => x is ConstellarTellarknights) && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
             {
                 localStats.AverageXyzOneTellar = true;
                 return localStats;
