@@ -23,7 +23,7 @@ namespace TellarknightApp.Services
             }
 
             // Corrections
-            if (gameState.LocalStats.ZefraathAndSHS || gameState.LocalStats.ZefraathAndThuban || gameState.LocalStats.ZefraComboWithTrap)
+            if (gameState.LocalStats.OracleCombo || gameState.LocalStats.ZefraathAndThuban || gameState.LocalStats.ZefraComboWithTrap)
             {
                 gameState.LocalStats.PendulumnSummon = true;
             }
@@ -31,7 +31,7 @@ namespace TellarknightApp.Services
             {
                 gameState.LocalStats.AverageXyzOneTellar = true;
             }
-            if (gameState.LocalStats.ZefraathAndSHS || gameState.LocalStats.ZefraathAndThuban)
+            if (gameState.LocalStats.OracleCombo || gameState.LocalStats.ZefraathAndThuban)
             {
                 gameState.LocalStats.AverageXyzOneTellar = true;
             }
@@ -41,7 +41,7 @@ namespace TellarknightApp.Services
                 && !gameState.LocalStats.AverageXyzOneTellar
                 && !gameState.LocalStats.AverageXyzTwoTellar
                 && !gameState.LocalStats.PendulumnSummon
-                && !gameState.LocalStats.ZefraathAndSHS
+                && !gameState.LocalStats.OracleCombo
                 && !gameState.LocalStats.ZefraathAndThuban
                 && !gameState.LocalStats.ZefraComboWithTrap
                 && !gameState.LocalStats.ZefraComboWithNormalAvailable)
@@ -88,7 +88,7 @@ namespace TellarknightApp.Services
             if (localStats.AverageXyzOneTellar) stats.AverageXyzOneTellar++;
             if (localStats.AverageXyzTwoTellar) stats.AverageXyzTwoTellar++;
             if (localStats.PendulumnSummon) stats.PendulumnSummon++;
-            if (localStats.ZefraathAndSHS) stats.ZefraathAndSHS++;
+            if (localStats.OracleCombo) stats.OracleCombo++;
             if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;
             if (localStats.ZefraComboWithTrap) stats.ZefraComboWithTrap++;
             if (localStats.ZefraComboWithNormalAvailable) stats.ZefraComboWithNormalAvailable++;

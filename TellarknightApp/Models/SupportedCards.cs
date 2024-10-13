@@ -39,20 +39,20 @@ namespace TellarknightApp.Models
                 new Aratama(), // Done
 
                 // Zefra
-                new Zefraath(),
-                new SatellarknightZefrathuban(),
-                new StellarknightZefraxciton(),
-                new ShaddollZefracore(),
-                new ZefraniuSecretOfTheYangZing(),
+                new Zefraath(), // Done
+                new SatellarknightZefrathuban(), // Done
+                new StellarknightZefraxciton(), // Done
+                new ShaddollZefracore(), // Done
+                new ZefraniuSecretOfTheYangZing(), // Done
                 new OracleOfZefra(),
                 new ZefraProvidence(),
                 new ZefraDivineStrike(),
 
                 // Superheavy Samurai                
-                new SuperheavySamuraiProdigyWakaushi(),
-                new SuperheavySamuraiMonkBigBenkei(),
-                new SuperheavySamuraiMotorbike(),
-                new SuperheavySamuraiSoulgaiaBooster(),
+                new SuperheavySamuraiProdigyWakaushi(), // Done
+                new SuperheavySamuraiMonkBigBenkei(), // Done
+                new SuperheavySamuraiMotorbike(), // Done
+                new SuperheavySamuraiSoulgaiaBooster(), // Done
             };
         }
     }

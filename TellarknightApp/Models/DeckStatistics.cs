@@ -14,7 +14,7 @@ namespace TellarknightApp.Models
         public float AverageXyzOneTellar { get; set; } = 0;
         public float AverageXyzTwoTellar { get; set; } = 0;
         public float PendulumnSummon { get; set; } = 0;
-        public float ZefraathAndSHS { get; set; } = 0;
+        public float OracleCombo { get; set; } = 0;
         public float ZefraathAndThuban { get; set; } = 0;
         public float ZefraComboWithTrap { get; set; } = 0;
         public float ZefraComboWithNormalAvailable { get; set; } = 0;

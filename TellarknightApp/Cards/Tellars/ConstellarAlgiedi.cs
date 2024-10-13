@@ -5,7 +5,7 @@ namespace TellarknightApp.Cards
 {
     public class ConstellarAlgiedi : Card
     {
-        public ConstellarAlgiedi() 
+        public ConstellarAlgiedi()
         {
             Name = "Constellar Algiedi";
             Type = "Spellcaster";

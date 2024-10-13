@@ -5,7 +5,7 @@ namespace TellarknightApp.Cards
 {
     public class ConstellarPollux : Card
     {
-        public ConstellarPollux() 
+        public ConstellarPollux()
         {
             Name = "Constellar Pollux";
             Type = "Warrior";

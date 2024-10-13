@@ -1,11 +1,22 @@
-﻿using TellarknightApp.Models;
+﻿
+/* Unmerged change from project 'TellarknightApp (net8.0-ios)'
+Before:
+using TellarknightApp.Models;
+After:
+using TellarknightApp;
+using TellarknightApp.Cards;
+using TellarknightApp.Cards;
+using TellarknightApp.Cards.Constellar;
+using TellarknightApp.Models;
+*/
+using TellarknightApp.Models;
 using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
     public class ConstellarCaduceus : Card
     {
-        public ConstellarCaduceus() 
+        public ConstellarCaduceus()
         {
             Name = "Constellar Caduceus";
             Type = "Spellcaster";
@@ -28,7 +39,7 @@ namespace TellarknightApp.Cards
             }
 
             // Caduceus + Lv4 Tellarknight (Spell Search)
-            if (hand.Any(x => x is not ConstellarCaduceus && x.Level == 4 && x.Archetype.Contains("Tellarknight")) 
+            if (hand.Any(x => x is not ConstellarCaduceus && x.Level == 4 && x.Archetype.Contains("Tellarknight"))
                 && (hand.Any(x => x is ConstellarTellarknights) || deck.Any(x => x is ConstellarTellarknights)))
             {
                 localStats.AverageXyzTwoTellar = true;

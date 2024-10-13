@@ -21,6 +21,7 @@ namespace TellarknightApp.Models
         public string Image { get; set; }
         public int Quantity { get; set; }
         public bool Analyzed { get; set; }
+        public bool Enabled { get; set; }
 
         public Card()
         {
@@ -32,6 +33,7 @@ namespace TellarknightApp.Models
             Image = "./CardArt/CardBack.png";
             Quantity = 0;
             Analyzed = false;
+            Enabled = true;
         }
 
         public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)

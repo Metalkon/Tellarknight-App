@@ -1,11 +1,22 @@
-﻿using TellarknightApp.Models;
+﻿
+/* Unmerged change from project 'TellarknightApp (net8.0-ios)'
+Before:
+using TellarknightApp.Models;
+After:
+using TellarknightApp;
+using TellarknightApp.Cards;
+using TellarknightApp.Cards;
+using TellarknightApp.Cards.Constellar;
+using TellarknightApp.Models;
+*/
+using TellarknightApp.Models;
 using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
     public class ConstellarSheratan : Card
     {
-        public ConstellarSheratan() 
+        public ConstellarSheratan()
         {
             Name = "Constellar Sheratan";
             Type = "Beast";
