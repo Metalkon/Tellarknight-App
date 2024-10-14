@@ -19,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Booster.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Add code for an shs normal summon when it bricks with benkei, equip and summon off wakaushi/motorbike
 

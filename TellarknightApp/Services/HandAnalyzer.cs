@@ -11,7 +11,7 @@ namespace TellarknightApp.Services
             {
                 if (card.Analyzed == false)
                 {
-                    gameState.LocalStats = card.AnalyzeHand(gameState.LocalStats, gameState.Hand, gameState.Deck, gameState.Gy, gameState.OnField, gameState.Scales, gameState.ExtraDeck, gameState.NormalSummoned);
+                    gameState.LocalStats = card.AnalyzeHand(gameState.LocalStats, gameState.Hand, gameState.Deck, gameState.Gy, gameState.Scales, gameState.ExtraDeck);
                     card.Analyzed = true;
                 }
             }

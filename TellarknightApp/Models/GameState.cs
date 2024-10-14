@@ -12,10 +12,8 @@ namespace TellarknightApp.Models
         public List<Card> Hand { get; set; }
         public List<Card> Deck { get; set; }
         public List<Card> Gy { get; set; }
-        public List<Card> OnField { get; set; }
         public List<Card> Scales { get; set; }
         public List<Card> ExtraDeck { get; set; }
-        public bool NormalSummoned { get; set; }
 
         public GameState()
         {
@@ -23,10 +21,8 @@ namespace TellarknightApp.Models
             Hand = new List<Card>();
             Deck = new List<Card>();
             Gy = new List<Card>();
-            OnField = new List<Card>();
             Scales = new List<Card>();
             ExtraDeck = new List<Card>();
-            NormalSummoned = false;
         }
     }
 

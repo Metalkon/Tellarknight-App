@@ -13,6 +13,7 @@ namespace TellarknightApp.Models
                 // Neutral Cards && Hand Traps
                 new EmptyCard(), // Done
                 new Level4(), // Done
+                new SmallWorld(),
 
                 // Tellarknights & Constellars
                 new SatellarknightDeneb(),
@@ -74,7 +75,6 @@ new CrossoutDesignator(),
 
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
-                new SmallWorld(),
 
 
 

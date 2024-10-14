@@ -19,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Lyran.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Lyran + Any Other Lv4 "Tellar"
             if (hand.Any(x => x is not TellarknightLyran && x.Level == 4 

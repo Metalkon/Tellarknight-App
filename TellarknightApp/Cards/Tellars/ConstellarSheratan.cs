@@ -30,7 +30,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Sheratan.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Sheratan + Tellar (No Twinkle)
             if (hand.Any(x => x is not ConstellarSheratan && x.Level == 4 && (x.Archetype.Contains("Constellar") || x.Archetype.Contains("Tellarknight")))

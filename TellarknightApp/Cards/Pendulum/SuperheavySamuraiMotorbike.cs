@@ -19,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Motorbike.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // SHS Check
             if (deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)

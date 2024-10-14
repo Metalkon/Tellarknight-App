@@ -30,7 +30,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Caduceus.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Caduceus + Lv4 Constellar
             if (hand.Any(x => x != this && x.Level == 4 && x.Archetype.Contains("Constellar")))

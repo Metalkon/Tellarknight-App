@@ -19,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Vega.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Vega + Any Other Lv4 Tellarknight
             if (hand.Any(x => x is not SatellarknightVega && x.Level == 4 && x.Archetype.Contains("Tellarknight")))

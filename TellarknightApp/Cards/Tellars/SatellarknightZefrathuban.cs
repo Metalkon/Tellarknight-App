@@ -19,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/Zefrathuban.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Pendulumn Summon
             if (hand.Any(x => x.Scale >= 5 && x.Level != 4))

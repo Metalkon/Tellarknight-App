@@ -22,6 +22,7 @@ namespace TellarknightApp.Models
         public int Quantity { get; set; }
         public bool Analyzed { get; set; }
         public bool Enabled { get; set; }
+        public bool Searcher { get; set; }
 
         public Card()
         {
@@ -34,11 +35,17 @@ namespace TellarknightApp.Models
             Quantity = 0;
             Analyzed = false;
             Enabled = true;
+            Searcher = false;
         }
 
-        public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> onField, List<Card> scales, List<Card> extraDeck, bool normalSummoned)
+        public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             return localStats;
+        }
+
+        public virtual (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
+        {
+            return (hand, deck, gy);
         }
 
         public virtual Card Clone()
