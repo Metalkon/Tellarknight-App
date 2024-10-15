@@ -14,7 +14,7 @@ namespace TellarknightApp.Models
                 new EmptyCard(), // Done
                 new Level4(), // Done
                 new SmallWorld(),
-                new Terraforming(),
+                //new Terraforming(),
                 new ReinforcementOfTheArmy(),
 
                 // Tellarknights & Constellars

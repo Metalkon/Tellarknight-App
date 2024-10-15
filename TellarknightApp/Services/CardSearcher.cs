@@ -12,8 +12,6 @@ namespace TellarknightApp.Services
     {
         public static GameState CardSearch(GameState gameState)
         {
-            // Note: Testing will be needed
-
             // Rota (First Priority)
             if (gameState.Hand.FirstOrDefault(x => x is ReinforcementOfTheArmy) is ReinforcementOfTheArmy rota)
             {
@@ -64,10 +62,17 @@ namespace TellarknightApp.Services
             return gameState;
         }
 
-        public static GameState DisableSearchers(GameState gameState, Card card)
+        public static GameState DisableSearchers(GameState gameState, Card inputCard)
         {
-            var currentBaseClass = card.GetType().BaseType;
-            foreach (Card Card in gameState.Hand)
+            var currentBaseClass = inputCard.GetType().BaseType;
+            foreach (Card card in gameState.Hand)
+            {
+                if (card.GetType().BaseType == currentBaseClass)
+                {
+                    card.Enabled = false;
+                }
+            }
+            foreach (Card card in gameState.Deck)
             {
                 if (card.GetType().BaseType == currentBaseClass)
                 {

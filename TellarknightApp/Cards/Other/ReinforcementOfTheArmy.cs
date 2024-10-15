@@ -15,6 +15,7 @@ namespace TellarknightApp.Cards
             Defense = null;
             Scale = null;
             Role = string.Empty;
+            Searcher = true;
             Archetype = new List<string> { "None" };
             Image = "./CardArt/Rota.png";
         }
