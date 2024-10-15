@@ -52,5 +52,15 @@ namespace TellarknightApp.Models
         {
             return (Card)Activator.CreateInstance(this.GetType());
         }
+
+        public (List<Card>, List<Card>, List<Card>) SearchSwap(List<Card> hand, List<Card> deck, List<Card> gy, Card card)
+        {
+            hand.Add(card);
+            deck.Remove(card);
+            gy.Add(this);
+            hand.Remove(this);
+
+            return (hand, deck, gy);
+        }
     }
 }

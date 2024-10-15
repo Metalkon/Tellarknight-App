@@ -12,30 +12,43 @@ namespace TellarknightApp.Services
     {
         public static GameState CardSearch(GameState gameState)
         {
-            // Small World (First Priority)
+            // Note: Testing will be needed
+
+            // Rota (First Priority)
+            if (gameState.Hand.FirstOrDefault(x => x is ReinforcementOfTheArmy) is ReinforcementOfTheArmy rota)
+            {
+                (gameState.Hand, gameState.Deck, gameState.Gy) = rota.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
+                gameState = DisableSearchers(gameState, rota);
+            }
+
+            // Providence (Second Priority)
+            if (gameState.Hand.FirstOrDefault(x => x is ZefraProvidence) is ZefraProvidence prov)
+            {
+                (gameState.Hand, gameState.Deck, gameState.Gy) = prov.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
+                gameState = DisableSearchers(gameState, prov);
+            }
+
+            // Oracle (Third Priority)
+            if (gameState.Hand.FirstOrDefault(x => x is OracleOfZefra) is OracleOfZefra oracle)
+            {
+                (gameState.Hand, gameState.Deck, gameState.Gy) = oracle.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
+                gameState = DisableSearchers(gameState, oracle);
+            }
+
+            // Small World (Fourth Priority)
             if (gameState.Hand.FirstOrDefault(x => x is SmallWorld) is SmallWorld smallWorld)
             {
                 (gameState.Hand, gameState.Deck, gameState.Gy) = smallWorld.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-
-                smallWorld.Enabled = false;
-                gameState.Gy.Add(smallWorld);
-                gameState.Hand.Remove(smallWorld);
+                gameState = DisableSearchers(gameState, smallWorld);
             }
 
-            // Loop through each card in the hand (Note: May Need Tweeks Later)
+            // Loop All Other Searchers (Note: May Need Tweeks Later)
             foreach (Card card in gameState.Hand)
             {
                 if (card.Searcher && card.Enabled)
                 {
                     (gameState.Hand, gameState.Deck, gameState.Gy) = card.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                    var currentBaseClass = card.GetType().BaseType;
-                    foreach (Card Card in gameState.Hand)
-                    {
-                        if (card.GetType().BaseType == currentBaseClass)
-                        {
-                            card.Enabled = false; 
-                        }
-                    }
+                    gameState = DisableSearchers(gameState, card);
                 }
             }
 
@@ -46,6 +59,20 @@ namespace TellarknightApp.Services
             {
                 gameState.Gy.Add(card);
                 gameState.Hand.Remove(card);
+            }
+
+            return gameState;
+        }
+
+        public static GameState DisableSearchers(GameState gameState, Card card)
+        {
+            var currentBaseClass = card.GetType().BaseType;
+            foreach (Card Card in gameState.Hand)
+            {
+                if (card.GetType().BaseType == currentBaseClass)
+                {
+                    card.Enabled = false;
+                }
             }
 
             return gameState;
