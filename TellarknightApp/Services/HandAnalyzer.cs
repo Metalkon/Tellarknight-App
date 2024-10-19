@@ -25,7 +25,7 @@ namespace TellarknightApp.Services
             // Corrections
             if (gameState.LocalStats.OracleCombo || gameState.LocalStats.ZefraathAndThuban || gameState.LocalStats.ZefraComboWithTrap)
             {
-                gameState.LocalStats.PendulumnSummon = true;
+                gameState.LocalStats.PendulumSummon = true;
             }
             if (gameState.LocalStats.ZefraathAndThuban)
             {
@@ -35,7 +35,7 @@ namespace TellarknightApp.Services
             {
                 gameState.LocalStats.AverageXyzOneTellar = true;
             }
-            if (gameState.LocalStats.PendulumnSummon == true)
+            if (gameState.LocalStats.PendulumSummon == true)
             {
                 gameState.LocalStats.AverageXyzNoTellar = true;
             }
@@ -44,7 +44,7 @@ namespace TellarknightApp.Services
             if (!gameState.LocalStats.AverageXyzNoTellar
                 && !gameState.LocalStats.AverageXyzOneTellar
                 && !gameState.LocalStats.AverageXyzTwoTellar
-                && !gameState.LocalStats.PendulumnSummon
+                && !gameState.LocalStats.PendulumSummon
                 && !gameState.LocalStats.OracleCombo
                 && !gameState.LocalStats.ZefraathAndThuban
                 && !gameState.LocalStats.ZefraComboWithTrap
@@ -91,7 +91,7 @@ namespace TellarknightApp.Services
             if (localStats.AverageXyzNoTellar) stats.AverageXyzNoTellar++;
             if (localStats.AverageXyzOneTellar) stats.AverageXyzOneTellar++;
             if (localStats.AverageXyzTwoTellar) stats.AverageXyzTwoTellar++;
-            if (localStats.PendulumnSummon) stats.PendulumnSummon++;
+            if (localStats.PendulumSummon) stats.PendulumSummon++;
             if (localStats.OracleCombo) stats.OracleCombo++;
             if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;
             if (localStats.ZefraComboWithTrap) stats.ZefraComboWithTrap++;

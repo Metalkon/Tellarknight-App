@@ -1,4 +1,5 @@
-﻿using TellarknightApp.Models;
+﻿using System.Linq;
+using TellarknightApp.Models;
 using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
@@ -65,8 +66,8 @@ namespace TellarknightApp.Cards
             }
 
             // Search Lyran (Normal)
-            if (hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4)
-                && hand.Count(x => x is not TellarknightLyran) == 0 && deck.Any(x => x is TellarknightLyran))
+            if (hand.Any(x => x is not TellarknightLyran && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4)
+                && deck.Any(x => x is TellarknightLyran))
             {
                 Card searchedCard = deck.First(x => x is TellarknightLyran);
                 hand.Add(searchedCard);
@@ -74,6 +75,26 @@ namespace TellarknightApp.Cards
                 return (hand, deck, gy);
             }
 
+            // Search Vega (Normal)
+            if (hand.Any(x => x is not SatellarknightVega && x.Archetype.Contains("Tellarknight") && x.Level == 4)
+                && deck.Any(x => x is SatellarknightVega))
+            {
+                Card searchedCard = deck.First(x => x is SatellarknightVega);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, gy);
+            }
+
+            // Search Any Tellar (Normal)
+            if (hand.Any(x => x is TellarknightLyran)
+                && deck.Any(x => x is not TellarknightLyran && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4 && x.Type == "Warrior"))
+            {
+                Card searchedCard = deck.First(x => x is not TellarknightLyran && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4 && x.Type == "Warrior");
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, gy);
+            }
+            
             // Search Deneb (Tellar CT Spell)
             if (hand.Any(x => x is ConstellarTellarknights) 
                 && deck.Any(x => x is SatellarknightDeneb) 
@@ -100,6 +121,15 @@ namespace TellarknightApp.Cards
             if (deck.Any(x => x.Type == "Warrior" && x.Role == "Extender" && x.Level == 4))
             {
                 Card searchedCard = deck.First(x => x.Type == "Warrior" && x.Role == "Extender" && x.Level == 4);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, gy);
+            }
+
+            // Search Any Warrior
+            if (deck.Any(x => x.Type == "Warrior" && x.Level == 4))
+            {
+                Card searchedCard = deck.First(x => x.Type == "Warrior" && x.Level == 4);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 return (hand, deck, gy);

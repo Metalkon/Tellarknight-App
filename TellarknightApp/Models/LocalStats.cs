@@ -13,7 +13,7 @@ namespace TellarknightApp.Models
         public bool AverageXyzNoTellar { get; set; } = false;
         public bool AverageXyzOneTellar { get; set; } = false;
         public bool AverageXyzTwoTellar { get; set; } = false;
-        public bool PendulumnSummon { get; set; } = false;
+        public bool PendulumSummon { get; set; } = false;
         public bool OracleCombo { get; set; } = false;
         public bool ZefraathAndThuban { get; set; } = false;
         public bool ZefraComboWithTrap { get; set; } = false;

@@ -21,7 +21,7 @@ namespace TellarknightApp.Cards
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
-            // Pendulumn Summon
+            // Pendulum Summon
             if (hand.Any(x => x.Scale >= 5 && x.Level != 4))
             {
                 // Temporarily disable scale
@@ -40,7 +40,7 @@ namespace TellarknightApp.Cards
                     || (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Tellarknight")) && x.Level == 4) == 1 
                     && hand.Any(x => (!x.Archetype.Contains("Zefra") || !x.Archetype.Contains("Tellarknight")) && x.Level == 4)))
                 {
-                    localStats.PendulumnSummon = true;
+                    localStats.PendulumSummon = true;
                     foreach (Card card in hand)
                     {
                         card.Enabled = true;
@@ -54,7 +54,7 @@ namespace TellarknightApp.Cards
                     || (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Shaddoll")) && x.Level == 4) == 1
                     && hand.Any(x => (!x.Archetype.Contains("Zefra") || !x.Archetype.Contains("Shaddoll")) && x.Level == 4)))
                 {
-                    localStats.PendulumnSummon = true;
+                    localStats.PendulumSummon = true;
                     foreach (Card card in hand)
                     {
                         card.Enabled = true;
@@ -68,7 +68,7 @@ namespace TellarknightApp.Cards
                     || (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Yang Zing")) && x.Level == 4) == 1
                     && hand.Any(x => (!x.Archetype.Contains("Zefra") || !x.Archetype.Contains("Yang Zing")) && x.Level == 4)))
                 {
-                    localStats.PendulumnSummon = true;
+                    localStats.PendulumSummon = true;
                     foreach (Card card in hand)
                     {
                         card.Enabled = true;

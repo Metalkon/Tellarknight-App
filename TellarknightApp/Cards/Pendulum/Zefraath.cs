@@ -40,7 +40,7 @@ namespace TellarknightApp.Cards
                 && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))
             {
                 localStats.OracleCombo = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 if (hand.Any(x => x.Archetype.Contains("Zefra") && x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Archetype.Contains("Tellarknight") && x.Level == 4))
                 {
                     localStats.AverageXyzOneTellar = true;
@@ -54,7 +54,7 @@ namespace TellarknightApp.Cards
                 && (deck.Any(x => x is ShaddollZefracore) || (hand.Any(x => x is ShaddollZefracore) && deck.Any(x => x is StellarknightZefraxciton))))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 
@@ -66,7 +66,7 @@ namespace TellarknightApp.Cards
                 && (deck.Any(x => x is ShaddollZefracore) || (hand.Any(x => x is ShaddollZefracore) && deck.Any(x => x is StellarknightZefraxciton))))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 
@@ -79,7 +79,7 @@ namespace TellarknightApp.Cards
                 && hand.Any(x => x.Level == 4))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 
@@ -89,7 +89,7 @@ namespace TellarknightApp.Cards
                 && hand.Any(x => x.Level == 4))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 
@@ -100,7 +100,7 @@ namespace TellarknightApp.Cards
                 && (hand.Any(x => x is TellarknightLyran) || hand.Any(x => x is SatellarknightVega) || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x is ConstellarTellarknights))))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 
@@ -110,7 +110,7 @@ namespace TellarknightApp.Cards
                 && hand.Any(x => x.Level == 4 && (x.Scale <= 6 || x.Scale == null)))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 
@@ -120,7 +120,7 @@ namespace TellarknightApp.Cards
                 && hand.Any(x => x.Level == 4 && (x.Scale >= 4 || x.Scale == null)))
             {
                 localStats.AverageXyzOneTellar = true;
-                localStats.PendulumnSummon = true;
+                localStats.PendulumSummon = true;
                 return localStats;
             }
 

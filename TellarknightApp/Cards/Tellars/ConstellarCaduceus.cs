@@ -33,7 +33,7 @@ namespace TellarknightApp.Cards
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
         {
             // Caduceus + Lv4 Constellar
-            if (hand.Any(x => x != this && x.Level == 4 && x.Archetype.Contains("Constellar")))
+            if (hand.Any(x => x is not ConstellarCaduceus && x.Level == 4 && x.Archetype.Contains("Constellar")))
             {
                 localStats.AverageXyzTwoTellar = true;
             }

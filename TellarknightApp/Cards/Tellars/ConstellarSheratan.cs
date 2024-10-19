@@ -31,10 +31,10 @@ namespace TellarknightApp.Cards
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
-        {
+        {            
             // Sheratan + Tellar (No Twinkle)
-            if (hand.Any(x => x is not ConstellarSheratan && x.Level == 4 && (x.Archetype.Contains("Constellar") || x.Archetype.Contains("Tellarknight")))
-                && (hand.Any(x => x is ConstellarCaduceus) || deck.Any(x => x is ConstellarCaduceus))
+            if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Constellar") || x.Archetype.Contains("Tellarknight")))
+                && deck.Any(x => x is ConstellarCaduceus)
                 && (hand.Any(x => x is ConstellarTellarknights) || deck.Any(x => x is ConstellarTellarknights)))
             {
                 localStats.AverageXyzTwoTellar = true;
@@ -50,7 +50,7 @@ namespace TellarknightApp.Cards
             }
 
             // Sheratan + Pollux/Algiedi -> Caduceus
-            if ((hand.Any(x => x is ConstellarPollux) || hand.Any(x => x is ConstellarAlgiedi) || hand.Any(x => x.Role == "Extender" && x.Level == 4 /*&& x is not PhotonThrasher*/))
+            if ((hand.Any(x => x is ConstellarPollux) || hand.Any(x => x is ConstellarAlgiedi) || hand.Any(x => x.Role == "Extender" && x.Level == 4))
                 && (hand.Any(x => x is ConstellarCaduceus) || deck.Any(x => x is ConstellarCaduceus)))
             {
                 localStats.AverageXyzTwoTellar = true;
