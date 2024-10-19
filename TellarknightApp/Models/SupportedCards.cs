@@ -14,8 +14,8 @@ namespace TellarknightApp.Models
                 new EmptyCard(), // Done
                 new Level4(), // Done
                 new SmallWorld(),
-                //new Terraforming(),
-                new ReinforcementOfTheArmy(),
+                new Terraforming(), // Done
+                new ReinforcementOfTheArmy(), // Done
 
                 // Tellarknights & Constellars
                 new SatellarknightDeneb(),
@@ -41,14 +41,16 @@ namespace TellarknightApp.Models
                 new Sakitama(), // Done
                 new Aratama(), // Done
 
+                // Note: Zefra Pends (without zefraath) need more work and testing, paired with non-zefra scales too
+
                 // Zefra
                 new Zefraath(), // Done
                 new SatellarknightZefrathuban(), // Done
-                new StellarknightZefraxciton(), // Done
-                new ShaddollZefracore(), // Done
+                new StellarknightZefraxciton(),
+                new ShaddollZefracore(),
                 new ZefraniuSecretOfTheYangZing(), // Done
-                new OracleOfZefra(),
-                new ZefraProvidence(),
+                new OracleOfZefra(), // Done
+                new ZefraProvidence(), // Done
                 new ZefraDivineStrike(),
 
                 // Superheavy Samurai                

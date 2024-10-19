@@ -51,7 +51,11 @@
 
                     (1 In @((currentCount > 0 && deckStatistics.BrickChance > 0)
                     ? Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)
-                    : 1))
+                    : 1)) <br />
+
+                    Pendulum Chance: @((currentCount > 0 && currentCount != deckStatistics.BrickChance)
+                    ? $"{Math.Round((deckStatistics.PendulumnSummon / currentCount) * 100, 2)}%"
+                    : "N/A")
                 </div>
 
             </div>
@@ -120,7 +124,8 @@
 
     private async Task CheckDeck()
     {
-        maximumCount = (maximumCount > 100000) ? 100000 : (maximumCount < 5000 ? 5000 : maximumCount);
+        // Temporarily removed maximumCount check for testing purposes
+        //maximumCount = (maximumCount > 100000) ? 100000 : (maximumCount < 5000 ? 5000 : maximumCount);
         startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
 
         active = true;

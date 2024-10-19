@@ -3,12 +3,12 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class OracleOfZefra : Card
+    public class ZefraProvidence : Card
     {
-        public OracleOfZefra() 
+        public ZefraProvidence() 
         {
-            Name = "Oracle of Zefra";
-            Type = "Field Spell";
+            Name = "Zefra Providence";
+            Type = "Spell";
             Attribute = string.Empty;
             Level = null;
             Attack = null;
@@ -17,7 +17,7 @@ namespace TellarknightApp.Cards
             Role = string.Empty;
             Searcher = true;
             Archetype = new List<string> { "Zefra" };
-            Image = "./CardArt/Oracle.png";
+            Image = "./CardArt/ZefraProvidence.png";
         }
 
         public override (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
@@ -32,12 +32,28 @@ namespace TellarknightApp.Cards
                 superheavySamurai = true;
             }
 
+            // Search Oracle of Zefra (Optimal Oracle Combo)
+            if (superheavySamurai == true
+                && hand.Count(x => x is OracleOfZefra) == 0
+                && hand.Any(x => x is Zefraath)
+                && hand.Count(x => x.Archetype.Contains("Zefra") && x.Level == 4) == 0
+                && deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)
+                && deck.Any(x => x is OracleOfZefra)
+                && (hand.Any(x => x is ZefraniuSecretOfTheYangZing) || deck.Any(x => x is ZefraniuSecretOfTheYangZing))
+                )
+            {
+                Card searchedCard = deck.First(x => x is OracleOfZefra);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, gy);
+            }
+
             // Zefraath (Oracle Search)
             if (superheavySamurai == true
-                && hand.Count(x => x is Zefraath) == 0
+                && (hand.Count(x => x is Zefraath) == 0 || hand.Count(x => x is OracleOfZefra) == 0) 
                 && deck.Any(x => x is Zefraath)
-                && ((deck.Any(x => x is ZefraniuSecretOfTheYangZing) && ((gy.Any(x => x is ZefraProvidence) == false && deck.Any(x => x is ZefraProvidence) && deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)) || hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))
-                || (hand.Any(x => x is ZefraniuSecretOfTheYangZing) && deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale == 7))))
+                && (deck.Any(x => x is ZefraniuSecretOfTheYangZing) && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || (deck.Any(x => x is OracleOfZefra) && deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))
+                || (hand.Any(x => x is ZefraniuSecretOfTheYangZing) && deck.Any(x => x is OracleOfZefra) && deck.Any(x => x is StellarknightZefraxciton))))
             {
                 Card searchedCard = deck.First(x => x is Zefraath);
                 hand.Add(searchedCard);
@@ -45,9 +61,23 @@ namespace TellarknightApp.Cards
                 return (hand, deck, gy);
             }
 
+            // Zefraath (Oracle Search)
+            if (superheavySamurai == true
+                && hand.Count(x => x is Zefraath) == 0
+                && deck.Any(x => x is Zefraath)
+                && ((deck.Any(x => x is ZefraniuSecretOfTheYangZing) && deck.Any(x => x is OracleOfZefra) && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))   
+                || (hand.Any(x => x is ZefraniuSecretOfTheYangZing) && deck.Any(x => x is OracleOfZefra) && deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale == 7))))
+            {
+                Card searchedCard = deck.First(x => x is Zefraath);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, gy);
+            }
+
+
             // Zefraath (Normal/Deneb)
             if (superheavySamurai == false
-                && hand.Count(x => x is Zefraath) == 0
+                && (hand.Count(x => x is Zefraath) == 0 || hand.Count(x => x is OracleOfZefra) == 0) 
                 && (hand.Any(x => x is SatellarknightZefrathuban) || (hand.Any(x => x is SatellarknightDeneb) && deck.Any(x => x is SatellarknightZefrathuban)))
                 && deck.Any(x => x is Zefraath))
             {
@@ -59,10 +89,10 @@ namespace TellarknightApp.Cards
 
             // Zefraath (Skybridge, Note: No Vega)
             if (superheavySamurai == false
-                && hand.Count(x => x is Zefraath) == 0
-                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb)
+                && (hand.Count(x => x is Zefraath) == 0 || hand.Count(x => x is OracleOfZefra) == 0)
+                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb) 
                 && (hand.Any(x => x is SatellarknightSkybridge) || (hand.Any(x => x is TellarknightLyran) && deck.Any(x => x is SatellarknightSkybridge)))
-                && deck.Any(x => x is SatellarknightDeneb)
+                && deck.Any(x => x is SatellarknightDeneb) 
                 && deck.Any(x => x is SatellarknightZefrathuban)
                 && deck.Any(x => x is Zefraath))
             {
@@ -73,7 +103,8 @@ namespace TellarknightApp.Cards
             }
 
             // Zefrathuban Search
-            if (hand.Count(x => x is Zefraath) == 0
+            if (hand.Count(x => x is Zefraath) == 0 
+                && hand.Count(x => x is OracleOfZefra) == 0
                 && hand.Any(x => x is StellarknightZefraxciton)
                 && deck.Any(x => x is SatellarknightZefrathuban))
             {
@@ -85,6 +116,7 @@ namespace TellarknightApp.Cards
 
             // Zefraxciton Search
             if (hand.Count(x => x is Zefraath) == 0
+                && hand.Count(x => x is OracleOfZefra) == 0
                 && hand.Any(x => x is SatellarknightZefrathuban)
                 && deck.Any(x => x is StellarknightZefraxciton))
             {

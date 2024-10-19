@@ -35,6 +35,10 @@ namespace TellarknightApp.Services
             {
                 gameState.LocalStats.AverageXyzOneTellar = true;
             }
+            if (gameState.LocalStats.PendulumnSummon == true)
+            {
+                gameState.LocalStats.AverageXyzNoTellar = true;
+            }
 
             // Check For Hand Brick
             if (!gameState.LocalStats.AverageXyzNoTellar
