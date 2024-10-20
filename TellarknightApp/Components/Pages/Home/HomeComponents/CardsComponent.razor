@@ -6,6 +6,7 @@
     <div class="grid-search">
         <input id="searchQuery" type="text" @bind-value="searchQuery" class="search-input" />
         <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
+        <button class="btn btn-primary" @onclick="@(() => ResetCardsButton())">Reset</button>
     </div>
     <div class="item grid-search-other">
         grid-search-other
@@ -32,6 +33,8 @@
 @code {
     [Parameter]
     public EventCallback UpdateState { get; set; }
+    [Parameter]
+    public EventCallback ResetCardsParameter { get; set; }
     private string searchQuery = string.Empty;
 
     public async void CardSearch()
@@ -52,5 +55,10 @@
     public async Task UpdateStateChild()
     {
         await UpdateState.InvokeAsync();
+    }
+
+    public async Task ResetCardsButton()
+    {
+        await ResetCardsParameter.InvokeAsync();
     }
 }

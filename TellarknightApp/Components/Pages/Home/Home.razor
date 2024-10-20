@@ -5,17 +5,25 @@
 <div class="page-background-class">
     <div class="app-grid-container">
         <div class="item grid-statistics">
-            <StatisticsComponent UpdateState="UpdateState"></StatisticsComponent>
+            <StatisticsComponent @ref="statisticsComponent" UpdateState="UpdateState"></StatisticsComponent>
         </div>
         <div class="item grid-cards">
-            <CardsComponent UpdateState="UpdateState"></CardsComponent>
+            <CardsComponent UpdateState="UpdateState" ResetCardsParameter="ResetCardsParent"></CardsComponent>
         </div>
     </div>
 </div>
 
 @code {
+    private StatisticsComponent statisticsComponent;
+
     public async Task UpdateState()
     {
         await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task ResetCardsParent()
+    {
+        statisticsComponent.ResetCards();
+        UpdateState();
     }
 }

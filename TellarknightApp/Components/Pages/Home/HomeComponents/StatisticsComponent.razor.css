@@ -5,7 +5,7 @@
 
 .app-grid-container {
     display: grid;
-    grid-template-rows: 1fr 9fr;
+    grid-template-rows: 1fr 11fr;
     grid-template-columns: 1fr;
     grid-gap: 10px;
     height: 100%;
@@ -85,7 +85,7 @@
     padding: 5%;
     white-space: nowrap;
     overflow: hidden;
-    font-size: clamp(6px, 1vw, 24px);
+    font-size: clamp(12px, 1vw, 24px);
 }
 
 /* Grid Options */
