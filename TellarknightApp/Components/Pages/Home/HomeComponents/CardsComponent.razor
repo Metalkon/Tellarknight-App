@@ -3,13 +3,37 @@
 @inject SupportedCards supportedCards
 
 <div class="app-grid-container">
-    <div class="grid-search">
-        <input id="searchQuery" type="text" @bind-value="searchQuery" class="search-input" />
-        <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
-        <button class="btn btn-primary" @onclick="@(() => ResetCardsButton())">Reset</button>
-    </div>
-    <div class="item grid-search-other">
-        grid-search-other
+    <div class="item grid-search">
+        <div class="grid-search-container">
+            <div class="grid-search-1">
+                <input id="searchQuery" type="text" @bind-value="searchQuery" style="height: 100%; margin-left: 1%; width: 100%; font-size: 1.5vw; border: 1px solid black" />
+            </div>
+            <div class="grid-search-2">
+                <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
+            </div>
+            <div class="grid-search-3">
+                <select @bind="typeQuery" style="height: 100%; width: 100%;">
+                    <option value="@string.Empty" selected>Card Type</option>
+                    <option value="Monster">Monster</option>
+                    <option value="Spell">Spell</option>
+                    <option value="Trap">Trap</option>
+                </select>
+            </div>
+            <div class="grid-search-4">
+                <select @bind="archetypeQuery" style="height: 100%; width: 100%;">
+                    <option value="@string.Empty" selected>Archetype</option>
+                    <option value="None">None</option>
+                    <option value="Tellarknight">Tellarknight</option>
+                    <option value="Constellar">Constellar</option>
+                    <option value="Zefra">Zefra</option>
+                    <option value="SHS">SHS</option>
+
+                </select>
+            </div>
+            <div class="grid-search-5">
+                <button class="btn-danger" @onclick="() => CardSearch()">View Decklist</button>
+            </div>
+        </div>
     </div>
     <div class="item grid-cards">
 
@@ -19,9 +43,9 @@
                 <div class="grid-item">
                     <img src="@card.Image" alt="@card.Name" class="item-image" />
                     <div class="quantity-control">
-                        <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
+                        <button class="btn-quantity"                    HorizontalOptions="Center"   @onclick="() => DecreaseQuantity(card)">-</button>
                         <input type="text" class="item-input" @bind="card.Quantity" />
-                        <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
+                        <button class="btn-quantity" HorizontalOptions="Center"  @onclick="() => IncreaseQuantity(card)">+</button>
                     </div>
                 </div>
             }
@@ -30,12 +54,42 @@
     </div>
 </div>
 
+
+<!--
+        <div class="item grid-search">
+    <div class="grid-search-container">
+
+    </div>
+</div>
+-->
+<!--
+    <input id="searchQuery" type="text" @bind-value="searchQuery" class="search-input" />
+    <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
+</div>
+<div class="item grid-search-other">
+    grid-search-other
+</div>
+-->
+
+
+
+
 @code {
     [Parameter]
     public EventCallback UpdateState { get; set; }
     [Parameter]
     public EventCallback ResetCardsParameter { get; set; }
     private string searchQuery = string.Empty;
+    private string typeQuery;
+    private string archetypeQuery;
+    private List<string> optionsType = new List<string>
+    {
+        "Monster",
+        "Spell",
+        "Trap",
+    };
+
+
 
     public async void CardSearch()
     {
@@ -55,10 +109,5 @@
     public async Task UpdateStateChild()
     {
         await UpdateState.InvokeAsync();
-    }
-
-    public async Task ResetCardsButton()
-    {
-        await ResetCardsParameter.InvokeAsync();
     }
 }

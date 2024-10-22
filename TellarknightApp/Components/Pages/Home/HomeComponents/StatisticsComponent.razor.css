@@ -23,6 +23,8 @@
     grid-row: 1 / span 1;
     grid-column: 1 / span 1;
     background-color: white;
+    display: flex;
+    align-items: center;
 }
 
 .grid-statistics {
@@ -94,9 +96,10 @@
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 2fr;
-    height: 100%;
-    width: 100%;
+    height: calc(100% - 10px);
+    width: calc(100% - 5px);
     box-sizing: border-box;
+    grid-gap: 1%;
 }
 
 .grid-options-1 {
@@ -124,22 +127,17 @@
     grid-row: 2 / span 1;
     grid-column: 2 / span 1;
     background-color: white;
-    align-items: center;
+    align-items: flex-end;
+    border: 1px solid black;
 }
 
 .grid-options-5 {
-    grid-row: 1 / span 1;
+    grid-row: 1 / span 2;
     grid-column: 3 / span 1;
     background-color: white;
     align-items: flex-end;
 }
 
-.grid-options-6 {
-    grid-row: 2 / span 1;
-    grid-column: 3 / span 1;
-    background-color: white;
-    align-items: center;
-}
 
 .grid-options-7 {
     grid-row: 1 / span 2;
@@ -160,7 +158,15 @@
 }
 
 .btn-primary {
-    flex: 1;
     height: 100%;
-    box-sizing: border-box;
+    width: 100%;
+    justify-content: center;
+    font-size: clamp(12px, 1vw, 24px);
+}
+
+.btn-danger {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    font-size: clamp(12px, 1vw, 24px);
 }
