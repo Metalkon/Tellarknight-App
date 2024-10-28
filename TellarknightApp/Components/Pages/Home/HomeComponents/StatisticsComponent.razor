@@ -48,49 +48,72 @@
                 <div class="title">
                     <b>Basic Stats:</b>
                 </div>
-                <div class="stats">
-                    Deck Size: @(decklist.MainDeck.Count() > 40 ? decklist.MainDeck.Count() : 40) <br />
+                <div>
+                    Deck Size: @(!idle ? decklist.MainDeck.Count() : 40) <br />
+
                     Total Monsters: @decklist.MainDeck.Count(x => x.Level != null) <br />
 
-                    Combo Chance: @((currentCount > 0 && currentCount != deckStatistics.BrickChance)
-                    ? Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2)
+                    Combo Chance: @(!idle ? Math.Round(((currentCount - deckStatistics.BrickChance) / currentCount) * 100, 2)
                     : 0)% <br />
 
-                    Brick Chance: @((currentCount > 0 && deckStatistics.BrickChance > 0)
-                    ? Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2)
+                    Brick Chance: @(!idle ? Math.Round((deckStatistics.BrickChance / currentCount) * 100, 2)
                     : 100)% <br />
 
-                    (1 In @((currentCount > 0 && deckStatistics.BrickChance > 0)
-                    ? Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)
+                    (1 In @(!idle ? Math.Round(currentCount / (double)deckStatistics.BrickChance, 2)
                     : 1)) <br />
-
-                    Pendulum Chance: @((currentCount > 0 && currentCount != deckStatistics.BrickChance)
-                    ? $"{Math.Round((deckStatistics.PendulumSummon / currentCount) * 100, 2)}%"
-                    : "N/A")
                 </div>
-
             </div>
             <div class="grid-statistics-2">
-                <b>Untitled Stats:</b> <br />
-                <text>
+                <div class="title">
+                    <b>Summon Stats:</b>
+                </div>
+                <div>
+                    Xyz Summon (0 Tellars): @(!idle ? $"{Math.Round((deckStatistics.AverageXyzNoTellar / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+                    
+                    Xyz Summon (1 Tellars): @(!idle ? $"{Math.Round((deckStatistics.AverageXyzOneTellar / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
 
-                </text>
+                    Xyz Summon (2 Tellars): @(!idle ? $"{Math.Round((deckStatistics.AverageXyzTwoTellar / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+
+                    Pendulum Chance: @(!idle ? $"{Math.Round((deckStatistics.PendulumSummon / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+
+                    Oracle Combo Chance: @(!idle ? $"{Math.Round((deckStatistics.OracleCombo / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+
+                </div>
             </div>
             <div class="grid-statistics-3">
-                <b>Untitled Stats:</b> <br />
-                <text>
+                <div class="title">
+                    <b>Hand Stats:</b>
+                </div>
+                <div>
+                    Average # Tellars: @(!idle ? $"{Math.Round(deckStatistics.AverageTellars / currentCount, 2)}"
+                    : "N/A") <br />
 
-                </text>
+                    Average # Hand Traps: @(!idle ? $"{Math.Round(deckStatistics.AverageHandTraps / currentCount, 2)}"
+                    : "N/A") <br />
+
+                    Average # Bystials: @(!idle ? $"{Math.Round(deckStatistics.AverageBystials / currentCount, 2)}"
+                    : "N/A") <br />
+
+
+
+                </div>
             </div>
             <div class="grid-statistics-4">
-                <b>Untitled Stats:</b> <br />
-                <text>
+                <div class="title">
+                    <b>Other Stats:</b>
+                </div>
+                <div>
+                    Armored Brick Chance: @(!idle ? $"{Math.Round((deckStatistics.IsoldeBrick / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+                    Isolde Brick Chance: @(!idle ? $"{Math.Round((deckStatistics.IsoldeBrick / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
 
-                </text>
-            </div>
-            <div class="grid-statistics-5">
-            </div>
-            <div class="grid-statistics-6">
+                </div>
             </div>
         </div>
     </div>
@@ -103,6 +126,7 @@
     private int startingHand = 5;
     private int maximumCount = 15000;
     private int currentCount;
+    private bool idle = true;
 
     private async Task CheckDeck()
     {
@@ -110,6 +134,7 @@
         //maximumCount = (maximumCount > 100000) ? 100000 : (maximumCount < 5000 ? 5000 : maximumCount);
         startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
 
+        idle = false;
         active = true;
         currentCount = 0;
         deckStatistics = new DeckStatistics();
@@ -230,6 +255,7 @@
         gameState = new GameState();
         decklist = new Decklist();
         UpdateStateChild();
+        idle = true;
     }
 
     public async Task UpdateStateChild()

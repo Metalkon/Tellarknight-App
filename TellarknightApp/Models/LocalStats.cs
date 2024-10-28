@@ -16,8 +16,6 @@ namespace TellarknightApp.Models
         public bool PendulumSummon { get; set; } = false;
         public bool OracleCombo { get; set; } = false;
         public bool ZefraathAndThuban { get; set; } = false;
-        public bool ZefraComboWithTrap { get; set; } = false;
-        public bool ZefraComboWithNormalAvailable { get; set; } = false;
         public bool AverageHandTraps { get; set; } = false;
         public bool AverageBystials { get; set; } = false;
         public bool IsoldeBrick { get; set; } = false;

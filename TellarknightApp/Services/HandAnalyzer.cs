@@ -23,7 +23,7 @@ namespace TellarknightApp.Services
             }
 
             // Corrections
-            if (gameState.LocalStats.OracleCombo || gameState.LocalStats.ZefraathAndThuban || gameState.LocalStats.ZefraComboWithTrap)
+            if (gameState.LocalStats.OracleCombo)
             {
                 gameState.LocalStats.PendulumSummon = true;
             }
@@ -40,24 +40,29 @@ namespace TellarknightApp.Services
                 gameState.LocalStats.AverageXyzNoTellar = true;
             }
 
+            // Average Tellar Count
+            if (gameState.LocalStats.AverageXyzTwoTellar == true)
+            {
+                gameState.LocalStats.AverageXyzOneTellar = false;
+                gameState.LocalStats.AverageXyzNoTellar = false;
+            }
+            if (gameState.LocalStats.AverageXyzOneTellar == true)
+            {
+                gameState.LocalStats.AverageXyzNoTellar = false;
+            }
+
             // Check For Hand Brick
             if (!gameState.LocalStats.AverageXyzNoTellar
                 && !gameState.LocalStats.AverageXyzOneTellar
                 && !gameState.LocalStats.AverageXyzTwoTellar
                 && !gameState.LocalStats.PendulumSummon
-                && !gameState.LocalStats.OracleCombo
-                && !gameState.LocalStats.ZefraathAndThuban
-                && !gameState.LocalStats.ZefraComboWithTrap
-                && !gameState.LocalStats.ZefraComboWithNormalAvailable)
+                && !gameState.LocalStats.OracleCombo)
             {
                 gameState.LocalStats.BrickChance = true;
             }
 
             // Zefra Trap
-            if (gameState.LocalStats.BrickChance == false && gameState.Hand.Any(x => x.Name == "Zefra Divine Strike"))
-            {
-                gameState.LocalStats.ZefraComboWithTrap = true;
-            }
+
 
 
             // Isolde Bricking
@@ -93,9 +98,6 @@ namespace TellarknightApp.Services
             if (localStats.AverageXyzTwoTellar) stats.AverageXyzTwoTellar++;
             if (localStats.PendulumSummon) stats.PendulumSummon++;
             if (localStats.OracleCombo) stats.OracleCombo++;
-            if (localStats.ZefraathAndThuban) stats.ZefraathAndThuban++;
-            if (localStats.ZefraComboWithTrap) stats.ZefraComboWithTrap++;
-            if (localStats.ZefraComboWithNormalAvailable) stats.ZefraComboWithNormalAvailable++;
             if (localStats.AverageHandTraps) stats.AverageHandTraps++;
             if (localStats.AverageBystials) stats.AverageBystials++;
             if (localStats.IsoldeBrick) stats.IsoldeBrick++;
