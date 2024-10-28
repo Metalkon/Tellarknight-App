@@ -6,9 +6,9 @@
     <div class="item grid-search">
         <div class="grid-search-container">
             <div class="grid-search-1">
-                <input id="searchQuery" type="text" @bind-value="searchQuery" style="height: 100%; margin-left: 1%; width: 100%; font-size: 1.5vw; border: 1px solid black" />
+                <input id="searchQuery" type="text" class="search-input" @bind-value="searchQuery" />
             </div>
-            <div class="grid-search-2">
+            <div class="size grid-search-2">
                 <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
             </div>
             <div class="grid-search-3">
@@ -31,11 +31,11 @@
                 </select>
             </div>
             <div class="grid-search-5">
-                <button class="btn-danger" @onclick="() => CardSearch()">View Decklist</button>
+                <button class="btn btn-danger" @onclick="() => CardSearch()">View Decklist</button>
             </div>
         </div>
     </div>
-    <div class="item grid-cards">
+    <div class="grid-cards">
 
         <div class="card-container">
             @foreach (Card card in supportedCards.Cards.Where(x => x.Name.ToLower().Contains(searchQuery.ToLower())))

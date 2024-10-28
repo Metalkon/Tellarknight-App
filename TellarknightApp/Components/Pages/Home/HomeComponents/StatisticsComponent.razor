@@ -8,16 +8,19 @@
     <div class="item grid-options">
         <div class="grid-options-container">
             <div class="grid-options-1">
-                <b>Hand Size:</b>
+                <b>Hand:</b>
             </div>
             <div class="grid-options-2">
-                <input type="text" style="text-align: center; position: relative;" @bind-value="startingHand">
+                <div style="width: 100%; height: 100%; position: relative;">
+                    <div style="width: 100%; background-color: transparent; height: 100%; position: absolute;"></div>
+                    <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="startingHand">
+                </div>
             </div>
             <div class="grid-options-3">
-                <b>Sample Size:</b>
+                <b>Sample:</b>
             </div>
             <div class="grid-options-4">
-                <div style="width: 100%; position: relative;">
+                <div style="width: 100%; height: 100%; position: relative;">
                     <div style="width: @($"{(double)currentCount / maximumCount * 100}%"); background-color: lightgreen; height: 100%; position: absolute;"></div>
                     @if(active == true)
                     {
@@ -30,13 +33,6 @@
 
                 </div>
             </div>
-
-
-
-
-
-
-
             <div class="grid-options-5">
                 <button class="btn btn-danger" HorizontalOptions="Center" @onclick="@(() => ResetCards())">Reset</button>
             </div>
