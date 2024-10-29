@@ -220,7 +220,7 @@
             }
         }
         active = false;
-        await InvokeAsync(StateHasChanged);
+        UpdateState.InvokeAsync();
     }
 
     private async Task CheckHand()
@@ -245,7 +245,7 @@
         deckStatisticsHand = HandAnalyzer.HandCheck(gameStateHand, deckStatisticsHand);
 
         handTested = true;
-        await InvokeAsync(StateHasChanged);
+        UpdateState.InvokeAsync();
     }
 
     // Filter cards and quantities in supportedcards to fill the contents of the decklist
@@ -331,7 +331,6 @@
         currentCount = 0;
         deckStatistics = new DeckStatistics();
         deckStatisticsHand = new DeckStatistics();
-        supportedCards = new SupportedCards();
         gameState = new GameState();
         gameStateHand = new GameState();
         decklist = new Decklist();
@@ -346,12 +345,12 @@
             new EmptyCard(){ Image = "./CardArt/CardBack.png" }
         };
 
-        UpdateStateChild();
+        supportedCards.RefreshUpdate();
         idle = true;
     }
 
-    public async Task UpdateStateChild()
+    protected override async Task OnInitializedAsync()
     {
-        await UpdateState.InvokeAsync();
+        supportedCards.Action += StateHasChanged;
     }
 }

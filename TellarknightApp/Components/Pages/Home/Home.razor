@@ -1,29 +1,27 @@
 ﻿@page "/"
 @using TellarknightApp.Components.Pages.Home.HomeComponents;
-
+@inject SupportedCards supportedCards
 
 <div class="page-background-class">
     <div class="app-grid-container">
         <div class="item grid-statistics">
-            <StatisticsComponent @ref="statisticsComponent" UpdateState="UpdateState"></StatisticsComponent>
+            <StatisticsComponent UpdateState="UpdateState"></StatisticsComponent>
         </div>
         <div class="item grid-cards">
-            <CardsComponent UpdateState="UpdateState" ResetCardsParameter="ResetCardsParent"></CardsComponent>
+            <CardsComponent UpdateState="UpdateState"></CardsComponent>
         </div>
     </div>
 </div>
 
 @code {
-    private StatisticsComponent statisticsComponent;
 
     public async Task UpdateState()
     {
         await InvokeAsync(StateHasChanged);
     }
 
-    public async Task ResetCardsParent()
+    protected override async Task OnInitializedAsync()
     {
-        statisticsComponent.ResetCards();
-        UpdateState();
+        supportedCards.Action += StateHasChanged;
     }
 }

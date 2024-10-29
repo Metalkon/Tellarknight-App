@@ -54,31 +54,9 @@
     </div>
 </div>
 
-
-<!--
-        <div class="item grid-search">
-    <div class="grid-search-container">
-
-    </div>
-</div>
--->
-<!--
-    <input id="searchQuery" type="text" @bind-value="searchQuery" class="search-input" />
-    <button class="btn btn-primary" @onclick="@(() => CardSearch())">Search</button>
-</div>
-<div class="item grid-search-other">
-    grid-search-other
-</div>
--->
-
-
-
-
 @code {
     [Parameter]
     public EventCallback UpdateState { get; set; }
-    [Parameter]
-    public EventCallback ResetCardsParameter { get; set; }
     private string searchQuery = string.Empty;
     private string typeQuery;
     private string archetypeQuery;
@@ -88,8 +66,6 @@
         "Spell",
         "Trap",
     };
-
-
 
     public async void CardSearch()
     {
@@ -106,8 +82,8 @@
         card.Quantity--;
     }
 
-    public async Task UpdateStateChild()
+    protected override async Task OnInitializedAsync()
     {
-        await UpdateState.InvokeAsync();
+        supportedCards.Action += StateHasChanged;
     }
 }

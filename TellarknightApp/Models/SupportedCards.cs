@@ -4,20 +4,34 @@ namespace TellarknightApp.Models
 {
     public class SupportedCards
     {
+        public event Action? Action;
         public List<Card> Cards { get; set; }
 
+        // Constructor
         public SupportedCards()
         {
-            Cards = new List<Card>()
+            InitializeCards();
+        }
+
+        // Refresh method: Resets the Cards list
+        public async Task RefreshUpdate()
+        {
+            Cards.Clear();
+            InitializeCards();
+            Action?.Invoke();
+        }
+
+        // Helper method to initialize the Cards list
+        private void InitializeCards()
+        {
+            Cards = new List<Card>
             {
-                // Neutral Cards && Hand Traps
                 new EmptyCard(), // Done
                 new Level4(), // Done
                 new SmallWorld(),
                 new Terraforming(), // Done
                 new ReinforcementOfTheArmy(), // Done
 
-                // Tellarknights & Constellars
                 new SatellarknightDeneb(),
                 new SatellarknightAltair(), // Done
                 new SatellarknightVega(), // Done
@@ -26,7 +40,7 @@ namespace TellarknightApp.Models
                 new TellarknightLyran(),
                 new TellarknightAltairan(), // Done
                 new SatellarknightSkybridge(),
-                new ConstellarTellarknights(), //  Done
+                new ConstellarTellarknights(), // Done
                 new ConstellarCaduceus(), // Done
                 new ConstellarSheratan(), // Done
                 new ConstellarPollux(), // Done
@@ -34,16 +48,12 @@ namespace TellarknightApp.Models
                 new ConstellarSombre(), // Done
                 new ConstellarTwinkle(), // Done
 
-                // Extenders
                 new ThePhantomKnightsOfShadeBrigandine(), // Done
                 new PhotonThrasher(), // Done
                 new ZSAscendedSage(), // Done
                 new Sakitama(), // Done
                 new Aratama(), // Done
 
-                // Note: Zefra Pends (without zefraath) need more work and testing, paired with non-zefra scales too
-
-                // Zefra
                 new Zefraath(), // Done
                 new SatellarknightZefrathuban(), // Done
                 new StellarknightZefraxciton(),
@@ -53,7 +63,6 @@ namespace TellarknightApp.Models
                 new ZefraProvidence(), // Done
                 new ZefraDivineStrike(),
 
-                // Superheavy Samurai                
                 new SuperheavySamuraiProdigyWakaushi(), // Done
                 new SuperheavySamuraiMonkBigBenkei(), // Done
                 new SuperheavySamuraiMotorbike(), // Done
