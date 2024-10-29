@@ -31,7 +31,7 @@ namespace TellarknightApp.Models
             Attribute = string.Empty;
             Archetype = new List<string> { "None" };
             Role = string.Empty;
-            Image = "./CardArt/CardBack.png";
+            Image = "./CardArt/EmptyCard.png";
             Quantity = 0;
             Analyzed = false;
             Enabled = true;

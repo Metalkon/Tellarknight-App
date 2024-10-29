@@ -19,9 +19,7 @@ namespace TellarknightApp
             builder.Services.AddMauiBlazorWebView();
             builder.Services
                 .AddSingleton<Decklist>()
-                .AddSingleton<GameState>()
-                .AddSingleton<SupportedCards>()
-                .AddSingleton<DeckStatistics>();
+                .AddSingleton<SupportedCards>();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();

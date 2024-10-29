@@ -80,6 +80,9 @@
 .grid-search-1, .grid-search-2, .grid-search-3, .grid-search-4, .grid-search-5, .grid-search-6, .grid-search-7, .grid-search-8 {
     white-space: nowrap;
     font-size: clamp(6px, 1vw, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary, .btn-danger, .search-input {

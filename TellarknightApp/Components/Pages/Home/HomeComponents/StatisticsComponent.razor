@@ -1,6 +1,4 @@
-﻿@inject DeckStatistics deckStatistics
-@inject SupportedCards supportedCards
-@inject GameState gameState
+﻿@inject SupportedCards supportedCards
 @inject Decklist decklist
 
 <div class="app-grid-container">
@@ -37,7 +35,7 @@
                 <button class="btn btn-danger" HorizontalOptions="Center" @onclick="@(() => ResetCards())">Reset</button>
             </div>
             <div class="grid-options-7">
-                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@(() => CheckDeck())">Start</button>
+                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@(() => CheckDeck())">Check Deck</button>
             </div>
         </div>
     </div>
@@ -98,9 +96,6 @@
 
                     Average # Bystials: @(!idle ? $"{Math.Round(deckStatistics.AverageBystials / currentCount, 2)}"
                     : "N/A") <br />
-
-
-
                 </div>
             </div>
             <div class="grid-statistics-4">
@@ -115,6 +110,48 @@
 
                 </div>
             </div>
+
+            <div class="grid-statistics-extra">
+                <div class="hand-test-container">
+                    <!-- Button Section -->
+                    <div class="card-button">
+                        <button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand())">Check Hand</button>
+                        <text class="check-hand-text">
+                            <b style="margin-right: 3px;">Result: </b>
+                            @if (handTested == true && deckStatisticsHand.BrickChance != 0)
+                            {
+                                <text> Bricked!</text>
+                            }
+                            else if (handTested == true && deckStatisticsHand.BrickChance == 0)
+                            {
+                                <text> Success!</text>
+                            }
+                            else
+                            {
+                                <text> N/A</text>
+                            }
+                        </text>
+                    </div>
+                    <hr>
+                    <!-- Card Grid Section -->
+                    <div class="card-container">
+                        @foreach (Card card in handTest)
+                        {
+                            <div class="grid-item">
+                                <img src="@card.Image" alt="@card.Name" class="item-image" />
+                            </div>
+                        }
+
+                        @if (handTest.Count == 5)
+                        {
+                            <div class="grid-item">
+                                <img src="./CardArt/Empty.png" alt="Empty" class="item-image" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -127,11 +164,23 @@
     private int maximumCount = 15000;
     private int currentCount;
     private bool idle = true;
+    private bool handTested = false;
+    private DeckStatistics deckStatistics = new DeckStatistics();
+    private DeckStatistics deckStatisticsHand = new DeckStatistics();
+    private GameState gameState = new GameState();
+    private GameState gameStateHand = new GameState();
+    private List<Card> handTest = new List<Card>()
+    {
+        new EmptyCard(){ Image = "./CardArt/CardBack.png" }, 
+        new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.png" }
+    };
 
     private async Task CheckDeck()
     {
-        // Temporarily removed maximumCount check for testing purposes
-        //maximumCount = (maximumCount > 100000) ? 100000 : (maximumCount < 5000 ? 5000 : maximumCount);
+        maximumCount = (maximumCount > 100000) ? 100000 : (maximumCount < 5000 ? 5000 : maximumCount);
         startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
 
         idle = false;
@@ -151,9 +200,9 @@
         // Main Loop
         for (int i = 0; i < maximumCount; i++)
         {
-            RefreshGameState();
-            ShuffleDeck();
-            DrawHand();
+            gameState = RefreshGameState(gameState);
+            gameState = ShuffleDeck(gameState);
+            gameState = DrawHand(gameState);
 
             // Check Hand & Deck For Optimal Searches
             gameState = CardSearcher.CardSearch(gameState);
@@ -171,6 +220,31 @@
             }
         }
         active = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CheckHand()
+    {
+        startingHand = (startingHand < 1) ? 1 : (startingHand > 6 ? 6 : startingHand);
+
+        deckStatisticsHand = new DeckStatistics();
+        gameStateHand = new GameState();
+        handTest = new List<Card>();
+
+        BuildDecklist();
+        gameStateHand = RefreshGameState(gameStateHand);
+        gameStateHand = ShuffleDeck(gameStateHand);
+        gameStateHand = DrawHand(gameStateHand);
+
+        foreach(Card card in gameStateHand.Hand)
+        {
+            handTest.Add(card);
+        }
+
+        gameStateHand = CardSearcher.CardSearch(gameStateHand);
+        deckStatisticsHand = HandAnalyzer.HandCheck(gameStateHand, deckStatisticsHand);
+
+        handTested = true;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -207,53 +281,71 @@
 
 
     // Clears the gamestate and transfer decklist contents to gamestate
-    private void RefreshGameState()
+    private GameState RefreshGameState(GameState gameStateInput)
     {
-        gameState = new GameState();
+        gameStateInput = new GameState();
         foreach (Card card in decklist.MainDeck)
         {
-            gameState.Deck.Add(card.Clone());
+            gameStateInput.Deck.Add(card.Clone());
         }
         foreach (Card card in decklist.ExtraDeck)
         {
-            gameState.ExtraDeck.Add(card.Clone());
+            gameStateInput.ExtraDeck.Add(card.Clone());
         }
+        return gameStateInput;
+
     }
 
     // Shuffles the deck fisher-yates style
-    private void ShuffleDeck()
+    private GameState ShuffleDeck(GameState gameStateInput)
     {
         var random = new Random();
-        int deckCount = gameState.Deck.Count;
+        int deckCount = gameStateInput.Deck.Count;
         for (int i = 0; i < 3; i++)
         {
             while (deckCount > 1)
             {
                 deckCount--;
                 int randomIndex = random.Next(deckCount + 1);
-                var tempCard = gameState.Deck[randomIndex];
-                gameState.Deck[randomIndex] = gameState.Deck[deckCount];
-                gameState.Deck[deckCount] = tempCard;
+                var tempCard = gameStateInput.Deck[randomIndex];
+                gameStateInput.Deck[randomIndex] = gameStateInput.Deck[deckCount];
+                gameStateInput.Deck[deckCount] = tempCard;
             }
         }
+        return gameStateInput;
+
     }
 
-    public void DrawHand()
+    public GameState DrawHand(GameState gameStateInput)
     {
         for (int i = 0; i < startingHand; i++)
         {
-            gameState.Hand.Add(gameState.Deck[0]);
-            gameState.Deck.RemoveAt(0);
+            gameStateInput.Hand.Add(gameStateInput.Deck[0]);
+            gameStateInput.Deck.RemoveAt(0);
         }
+        return gameStateInput;
     }
 
     public void ResetCards()
     {
         currentCount = 0;
         deckStatistics = new DeckStatistics();
+        deckStatisticsHand = new DeckStatistics();
         supportedCards = new SupportedCards();
         gameState = new GameState();
+        gameStateHand = new GameState();
         decklist = new Decklist();
+        handTested = false;
+
+        handTest = new List<Card>()
+        {
+            new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.png" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.png" }
+        };
+
         UpdateStateChild();
         idle = true;
     }
