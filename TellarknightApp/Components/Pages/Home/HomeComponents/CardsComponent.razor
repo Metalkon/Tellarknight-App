@@ -1,6 +1,7 @@
 ﻿@using TellarknightApp.Services
 @using TellarknightApp.Models
 @inject SupportedCards supportedCards
+@inject Decklist decklist
 
 <div class="app-grid-container">
     <div class="item grid-search">
@@ -31,26 +32,66 @@
                 </select>
             </div>
             <div class="grid-search-5">
-                <button class="btn btn-danger" @onclick="() => CardSearch()">View Decklist</button>
+                @if (select == true)
+                {
+                    <button class="btn btn-danger" @onclick="() => DecklistButton()">View Decklist</button>
+                }
+                else
+                {
+                    <button class="btn btn-danger" @onclick="() => DecklistButton()">Select Cards</button>
+                }
+            </div>
+            <div class="grid-search-6">
+                <button class="btn btn-secondary" @onclick="() => CardSearch()">Export YDK</button>
             </div>
         </div>
     </div>
     <div class="grid-cards">
-
-        <div class="card-container">
-            @foreach (Card card in supportedCards.Cards.Where(x => x.Name.ToLower().Contains(searchQuery.ToLower())))
-            {
-                <div class="grid-item">
-                    <img src="@card.Image" alt="@card.Name" class="item-image" />
-                    <div class="quantity-control">
-                        <button class="btn-quantity"                    HorizontalOptions="Center"   @onclick="() => DecreaseQuantity(card)">-</button>
-                        <input type="text" class="item-input" @bind="card.Quantity" />
-                        <button class="btn-quantity" HorizontalOptions="Center"  @onclick="() => IncreaseQuantity(card)">+</button>
+        @if (select == true)
+        {
+            <div class="card-container">
+                @foreach (Card card in supportedCards.Cards.Where(x => x.Name.ToLower().Contains(searchQuery.ToLower())))
+                {
+                    <div class="grid-item">
+                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <div class="quantity-control">
+                            <button class="btn-quantity" HorizontalOptions="Center" @onclick="() => DecreaseQuantity(card)">-</button>
+                            <input type="text" class="item-input" @bind="card.Quantity" />
+                            <button class="btn-quantity" HorizontalOptions="Center" @onclick="() => IncreaseQuantity(card)">+</button>
+                        </div>
                     </div>
-                </div>
-            }
-        </div>
-
+                }
+            </div>
+        }
+        else
+        {
+            <div class="card-container">
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type != "Spell" && x.Type != "Trap" && x.Role != "Extra Deck"))
+                {
+                    <div class="grid-item">
+                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    </div>
+                }
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell"))
+                {
+                    <div class="grid-item">
+                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    </div>
+                }
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Trap"))
+                {
+                    <div class="grid-item">
+                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    </div>
+                }
+                @foreach (Card card in decklist.ExtraDeck)
+                {
+                    <div class="grid-item">
+                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    </div>
+                }
+            </div>
+        }
     </div>
 </div>
 
@@ -60,12 +101,19 @@
     private string searchQuery = string.Empty;
     private string typeQuery;
     private string archetypeQuery;
+    private bool select = true;
     private List<string> optionsType = new List<string>
     {
         "Monster",
         "Spell",
         "Trap",
     };
+
+    public void DecklistButton()
+    {
+        select = !select;
+        decklist.BuildDecklist(supportedCards);
+    }
 
     public async void CardSearch()
     {
@@ -85,5 +133,6 @@
     protected override async Task OnInitializedAsync()
     {
         supportedCards.Action += StateHasChanged;
+        decklist.Action += StateHasChanged;
     }
 }

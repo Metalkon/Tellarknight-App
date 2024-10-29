@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using TellarknightApp.Components.Pages.Home.HomeComponents;
 @inject SupportedCards supportedCards
+@inject Decklist decklist
 
 <div class="page-background-class">
     <div class="app-grid-container">
@@ -23,5 +24,6 @@
     protected override async Task OnInitializedAsync()
     {
         supportedCards.Action += StateHasChanged;
+        decklist.Action += StateHasChanged;
     }
 }

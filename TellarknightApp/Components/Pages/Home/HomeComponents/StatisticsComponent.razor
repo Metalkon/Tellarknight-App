@@ -192,7 +192,7 @@
         int tempCountNext = (int)(maximumCount * 0.001);
         Random random = new Random();
 
-        BuildDecklist();
+        decklist.BuildDecklist(supportedCards);
         await UpdateState.InvokeAsync();
 
         // Testing
@@ -231,7 +231,7 @@
         gameStateHand = new GameState();
         handTest = new List<Card>();
 
-        BuildDecklist();
+        decklist.BuildDecklist(supportedCards);
         gameStateHand = RefreshGameState(gameStateHand);
         gameStateHand = ShuffleDeck(gameStateHand);
         gameStateHand = DrawHand(gameStateHand);
@@ -247,38 +247,6 @@
         handTested = true;
         UpdateState.InvokeAsync();
     }
-
-    // Filter cards and quantities in supportedcards to fill the contents of the decklist
-    private void BuildDecklist()
-    {
-        decklist = new Decklist();
-        foreach (Card card in supportedCards.Cards)
-        {
-            if (card.Quantity > 3 && card is not Level4 && card is not EmptyCard)
-            {
-                card.Quantity = 3;
-            }
-            if (card.Quantity > 0 && card.Role != "Extra Deck")
-            {
-                for (int i = 0; i < card.Quantity; i++)
-                {
-                    decklist.MainDeck.Add(card);
-                }
-            }
-            if (card.Quantity > 0 && card.Role == "Extra Deck")
-            {
-                for (int i = 0; i < card.Quantity; i++)
-                {
-                    decklist.ExtraDeck.Add(card);
-                }
-            }
-        }
-        while (decklist.MainDeck.Count < 40)
-        {
-            decklist.MainDeck.Add(new EmptyCard());
-        }
-    }
-
 
     // Clears the gamestate and transfer decklist contents to gamestate
     private GameState RefreshGameState(GameState gameStateInput)
@@ -352,5 +320,6 @@
     protected override async Task OnInitializedAsync()
     {
         supportedCards.Action += StateHasChanged;
+        decklist.Action += StateHasChanged;
     }
 }
