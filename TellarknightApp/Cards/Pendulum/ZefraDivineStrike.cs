@@ -8,7 +8,7 @@ namespace TellarknightApp.Cards
         public ZefraDivineStrike() 
         {
             Name = "Zefra Divine Strike";
-            Type = "Spell";
+            Type = "Trap";
             Attribute = string.Empty;
             Level = null;
             Attack = null;

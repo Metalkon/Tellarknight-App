@@ -33,7 +33,6 @@
                     <option value="Constellar">Constellar</option>
                     <option value="Zefra">Zefra</option>
                     <option value="SHS">SHS</option>
-
                 </select>
             </div>
             <div class="grid-search-5">
@@ -55,14 +54,17 @@
         @if (select == true)
         {
             <div class="card-container">
-                @foreach (Card card in supportedCards.Cards.Where(x => x.Name.ToLower().Contains(searchQuery.ToLower())))
+                @foreach (Card card in supportedCards.Cards
+               .Where(x => string.IsNullOrWhiteSpace(searchQuery) ? true : x.Name.Contains(searchQuery))
+               .Where(x => string.IsNullOrWhiteSpace(archetypeQuery) ? true : x.Archetype.Contains(archetypeQuery))
+               .Where(x => string.IsNullOrWhiteSpace(typeQuery) ? true : (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") : x.Type == typeQuery)))
                 {
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" />
                         <div class="quantity-control">
-                            <button class="btn-quantity" HorizontalOptions="Center" @onclick="() => DecreaseQuantity(card)">-</button>
+                            <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
                             <input type="text" class="item-input" @bind="card.Quantity" />
-                            <button class="btn-quantity" HorizontalOptions="Center" @onclick="() => IncreaseQuantity(card)">+</button>
+                            <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
                         </div>
                     </div>
                 }
@@ -71,13 +73,13 @@
         else
         {
             <div class="card-container">
-                @foreach (Card card in decklist.MainDeck.Where(x => x.Type != "Spell" && x.Type != "Trap" && x.Role != "Extra Deck"))
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type != "Spell" && x.Type != "Trap" && x is not EmptyCard && x.Role != "Extra Deck"))
                 {
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" />
                     </div>
                 }
-                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell" || x.Type == "Field Spell"))
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell"))
                 {
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" />
@@ -95,6 +97,12 @@
                         <img src="@card.Image" alt="@card.Name" class="item-image" />
                     </div>
                 }
+                @foreach (Card card in decklist.MainDeck.Where(x => x is EmptyCard))
+                {
+                    <div class="grid-item">
+                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                    </div>
+                }
             </div>
         }
     </div>
@@ -104,8 +112,8 @@
     [Parameter]
     public EventCallback UpdateState { get; set; }
     private string searchQuery = string.Empty;
-    private string typeQuery;
-    private string archetypeQuery;
+    private string typeQuery = string.Empty;
+    private string archetypeQuery = string.Empty;
     private bool select = true;
     private List<string> optionsType = new List<string>
     {

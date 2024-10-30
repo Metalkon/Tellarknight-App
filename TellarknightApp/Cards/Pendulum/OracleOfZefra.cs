@@ -8,7 +8,7 @@ namespace TellarknightApp.Cards
         public OracleOfZefra() 
         {
             Name = "Oracle of Zefra";
-            Type = "Field Spell";
+            Type = "Spell";
             Attribute = string.Empty;
             Level = null;
             Attack = null;
