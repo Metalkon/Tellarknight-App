@@ -17,8 +17,8 @@ namespace TellarknightApp.Cards
             Role = string.Empty;
             Searcher = true;
             Archetype = new List<string> { "Zefra" };
-            Image = "./CardArt/ZefraProvidence.png";
             Id = 74580251;
+            Image = $"./CardArt/{Id}.jpg";
         }
 
         public override (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)

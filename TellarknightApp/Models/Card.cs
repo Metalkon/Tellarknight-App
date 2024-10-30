@@ -33,12 +33,12 @@ namespace TellarknightApp.Models
             Attribute = string.Empty;
             Archetype = new List<string> { "None" };
             Role = string.Empty;
-            Image = "./CardArt/EmptyCard.png";
             Quantity = 0;
             Analyzed = false;
             Enabled = true;
             Searcher = false;
             Id = 0;
+            Image = $"./CardArt/EmptyCard.png";
         }
 
         public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)

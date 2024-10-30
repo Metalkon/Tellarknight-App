@@ -16,8 +16,8 @@ namespace TellarknightApp.Cards
             Scale = 7;
             Role = string.Empty;
             Archetype = new List<string> { "Tellarknight", "Zefra" };
-            Image = "./CardArt/Zefraxciton.png";
             Id = 22617205;
+            Image = $"./CardArt/{Id}.jpg";
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
