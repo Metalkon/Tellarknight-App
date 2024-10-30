@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
+using Microsoft.Extensions.Logging;
 using TellarknightApp.Models;
-using TellarknightApp.Services;
 
 namespace TellarknightApp
 {
@@ -11,12 +12,14 @@ namespace TellarknightApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
             builder.Services
                 .AddSingleton<Decklist>()
                 .AddSingleton<SupportedCards>();

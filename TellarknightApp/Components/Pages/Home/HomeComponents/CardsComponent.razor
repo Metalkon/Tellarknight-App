@@ -1,7 +1,12 @@
 ﻿@using TellarknightApp.Services
 @using TellarknightApp.Models
+@using CommunityToolkit.Maui
+@using System.Text
+@using CommunityToolkit.Maui.Storage
+@using CommunityToolkit.Maui.Alerts
 @inject SupportedCards supportedCards
 @inject Decklist decklist
+@inject IFileSaver FileSaver
 
 <div class="app-grid-container">
     <div class="item grid-search">
@@ -42,7 +47,7 @@
                 }
             </div>
             <div class="grid-search-6">
-                <button class="btn btn-secondary" @onclick="() => CardSearch()">Export YDK</button>
+                <button class="btn btn-secondary" @onclick="() => SaveFile()">Export YDK</button>
             </div>
         </div>
     </div>
@@ -72,7 +77,7 @@
                         <img src="@card.Image" alt="@card.Name" class="item-image" />
                     </div>
                 }
-                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell"))
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell" || x.Type == "Field Spell"))
                 {
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" />
@@ -111,8 +116,16 @@
 
     public void DecklistButton()
     {
-        select = !select;
-        decklist.BuildDecklist(supportedCards);
+        if(select == true && supportedCards.Cards.Any(x => x.Quantity != 0))
+        {
+            select = !select;
+            decklist.BuildDecklist(supportedCards);
+        }
+        else
+        {
+            select = !select;
+            UpdateState.InvokeAsync();
+        }
     }
 
     public async void CardSearch()
@@ -134,5 +147,42 @@
     {
         supportedCards.Action += StateHasChanged;
         decklist.Action += StateHasChanged;
+    }
+
+    private string GenerateYdk()
+    {
+        decklist.BuildDecklist(supportedCards);
+        var sb = new StringBuilder();
+
+        sb.AppendLine("#main");
+        foreach (var card in decklist.MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
+        {
+            sb.AppendLine(card.Id.ToString());
+        }
+
+        sb.AppendLine("#extra");
+        foreach (var card in decklist.ExtraDeck.Where(x => x.Id != 0))
+        {
+            sb.AppendLine(card.Id.ToString());        
+        }
+
+        sb.AppendLine("!side");
+
+        return sb.ToString();
+    }
+
+    async Task SaveFile()
+    {
+        using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
+        var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
+
+        if (fileSaverResult.IsSuccessful)
+        {
+            await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show();
+        }
+        else
+        {
+            await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
+        }
     }
 }

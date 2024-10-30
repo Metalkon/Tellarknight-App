@@ -117,7 +117,7 @@
                     <div class="card-button">
                         <button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand())">Check Hand</button>
                         <text class="check-hand-text">
-                            <b style="margin-right: 3px;">Result: </b>
+                            <b style="margin-right: 3px; font-size: clamp(6px, 1vw, 36px);">Result: </b>
                             @if (handTested == true && deckStatisticsHand.BrickChance != 0)
                             {
                                 <text> Bricked!</text>
@@ -132,7 +132,6 @@
                             }
                         </text>
                     </div>
-                    <hr>
                     <!-- Card Grid Section -->
                     <div class="card-container">
                         @foreach (Card card in handTest)

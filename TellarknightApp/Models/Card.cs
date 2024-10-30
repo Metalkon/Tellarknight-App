@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace TellarknightApp.Models
         public bool Analyzed { get; set; }
         public bool Enabled { get; set; }
         public bool Searcher { get; set; }
+        public int Id { get; set; }
 
         public Card()
         {
@@ -36,6 +38,7 @@ namespace TellarknightApp.Models
             Analyzed = false;
             Enabled = true;
             Searcher = false;
+            Id = 0;
         }
 
         public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)

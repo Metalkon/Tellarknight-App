@@ -17,6 +17,7 @@ namespace TellarknightApp.Cards
             Role = "Extender";
             Archetype = new List<string> { "None" };
             Image = "./CardArt/Brigandine.png";
+            Id = 98827725;
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
