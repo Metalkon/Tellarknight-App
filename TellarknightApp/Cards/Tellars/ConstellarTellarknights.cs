@@ -17,6 +17,7 @@ namespace TellarknightApp.Cards
             Role = string.Empty;
             Archetype = new List<string> { "Tellarknight", "Constellar" };
             Image = "./CardArt/ConstellarTellarknights.png";
+            Id = 10125011;
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)

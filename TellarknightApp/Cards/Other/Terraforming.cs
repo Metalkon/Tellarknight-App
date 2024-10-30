@@ -18,6 +18,7 @@ namespace TellarknightApp.Cards
             Searcher = true;
             Archetype = new List<string> { "None" };
             Image = "./CardArt/Terraforming.png";
+            Id = 73628505;
         }
 
         public override (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
