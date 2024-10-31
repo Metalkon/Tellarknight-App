@@ -39,12 +39,18 @@ namespace TellarknightApp.Models
                 new SatellarknightSirius(), // Done
                 new TellarknightLyran(),
                 new TellarknightAltairan(), // Done
+                new SatellarknightAlsahm(),
+                new SatellarknightBetelgeuse(),
+                new SatellarknightCapella(),
+                new SatellarknightProcyon(),
+                new SatellarknightRigel(),
                 new SatellarknightSkybridge(),
                 new ConstellarTellarknights(), // Done
                 new ConstellarCaduceus(), // Done
                 new ConstellarSheratan(), // Done
                 new ConstellarPollux(), // Done
                 new ConstellarAlgiedi(), // Done
+                new ConstellarKaus(),
                 new ConstellarSombre(), // Done
                 new ConstellarTwinkle(), // Done
 

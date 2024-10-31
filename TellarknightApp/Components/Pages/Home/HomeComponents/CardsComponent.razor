@@ -66,7 +66,7 @@
                 @foreach (Card card in pagedCards)
                 {
                     <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                         <div class="quantity-control">
                             <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
                             <input type="text" class="item-input" @bind="card.Quantity" />
@@ -108,31 +108,31 @@
                 @foreach (Card card in decklist.MainDeck.Where(x => x.Type != "Spell" && x.Type != "Trap" && x is not EmptyCard && x.Role != "Extra Deck"))
                 {
                     <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                     </div>
                 }
                 @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell"))
                 {
                     <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                     </div>
                 }
                 @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Trap"))
                 {
                     <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                     </div>
                 }
                 @foreach (Card card in decklist.ExtraDeck)
                 {
                     <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                     </div>
                 }
                 @foreach (Card card in decklist.MainDeck.Where(x => x is EmptyCard))
                 {
                     <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" class="item-image" />
+                        <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                     </div>
                 }
             </div>
@@ -158,6 +158,34 @@
     private int currentPage = 1;
     private const int itemsPerPage = 30;
     private int totalItems;
+    private string GenerateCardTooltip(Card card)
+    {
+        var tooltipLines = new List<string>
+    {
+        $"Name: {card.Name}",
+        $"Type: {card.Type}"
+    };
+        if (!string.IsNullOrWhiteSpace(card.Attribute))
+        {
+            tooltipLines.Add($"Attribute: {card.Attribute}");
+        }
+        if (card.Level.HasValue)
+        {
+            tooltipLines.Add($"Level: {card.Level.Value}");
+        }
+        if (card.Attack.HasValue || card.Defense.HasValue)
+        {
+            tooltipLines.Add($"ATK/DEF: {(card.Attack?.ToString() ?? "N/A")}/{(card.Defense?.ToString() ?? "N/A")}");
+        }
+        if (card.Scale.HasValue)
+        {
+            tooltipLines.Add($"Scale: {card.Scale.Value}");
+        }
+
+        tooltipLines.Add($"Archetype: {(card.Archetype != null ? string.Join(", ", card.Archetype) : "N/A")}");
+
+        return string.Join("\n", tooltipLines);
+    }
 
     private void HandleTypeChange(ChangeEventArgs e)
     {
@@ -261,4 +289,6 @@
             await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
         }
     }
+
+
 }
