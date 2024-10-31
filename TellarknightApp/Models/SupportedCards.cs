@@ -31,7 +31,7 @@ namespace TellarknightApp.Models
                 new EmptyCard(),
                 new Level4(),
                 new SmallWorld(), // Incomplete
-                new Terraforming(),
+                new Terraforming(), // Fix condition not counting lack of oracle
                 new ReinforcementOfTheArmy(),
 
                 new SatellarknightDeneb(), // Pend Search
@@ -79,8 +79,23 @@ namespace TellarknightApp.Models
 
                 new SuperheavySamuraiProdigyWakaushi(),
                 new SuperheavySamuraiMonkBigBenkei(),
-                new SuperheavySamuraiMotorbike(),
+                new SuperheavySamuraiMotorbike(), // Add Conditional Search, Maybe Change It's Level During Search?
                 new SuperheavySamuraiSoulgaiaBooster(),
+
+                new MathmechCircular(),
+                new MathmechNabla(), // Add Living Fossil
+                new MathmechDiameter(),
+                new MathmechEquation(),
+                new MathmechSuperfactorial(),
+                new CynetMining(),
+
+                new LivingFossil(),
+                new InfernobleArmsDurendal(), // Turn Into Searcher
+                new InfernobleKnightRenaud(),
+                new FireFlintLady(),
+
+                new CalledByTheGrave(),
+                new CrossoutDesignator(),
 
                 new InfiniteImpermanence(),
                 new RedReboot(),
@@ -112,19 +127,11 @@ namespace TellarknightApp.Models
 }
 
 /*
-new CalledByTheGrave(),
-new CrossoutDesignator(),
 
-new LivingFossil(),
-new InfernobleArmsDurendal(),
-new InfernobleKnightRenaud(),
-new FireFlintLady(),
 
-new MathmechCircular(),
-new MathmechNabla(),
-new MathmechDiameter(),
-new MathmechEquation(),
-new MathmechSuperfactorial(),
+
+
+
 new RunickTip(),
 new RunickFreezingCurses(),
 new RunickDestruction(),
