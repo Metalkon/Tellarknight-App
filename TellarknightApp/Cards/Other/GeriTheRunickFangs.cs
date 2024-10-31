@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class CalledByTheGrave : Card
+    public class GeriTheRunickFangs : Card
     {
-        public CalledByTheGrave() 
+        public GeriTheRunickFangs()
         {
-            Name = "Called by the Grave";
-            Type = "Spell";
-            Attribute = string.Empty;
-            Level = null;
-            Attack = null;
-            Defense = null;
+            Name = "Geri the Runick Fangs";
+            Type = "Beast";
+            Attribute = "Dark";
+            Level = 4;
+            Attack = 0;
+            Defense = 1000;
             Scale = null;
-            Role = string.Empty;
-            Archetype = new List<string> { "None" };
-            Id = 24224830;
+            Role = "Extra Deck";
+            Archetype = new List<string> { "Runick" };
+            Id = 28373620;
             Image = $"./CardArt/{Id}.jpg";
         }
 

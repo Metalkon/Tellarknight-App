@@ -3,11 +3,11 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class CalledByTheGrave : Card
+    public class RunickFountain : Card
     {
-        public CalledByTheGrave() 
+        public RunickFountain()
         {
-            Name = "Called by the Grave";
+            Name = "Runick Fountain";
             Type = "Spell";
             Attribute = string.Empty;
             Level = null;
@@ -15,8 +15,8 @@ namespace TellarknightApp.Cards
             Defense = null;
             Scale = null;
             Role = string.Empty;
-            Archetype = new List<string> { "None" };
-            Id = 24224830;
+            Archetype = new List<string> { "Runick" };
+            Id = 92107604;
             Image = $"./CardArt/{Id}.jpg";
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls;
+﻿using CommunityToolkit.Maui.Core.Primitives;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Primitives;
 using System.Diagnostics.Metrics;
 using System.Runtime.InteropServices.JavaScript;
@@ -89,6 +90,18 @@ namespace TellarknightApp.Models
                 new MathmechSuperfactorial(),
                 new CynetMining(),
 
+                new RunickTip(),
+                new RunickFreezingCurses(),
+                new RunickDestruction(),
+                new RunickFlashingFire(),
+                new RunickSlumber(),
+                new RunickSmitingStorm(),
+                new RunickDispelling(),
+                new RunickGoldenDroplet(),
+                new GeriTheRunickFangs(),
+                new RunickAllure(),
+                new RunickFountain(),
+
                 new LivingFossil(),
                 new InfernobleArmsDurendal(), // Turn Into Searcher
                 new InfernobleKnightRenaud(),
@@ -132,15 +145,7 @@ namespace TellarknightApp.Models
 
 
 
-new RunickTip(),
-new RunickFreezingCurses(),
-new RunickDestruction(),
-new RunickFlashingFire(),
-new RunickSlumber(),
-new RunickSmitingStorm(),
-new RunickDispelling(),
-new GeriTheRunickFangs(),
-new CynetMining(),
+
 
 new ZoodiacBarrage(),
 new ZoodiacThoroughblade(),
@@ -150,5 +155,4 @@ new IgnisPhoenixTheDracoslayer(),
 new MajestyPegasusTheDracoslayer(),
 new ChaosAngel(),
 new TheBystialLubellion(),
-new BystialMagnamhut(),
 */
