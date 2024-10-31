@@ -19,10 +19,13 @@
             </div>
             <div class="grid-search-3">
                 <select @onchange="HandleTypeChange" style="height: 100%; width: 100%;">
-                    <option value="" selected>Card Type</option>
+                    <option value="" selected>Type/Role</option>
                     <option value="Monster">Monster</option>
                     <option value="Spell">Spell</option>
                     <option value="Trap">Trap</option>
+                    <option value="Extender">Extender</option>
+                    <option value="Hand Trap">Hand Trap</option>
+
                 </select>
             </div>
             <div class="grid-search-4">
@@ -54,8 +57,11 @@
             .Where(x => string.IsNullOrWhiteSpace(searchQuery) || x.Name.Contains(searchQuery))
             .Where(x => string.IsNullOrWhiteSpace(archetypeQuery) || x.Archetype.Contains(archetypeQuery))
             .Where(x => string.IsNullOrWhiteSpace(typeQuery) ||
-            (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") : x.Type == typeQuery))
+            (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") :
+            (typeQuery == "Extender" ? x.Role == "Extender" :
+            (typeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == typeQuery))))
             .ToList();
+
 
             totalItems = filteredCards.Count;
             var pagedCards = filteredCards
