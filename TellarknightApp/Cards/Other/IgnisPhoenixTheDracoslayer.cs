@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class InfiniteImpermanence : Card
+    public class IgnisPhoenixTheDracoslayer : Card
     {
-        public InfiniteImpermanence()
+        public IgnisPhoenixTheDracoslayer()
         {
-            Name = "Infinite Impermanence";
-            Type = "Trap";
-            Attribute = string.Empty;
-            Level = null;
-            Attack = null;
-            Defense = null;
+            Name = "Ignis Phoenix, the Dracoslayer";
+            Type = "Warrior";
+            Attribute = "Fire";
+            Level = 4;
+            Attack = 1700;
+            Defense = 1900;
             Scale = null;
-            Role = "Hand Trap";
+            Role = string.Empty;
             Archetype = new List<string> { "None" };
-            Id = 10045474;
+            Id = 56347375;
             Image = $"./CardArt/{Id}.jpg";
         }
 

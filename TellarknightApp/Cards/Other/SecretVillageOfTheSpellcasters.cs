@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class InfiniteImpermanence : Card
+    public class SecretVillageOfTheSpellcasters : Card
     {
-        public InfiniteImpermanence()
+        public SecretVillageOfTheSpellcasters()
         {
-            Name = "Infinite Impermanence";
-            Type = "Trap";
+            Name = "Therion Discolosseum";
+            Type = "Field Spell";
             Attribute = string.Empty;
             Level = null;
             Attack = null;
             Defense = null;
             Scale = null;
-            Role = "Hand Trap";
+            Role = string.Empty;
             Archetype = new List<string> { "None" };
-            Id = 10045474;
+            Id = 68462976;
             Image = $"./CardArt/{Id}.jpg";
         }
 

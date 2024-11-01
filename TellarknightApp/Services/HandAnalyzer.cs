@@ -77,7 +77,7 @@ namespace TellarknightApp.Services
             // - Add Later
 
             // Average Hand Traps/Bystials
-            stats.AverageHandTraps = stats.AverageHandTraps + gameState.Hand.Count(x => x.Role == "HandTrap");
+            stats.AverageHandTraps = stats.AverageHandTraps + gameState.Hand.Count(x => x.Role == "Hand Trap");
             stats.AverageBystials = stats.AverageBystials + gameState.Hand.Count(x => x.Archetype.Contains("Bystial"));
 
             // Average # Tellars

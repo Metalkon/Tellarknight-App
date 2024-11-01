@@ -59,9 +59,10 @@
             .Where(x => string.IsNullOrWhiteSpace(searchQuery) || x.Name.Contains(searchQuery))
             .Where(x => string.IsNullOrWhiteSpace(archetypeQuery) || x.Archetype.Contains(archetypeQuery))
             .Where(x => string.IsNullOrWhiteSpace(typeQuery) ||
-            (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") :
+            (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap") :
+            (typeQuery == "Spell (includes Field Spell)" ? (x.Type == "Spell" || x.Type == "Field Spell") :
             (typeQuery == "Extender" ? x.Role == "Extender" :
-            (typeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == typeQuery))))
+            (typeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == typeQuery)))))
             .ToList();
 
 
@@ -113,13 +114,13 @@
         else
         {
             <div class="card-container">
-                @foreach (Card card in decklist.MainDeck.Where(x => x.Type != "Spell" && x.Type != "Trap" && x is not EmptyCard && x.Role != "Extra Deck"))
+                @foreach (Card card in decklist.MainDeck.Where(x => x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap" && x is not EmptyCard && x.Role != "Extra Deck"))
                 {
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                     </div>
                 }
-                @foreach (Card card in decklist.MainDeck.Where(x => x.Type == "Spell"))
+                @foreach (Card card in decklist.MainDeck.Where(x => (x.Type == "Spell" || x.Type == "Field Spell")))
                 {
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />

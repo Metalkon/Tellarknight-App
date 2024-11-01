@@ -1,9 +1,4 @@
-﻿using CommunityToolkit.Maui.Core.Primitives;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Primitives;
-using System.Diagnostics.Metrics;
-using System.Runtime.InteropServices.JavaScript;
-using TellarknightApp.Cards;
+﻿using TellarknightApp.Cards;
 
 namespace TellarknightApp.Models
 {
@@ -32,7 +27,7 @@ namespace TellarknightApp.Models
                 new EmptyCard(),
                 new Level4(),
                 new SmallWorld(), // Incomplete
-                new Terraforming(), // Fix condition not counting lack of oracle
+                new Terraforming(), // Fix condition not counting lack of oracle and add field spell to all roles
                 new ReinforcementOfTheArmy(),
 
                 new SatellarknightDeneb(), // Pend Search
@@ -58,7 +53,6 @@ namespace TellarknightApp.Models
                 new ConstellarSombre(),
                 new ConstellarTwinkle(),
 
-                new ThePhantomKnightsOfShadeBrigandine(),
                 new PhotonThrasher(),
                 new ZSAscendedSage(),
                 new ZSArmedSage(),
@@ -68,6 +62,7 @@ namespace TellarknightApp.Models
                 new TenyiSpiritMapura(),
                 new TenyiSpiritShthana(),
                 new VanquishSoulPantera(),
+                new ThePhantomKnightsOfShadeBrigandine(),
 
                 new Zefraath(),
                 new SatellarknightZefrathuban(),
@@ -84,12 +79,13 @@ namespace TellarknightApp.Models
                 new SuperheavySamuraiSoulgaiaBooster(),
 
                 new MathmechCircular(),
-                new MathmechNabla(), // Add Living Fossil
+                new MathmechNabla(),
                 new MathmechDiameter(),
                 new MathmechEquation(),
-                new MathmechSuperfactorial(),
                 new CynetMining(),
+                new MathmechSuperfactorial(),
 
+                new GeriTheRunickFangs(),
                 new RunickTip(),
                 new RunickFreezingCurses(),
                 new RunickDestruction(),
@@ -98,20 +94,30 @@ namespace TellarknightApp.Models
                 new RunickSmitingStorm(),
                 new RunickDispelling(),
                 new RunickGoldenDroplet(),
-                new GeriTheRunickFangs(),
                 new RunickAllure(),
                 new RunickFountain(),
 
-                new LivingFossil(),
-                new InfernobleArmsDurendal(), // Turn Into Searcher
+                new ZoodiacThoroughblade(),
+                new ZoodiacRatpier(),
+                new ZoodiacBarrage(),
+
+                new MadolcheMagileine(),
+                new MadolchePetingcessoeur(),
+
+                new TherionKingRegulus(),
+                new TherionDiscolosseum(),
+                new SecretVillageOfTheSpellcasters(),
+                new IgnisPhoenixTheDracoslayer(),
+                new MajestyPegasusTheDracoslayer(),
+
                 new InfernobleKnightRenaud(),
                 new FireFlintLady(),
+                new LivingFossil(), // Add Nabla
+                new InfernobleArmsDurendal(), // Turn Into Searcher
 
                 new CalledByTheGrave(),
                 new CrossoutDesignator(),
 
-                new InfiniteImpermanence(),
-                new RedReboot(),
                 new AshBlossomJoyousSpring(),
                 new GhostOgreSnowRabbit(),
                 new GhostBelleHauntedMansion(),
@@ -130,6 +136,8 @@ namespace TellarknightApp.Models
                 new NibiruThePrimalBeing(),
                 new PSYFramegearGamma(),
                 new PSYFrameDriver(),
+                new InfiniteImpermanence(),
+                new RedReboot(),
                 new BystialBaldrake(),
                 new BystialDruiswurm(),
                 new BystialMagnamhut(),
@@ -142,17 +150,20 @@ namespace TellarknightApp.Models
 /*
 
 
+add cards:
+monster reborn (Both kind)
+kashtira
+centur-ion
+ryzeal
+melodious
+7th tachyon & ed slot
+7th ascension (searches tachyon)
+artifact scy/mjol
+armored
 
 
 
-
-
-new ZoodiacBarrage(),
-new ZoodiacThoroughblade(),
-new MadolchePetingcessoeur(),
 new AmorphagePride(),
-new IgnisPhoenixTheDracoslayer(),
-new MajestyPegasusTheDracoslayer(),
 new ChaosAngel(),
 new TheBystialLubellion(),
 */

@@ -10,7 +10,7 @@ namespace TellarknightApp.Cards
             Name = "Red Reboot";
             Type = "Trap";
             Attribute = string.Empty;
-            Level = 3;
+            Level = null;
             Attack = null;
             Defense = null;
             Scale = null;

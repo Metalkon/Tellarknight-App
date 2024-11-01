@@ -3,20 +3,20 @@ using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
-    public class InfiniteImpermanence : Card
+    public class ZoodiacThoroughblade : Card
     {
-        public InfiniteImpermanence()
+        public ZoodiacThoroughblade()
         {
-            Name = "Infinite Impermanence";
-            Type = "Trap";
-            Attribute = string.Empty;
-            Level = null;
-            Attack = null;
-            Defense = null;
+            Name = "Zoodiac Thoroughblade";
+            Type = "Beast-Warrior";
+            Attribute = "Earth";
+            Level = 4;
+            Attack = 1600;
+            Defense = 0;
             Scale = null;
-            Role = "Hand Trap";
-            Archetype = new List<string> { "None" };
-            Id = 10045474;
+            Role = string.Empty;
+            Archetype = new List<string> { "Zoodiac" };
+            Id = 77150143;
             Image = $"./CardArt/{Id}.jpg";
         }
 
