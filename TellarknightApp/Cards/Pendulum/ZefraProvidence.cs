@@ -21,7 +21,7 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
+        public override (List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy, bool searched)
         {
             bool superheavySamurai = false;
 
@@ -46,7 +46,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is OracleOfZefra);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefraath (Oracle Search)
@@ -59,7 +59,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is Zefraath);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefraath (Oracle Search)
@@ -72,7 +72,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is Zefraath);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
 
@@ -85,7 +85,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is Zefraath);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefraath (Skybridge, Note: No Vega)
@@ -100,7 +100,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is Zefraath);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefrathuban Search
@@ -112,7 +112,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefraxciton Search
@@ -124,7 +124,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is StellarknightZefraxciton);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefrathuban Search #2
@@ -133,7 +133,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefraxciton Search #2
@@ -142,7 +142,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is StellarknightZefraxciton);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefracore Search
@@ -151,7 +151,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is ShaddollZefracore);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Zefraniu Search
@@ -160,10 +160,10 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is ZefraniuSecretOfTheYangZing);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
-            return (hand, deck, gy);
+            return (hand, deck, gy, searched = false);
         }
     }
 }

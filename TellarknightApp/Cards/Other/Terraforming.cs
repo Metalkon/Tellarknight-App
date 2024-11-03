@@ -21,15 +21,15 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
+        public override (List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy, bool searched)
         {
             // Oracle
-            if (hand.Any(x => x is not OracleOfZefra) && deck.Any(x => x is OracleOfZefra))
+            if (hand.Count(x => x is OracleOfZefra) == 0 && deck.Any(x => x is OracleOfZefra))
             {
                 Card searchedCard = deck.First(x => x is OracleOfZefra);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
             // Add any priority cards in the future
@@ -40,10 +40,10 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is not OracleOfZefra && x.Type == "Field Spell");
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy);
+                return (hand, deck, gy, searched);
             }
 
-            return (hand, deck, gy);
+            return (hand, deck, gy, searched = false);
         }
     }
 }

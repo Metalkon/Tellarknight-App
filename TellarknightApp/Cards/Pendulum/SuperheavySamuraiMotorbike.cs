@@ -31,7 +31,7 @@ namespace TellarknightApp.Cards
                 return localStats;
             }
 
-            // Extender Play
+            // Extender Play (NOTE: Needs To Be Fleshed Out for conditonal extenders)
             if (hand.Any(x => x.Role.Contains("Extender") && x.Level == 4))
             {
                 localStats.AverageXyzNoTellar = true;

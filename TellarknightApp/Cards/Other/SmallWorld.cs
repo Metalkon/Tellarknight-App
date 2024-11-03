@@ -21,11 +21,11 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
+        public override (List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy, bool searched)
         {
             // Add Small World Code
 
-            return (hand, deck, gy);
+            return (hand, deck, gy, searched = false);
         }
     }
 }

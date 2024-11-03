@@ -17,7 +17,7 @@ namespace TellarknightApp.Cards
             Role = string.Empty;
             Searcher = true;
             Archetype = new List<string> { "None" };
-            Id = 65681983;
+            Id = 37478723;
             Image = $"./CardArt/{Id}.jpg";
         }
 

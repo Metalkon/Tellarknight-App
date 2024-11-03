@@ -27,7 +27,7 @@ namespace TellarknightApp.Models
                 new EmptyCard(),
                 new Level4(),
                 new SmallWorld(), // Incomplete
-                new Terraforming(), // Fix condition not counting lack of oracle and add field spell to all roles
+                new Terraforming(),
                 new ReinforcementOfTheArmy(),
 
                 new SatellarknightDeneb(), // Pend Search

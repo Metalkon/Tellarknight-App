@@ -12,76 +12,55 @@ namespace TellarknightApp.Services
     {
         public static GameState CardSearch(GameState gameState)
         {
-            // Terraforming
-            if (gameState.Hand.FirstOrDefault(x => x is Terraforming) is Terraforming terra)
-            {
-                (gameState.Hand, gameState.Deck, gameState.Gy) = terra.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                gameState = DisableSearchers(gameState, terra);
-            }
+            List<Card> searchers = new List<Card>();
 
-            // Rota
-            if (gameState.Hand.FirstOrDefault(x => x is ReinforcementOfTheArmy) is ReinforcementOfTheArmy rota)
+            // Find Search Cards
+            foreach (var card in gameState.Hand)
             {
-                (gameState.Hand, gameState.Deck, gameState.Gy) = rota.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                gameState = DisableSearchers(gameState, rota);
-            }
-            
-            // Providence
-            if (gameState.Hand.FirstOrDefault(x => x is ZefraProvidence) is ZefraProvidence prov)
-            {
-                (gameState.Hand, gameState.Deck, gameState.Gy) = prov.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                gameState = DisableSearchers(gameState, prov);
-            }
-            
-            // Oracle
-            if (gameState.Hand.FirstOrDefault(x => x is OracleOfZefra) is OracleOfZefra oracle)
-            {
-                (gameState.Hand, gameState.Deck, gameState.Gy) = oracle.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                gameState = DisableSearchers(gameState, oracle);
-            }
-
-            // Small World
-            if (gameState.Hand.FirstOrDefault(x => x is SmallWorld) is SmallWorld smallWorld)
-            {
-                (gameState.Hand, gameState.Deck, gameState.Gy) = smallWorld.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                gameState = DisableSearchers(gameState, smallWorld);
-            }
-
-            // Loop All Other Searchers (Note: May Need Tweeks Later)
-            foreach (Card card in gameState.Hand)
-            {
-                if (card.Searcher && card.Enabled)
+                if (card.Searcher && searchers.Any(x => x.GetType() == card.GetType()) == false)
                 {
-                    (gameState.Hand, gameState.Deck, gameState.Gy) = card.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy);
-                    gameState = DisableSearchers(gameState, card);
+                    searchers.Add(card);
                 }
-            }            
-
-            // Send Any Disabled Cards To Gy
-            var removeCards = gameState.Hand.Where(card => !card.Enabled).ToList();
-
-            foreach (var card in removeCards)
-            {
-                gameState.Gy.Add(card);
             }
 
-            gameState.Hand.RemoveAll(card => removeCards.Contains(card));
+            // Priority Search Order
+            var searcherTypes = new List<Type>
+            {
+                typeof(Terraforming),
+                typeof(ReinforcementOfTheArmy),
+                typeof(ZefraProvidence),
+                typeof(OracleOfZefra),
+                typeof(SmallWorld)
+            };
+
+            foreach (var searcherType in searcherTypes)
+            {
+                if (gameState.Hand.FirstOrDefault(x => x.GetType() == searcherType) is Card foundCard)
+                {
+                    (gameState, searchers) = HandleSearch(gameState, searchers, foundCard);
+                    searchers.RemoveAll(x => x.GetType() == foundCard.GetType());
+                }
+            }
+
+            // SearchDeck Method
+            foreach (var card in searchers)
+            {
+                (gameState, searchers) = HandleSearch(gameState, searchers, card);
+            }
 
             return gameState;
         }
 
-        public static GameState DisableSearchers(GameState gameState, Card inputCard)
+        public static (GameState, List<Card>) HandleSearch(GameState gameState, List<Card> searchers, Card card)
         {
-            var target = inputCard.GetType();
-            foreach (Card card in gameState.Hand)
+            bool searched = true;
+            (gameState.Hand, gameState.Deck, gameState.Gy, searched) = card.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy, searched);
+            if (searched == true)
             {
-                if (card.GetType() == target)
-                {
-                    card.Enabled = false;
-                }
+                gameState.Gy.Add(card);
+                gameState.Hand.Remove(card);
             }
-
-            return gameState;
+            return (gameState, searchers);
         }
     }
 }

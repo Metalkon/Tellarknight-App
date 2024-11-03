@@ -46,9 +46,9 @@ namespace TellarknightApp.Models
             return localStats;
         }
 
-        public virtual (List<Card>, List<Card>, List<Card>) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy)
+        public virtual (List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy, bool searched)
         {
-            return (hand, deck, gy);
+            return (hand, deck, gy, searched = false);
         }
 
         public virtual Card Clone()
