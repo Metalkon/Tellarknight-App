@@ -17,7 +17,10 @@ namespace TellarknightApp.Models
         public bool OracleCombo { get; set; } = false;
         public bool ZefraathAndThuban { get; set; } = false;
         public bool AverageHandTraps { get; set; } = false;
-        public bool AverageBystials { get; set; } = false;
+        public bool AverageExtenders { get; set; } = false;
         public bool IsoldeBrick { get; set; } = false;
+        public bool ArmoredBrick { get; set; } = false;
+        public bool RyzealLock { get; set; } = false;
+
     }
 }

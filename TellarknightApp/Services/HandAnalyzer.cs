@@ -1,4 +1,5 @@
-﻿using TellarknightApp.Models;
+﻿using TellarknightApp.Cards;
+using TellarknightApp.Models;
 
 namespace TellarknightApp.Services
 {
@@ -61,24 +62,23 @@ namespace TellarknightApp.Services
                 gameState.LocalStats.BrickChance = true;
             }
 
-            // Zefra Trap
-
-
-
             // Isolde Bricking
-            if (
-                (gameState.Deck.Count(x => x.Name == "Living Fossil" || x.Name == "\"Infernoble Arms - Durendal\"") == 0
+            if ((gameState.Deck.Count(x => x.Name == "Living Fossil" || x.Name == "\"Infernoble Arms - Durendal\"") == 0
                 || gameState.Deck.Count(x => x.Name == "Infernoble Knight - Renaud" || x.Name == "Fire Flint Lady") == 0))
             {
                 gameState.LocalStats.IsoldeBrick = true;
             }
 
             // Drawing An Armored Xyz Card / Not Being Able to Search x2
-            // - Add Later
+            if ((gameState.Deck.Count(x => x is ArmoredXyz) == 0
+                || gameState.Deck.Count(x => x is FullArmoredXyz) == 0))
+            {
+                gameState.LocalStats.ArmoredBrick = true;
+            }
 
             // Average Hand Traps/Bystials
             stats.AverageHandTraps = stats.AverageHandTraps + gameState.Hand.Count(x => x.Role == "Hand Trap");
-            stats.AverageBystials = stats.AverageBystials + gameState.Hand.Count(x => x.Archetype.Contains("Bystial"));
+            stats.AverageExtenders = stats.AverageExtenders + gameState.Hand.Count(x => x.Role == "Extender");
 
             // Average # Tellars
             stats.AverageTellars = stats.AverageTellars + gameState.Hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
@@ -99,8 +99,10 @@ namespace TellarknightApp.Services
             if (localStats.PendulumSummon) stats.PendulumSummon++;
             if (localStats.OracleCombo) stats.OracleCombo++;
             if (localStats.AverageHandTraps) stats.AverageHandTraps++;
-            if (localStats.AverageBystials) stats.AverageBystials++;
+            if (localStats.AverageExtenders) stats.AverageExtenders++;
             if (localStats.IsoldeBrick) stats.IsoldeBrick++;
+            if (localStats.ArmoredBrick) stats.ArmoredBrick++;
+            if (localStats.RyzealLock) stats.RyzealLock++;
 
             return stats;
         }

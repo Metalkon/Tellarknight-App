@@ -38,7 +38,7 @@ namespace TellarknightApp.Models
             Enabled = true;
             Searcher = false;
             Id = 0;
-            Image = $"./CardArt/EmptyCard.png";
+            Image = $"./CardArt/EmptyCard.jpg";
         }
 
         public virtual LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)

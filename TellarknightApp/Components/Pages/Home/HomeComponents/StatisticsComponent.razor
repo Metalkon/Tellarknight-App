@@ -90,12 +90,14 @@
                 <div>
                     Average # Tellars: @(!idle ? $"{Math.Round(deckStatistics.AverageTellars / currentCount, 2)}"
                     : "N/A") <br />
+                    
+                    Average # Extenders: @(!idle ? $"{Math.Round(deckStatistics.AverageExtenders / currentCount, 2)}"
+                    : "N/A") <br />
 
                     Average # Hand Traps: @(!idle ? $"{Math.Round(deckStatistics.AverageHandTraps / currentCount, 2)}"
                     : "N/A") <br />
 
-                    Average # Bystials: @(!idle ? $"{Math.Round(deckStatistics.AverageBystials / currentCount, 2)}"
-                    : "N/A") <br />
+
                 </div>
             </div>
             <div class="grid-statistics-4">
@@ -103,9 +105,13 @@
                     <b>Other Stats:</b>
                 </div>
                 <div>
-                    Armored Brick Chance: @(!idle ? $"{Math.Round((deckStatistics.IsoldeBrick / currentCount) * 100, 2)}%"
-                    : "N/A") <br />
                     Isolde Brick Chance: @(!idle ? $"{Math.Round((deckStatistics.IsoldeBrick / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+
+                    Armored Brick Chance: @(!idle ? $"{Math.Round((deckStatistics.ArmoredBrick / currentCount) * 100, 2)}%"
+                    : "N/A") <br />
+                    
+                    Ryzeal Lock Chance: @(!idle ? $"{Math.Round((deckStatistics.RyzealLock / currentCount) * 100, 2)}%"
                     : "N/A") <br />
 
                 </div>
@@ -144,7 +150,7 @@
                         @if (handTest.Count == 5)
                         {
                             <div class="grid-item">
-                                <img src="./CardArt/Empty.png" alt="Empty" class="item-image" />
+                                <img src="./CardArt/Empty.jpg" alt="Empty" class="item-image" />
                             </div>
                         }
                     </div>
@@ -170,11 +176,11 @@
     private GameState gameStateHand = new GameState();
     private List<Card> handTest = new List<Card>()
     {
-        new EmptyCard(){ Image = "./CardArt/CardBack.png" }, 
-        new EmptyCard(){ Image = "./CardArt/CardBack.png" },
-        new EmptyCard(){ Image = "./CardArt/CardBack.png" },
-        new EmptyCard(){ Image = "./CardArt/CardBack.png" },
-        new EmptyCard(){ Image = "./CardArt/CardBack.png" }
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }, 
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
     };
 
     private async Task CheckDeck()
