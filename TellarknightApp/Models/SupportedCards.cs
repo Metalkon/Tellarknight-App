@@ -29,6 +29,9 @@ namespace TellarknightApp.Models
                 new SmallWorld(), // Incomplete
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
+                new SeventhAscension(),
+                new SeventhTachyon(),
+                new Number104Masquerade(),
 
                 new SatellarknightDeneb(),
                 new SatellarknightAltair(),
@@ -62,23 +65,21 @@ namespace TellarknightApp.Models
                 new TenyiSpiritMapura(),
                 new TenyiSpiritShthana(),
                 new VanquishSoulPantera(),
+                new AbyssActorCurtainRaiser(),
                 new ThePhantomKnightsOfShadeBrigandine(),
 
-                // Note: go over existing pends, add scales reference object as needed to not count the scales as summon targets.
-                // Possibly remove the scales in gamestate and only use more local ones
-
-                new Zefraath(), // confirm skybridge lock, and zefraxciton
+                new Zefraath(),
                 new SatellarknightZefrathuban(),
-                new StellarknightZefraxciton(), // Pend Summon
-                new ShaddollZefracore(), // Pend Summon
-                new ZefraniuSecretOfTheYangZing(), // Pend Summon
+                new StellarknightZefraxciton(), 
+                new ShaddollZefracore(),
+                new ZefraniuSecretOfTheYangZing(),
                 new OracleOfZefra(),
                 new ZefraProvidence(),
                 new ZefraDivineStrike(),
 
-                new SuperheavySamuraiProdigyWakaushi(), // Add single extender option and horns
+                new SuperheavySamuraiProdigyWakaushi(),
                 new SuperheavySamuraiMonkBigBenkei(),
-                new SuperheavySamuraiMotorbike(), // Add Conditional Search, Maybe Change the Level of other motorbikes During Search to fix extender issues?
+                new SuperheavySamuraiMotorbike(),
                 new SuperheavySamuraiSoulgaiaBooster(),
 
                 new MathmechCircular(),
@@ -107,44 +108,54 @@ namespace TellarknightApp.Models
                 new MadolcheMagileine(),
                 new MadolchePetingcessoeur(),
 
+                new MonsterReborn(),
+                new SpellCardMonsterReborn(),
+                new ArmoredXyz(),
+                new FullArmoredXyz(),
+
+                new CalledByTheGrave(),
+                new CrossoutDesignator(),
+                
+                new ArtifactScythe(),
+                new ArtifactMjollnir(),
+                
                 new TherionKingRegulus(),
                 new TherionDiscolosseum(),
                 new SecretVillageOfTheSpellcasters(),
                 new IgnisPhoenixTheDracoslayer(),
                 new MajestyPegasusTheDracoslayer(),
+                new AmorphagePride(),
 
                 new InfernobleKnightRenaud(),
                 new FireFlintLady(),
-                new LivingFossil(), // Add Nabla
+                new LivingFossil(),
                 new InfernobleArmsDurendal(),
-
-                new CalledByTheGrave(),
-                new CrossoutDesignator(),
-
+                
+                new TheBystialLubellion(),
+                new BystialBaldrake(),
+                new BystialDruiswurm(),
+                new BystialMagnamhut(),
+                new BystialSaronir(),
                 new AshBlossomJoyousSpring(),
                 new GhostOgreSnowRabbit(),
                 new GhostBelleHauntedMansion(),
                 new GhostMournerMoonlitChill(),
                 new GhostReaperWinterCherries(),
                 new GhostSisterSpookyDogwood(),
+                new EffectVeiler(),
+                new DrollLockBird(),
+                new NibiruThePrimalBeing(),
                 new MulcharmyFuwalos(),
                 new MulcharmyPurulia(),
                 new MulcharmyNyalus(),
-                new SkullMeister(),
+                new MaxxC(),
                 new DDCrow(),
                 new DimensionShifter(),
-                new EffectVeiler(),
-                new DrollLockBird(),
-                new MaxxC(),
-                new NibiruThePrimalBeing(),
                 new PSYFramegearGamma(),
                 new PSYFrameDriver(),
+                new SkullMeister(),
                 new InfiniteImpermanence(),
                 new RedReboot(),
-                new BystialBaldrake(),
-                new BystialDruiswurm(),
-                new BystialMagnamhut(),
-                new BystialSaronir()
             };
         }
     }
@@ -154,19 +165,11 @@ namespace TellarknightApp.Models
 
 
 add cards:
-monster reborn (Both kind)
 kashtira
 centur-ion
 ryzeal
 melodious
-7th tachyon & ed slot
-7th ascension (searches tachyon)
-artifact scy/mjol
-armored
 
-
-
-new AmorphagePride(),
-new ChaosAngel(),
-new TheBystialLubellion(),
+Bonfire
+Agnimal Candle
 */

@@ -25,12 +25,14 @@ namespace TellarknightApp.Cards
             if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
             {
                 localStats.AverageXyzOneTellar = true;
+                return localStats;
             }
 
             // Extender + Any Other Lv4
             if (hand.Any(x => x is not ZSArmedSage && x.Level == 4))
             {
                 localStats.AverageXyzNoTellar = true;
+                return localStats;
             }
 
             return localStats;

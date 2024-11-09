@@ -20,7 +20,7 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override (List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy, bool searched)
+        public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
             // Circular
             if (hand.Any(x => x is MathmechCircular) == false && deck.Any(x => x is MathmechCircular))
@@ -28,7 +28,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is MathmechCircular);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Other Mathmech
@@ -37,7 +37,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x.Archetype.Contains("Mathmech") && x.Level == 4);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Other Cyberse
@@ -47,10 +47,10 @@ namespace TellarknightApp.Cards
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 searched = true;
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
-            return (hand, deck, gy, searched = false);
+            return (hand, deck, extraDeck, gy, searched = false);
         }
     }
 }

@@ -27,10 +27,12 @@ namespace TellarknightApp.Services
             var searcherTypes = new List<Type>
             {
                 typeof(Terraforming),
+                typeof(SeventhAscension),
+                typeof(SeventhTachyon),
                 typeof(ReinforcementOfTheArmy),
+                typeof(SmallWorld),
                 typeof(ZefraProvidence),
                 typeof(OracleOfZefra),
-                typeof(SmallWorld)
             };
 
             foreach (var searcherType in searcherTypes)
@@ -54,7 +56,7 @@ namespace TellarknightApp.Services
         public static (GameState, List<Card>) HandleSearch(GameState gameState, List<Card> searchers, Card card)
         {
             bool searched = true;
-            (gameState.Hand, gameState.Deck, gameState.Gy, searched) = card.SearchDeck(gameState.Hand, gameState.Deck, gameState.Gy, searched);
+            (gameState.Hand, gameState.Deck, gameState.ExtraDeck, gameState.Gy, searched) = card.SearchDeck(gameState.Hand, gameState.Deck, gameState.ExtraDeck, gameState.Gy, searched);
             if (searched == true)
             {
                 gameState.Gy.Add(card);

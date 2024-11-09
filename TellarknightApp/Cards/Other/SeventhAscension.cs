@@ -2,11 +2,11 @@
 
 namespace TellarknightApp.Cards
 {
-    public class Terraforming : Card
+    public class SeventhAscension : Card
     {
-        public Terraforming() 
+        public SeventhAscension() 
         {
-            Name = "Reinforcement of the Army";
+            Name = "Seventh Ascension";
             Type = "Spell";
             Attribute = string.Empty;
             Level = null;
@@ -16,27 +16,17 @@ namespace TellarknightApp.Cards
             Role = string.Empty;
             Searcher = true;
             Archetype = new List<string> { "None" };
-            Id = 73628505;
+            Id = 23153227;
             Image = $"./CardArt/{Id}.jpg";
         }
 
         public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
-            // Oracle
-            if (hand.Count(x => x is OracleOfZefra) == 0 && deck.Any(x => x is OracleOfZefra))
+            // Search Seventh Tachyon
+            if (hand.Count(x => x is SeventhTachyon) == 0
+                && deck.Any(x => x is SeventhTachyon))
             {
-                Card searchedCard = deck.First(x => x is OracleOfZefra);
-                hand.Add(searchedCard);
-                deck.Remove(searchedCard);
-                return (hand, deck, extraDeck, gy, searched);
-            }
-
-            // Add any priority cards in the future
-
-            // Other Field Spells
-            if (deck.Any(x => x is not OracleOfZefra && x.Type == "Field Spell"))
-            {
-                Card searchedCard = deck.First(x => x is not OracleOfZefra && x.Type == "Field Spell");
+                Card searchedCard = deck.First(x => x is SeventhTachyon);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 return (hand, deck, extraDeck, gy, searched);

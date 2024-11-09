@@ -21,7 +21,7 @@ namespace TellarknightApp.Cards
 
         }
 
-        public override (List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> gy, bool searched)
+        public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
             bool superheavySamurai = false;
 
@@ -41,7 +41,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Zefraath or Zefra Spell In Hand
@@ -51,7 +51,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Lyran (Zefraath)
@@ -62,7 +62,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Lyran (Normal)
@@ -72,7 +72,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is TellarknightLyran);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Vega (Normal)
@@ -82,7 +82,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightVega);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Any Tellar (Normal)
@@ -92,7 +92,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is not TellarknightLyran && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4 && x.Type == "Warrior");
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Deneb (Tellar CT Spell)
@@ -103,7 +103,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightDeneb);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Unuk (Tellar CT Spell)
@@ -114,7 +114,17 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x is SatellarknightUnukalhai);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // Search Pollux
+            if (hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4 )
+                && deck.Any(x => x is ConstellarPollux))
+            {
+                Card searchedCard = deck.First(x => x is ConstellarPollux);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Warrior Extender
@@ -123,7 +133,7 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x.Type == "Warrior" && x.Role == "Extender" && x.Level == 4);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
             // Search Any Warrior
@@ -132,10 +142,10 @@ namespace TellarknightApp.Cards
                 Card searchedCard = deck.First(x => x.Type == "Warrior" && x.Level == 4);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
-                return (hand, deck, gy, searched);
+                return (hand, deck, extraDeck, gy, searched);
             }
 
-            return (hand, deck, gy, searched = false);
+            return (hand, deck, extraDeck, gy, searched = false);
         }
     }
 }

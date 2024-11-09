@@ -2,11 +2,11 @@
 
 namespace TellarknightApp.Cards
 {
-    public class SmallWorld : Card
+    public class ArmoredXyz : Card
     {
-        public SmallWorld() 
+        public ArmoredXyz()
         {
-            Name = "Small World";
+            Name = "Armored Xyz";
             Type = "Spell";
             Attribute = string.Empty;
             Level = null;
@@ -16,15 +16,13 @@ namespace TellarknightApp.Cards
             Role = string.Empty;
             Searcher = true;
             Archetype = new List<string> { "None" };
-            Id = 89558743;
+            Id = 73046708;
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
-            // Add Small World Code
-
-            return (hand, deck, extraDeck, gy, searched = false);
+            return localStats;
         }
     }
 }

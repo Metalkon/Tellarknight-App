@@ -36,8 +36,9 @@ namespace TellarknightApp.Cards
                 localStats.AverageXyzNoTellar = true;
             }
 
-            // Extender Play (NOTE: Needs To Be Fleshed Out for conditonal extenders)
-            if (hand.Any(x => x.Role.Contains("Extender") && x.Level == 4))
+            // Extender Play (NOTE: Update As Needed)
+            if (hand.Any(x => x.Role.Contains("Extender") && x.Level == 4 && x is not MathmechCircular)
+                || (hand.Any(x => x.Archetype.Contains("Runick") && x.Role == "Extender" && x.Type == "Spell") && extraDeck.Any(x => x is GeriTheRunickFangs)))
             {
                 localStats.AverageXyzNoTellar = true;
                 return localStats;
