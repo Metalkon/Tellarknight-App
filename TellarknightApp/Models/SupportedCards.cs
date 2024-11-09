@@ -30,12 +30,12 @@ namespace TellarknightApp.Models
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
 
-                new SatellarknightDeneb(), // Pend Search
+                new SatellarknightDeneb(),
                 new SatellarknightAltair(),
                 new SatellarknightVega(),
                 new SatellarknightUnukalhai(),
                 new SatellarknightSirius(),
-                new TellarknightLyran(), // Pend Search
+                new TellarknightLyran(),
                 new TellarknightAltairan(),
                 new SatellarknightAlsahm(),
                 new SatellarknightBetelgeuse(),
@@ -43,7 +43,7 @@ namespace TellarknightApp.Models
                 new SatellarknightProcyon(),
                 new SatellarknightRigel(),
                 new TellarknightGenesis(),
-                new SatellarknightSkybridge(), // Incomplete
+                new SatellarknightSkybridge(),
                 new ConstellarTellarknights(),
                 new ConstellarCaduceus(),
                 new ConstellarSheratan(),
@@ -64,7 +64,10 @@ namespace TellarknightApp.Models
                 new VanquishSoulPantera(),
                 new ThePhantomKnightsOfShadeBrigandine(),
 
-                new Zefraath(),
+                // Note: go over existing pends, add scales reference object as needed to not count the scales as summon targets.
+                // Possibly remove the scales in gamestate and only use more local ones
+
+                new Zefraath(), // confirm skybridge lock, and zefraxciton
                 new SatellarknightZefrathuban(),
                 new StellarknightZefraxciton(), // Pend Summon
                 new ShaddollZefracore(), // Pend Summon
@@ -73,9 +76,9 @@ namespace TellarknightApp.Models
                 new ZefraProvidence(),
                 new ZefraDivineStrike(),
 
-                new SuperheavySamuraiProdigyWakaushi(),
+                new SuperheavySamuraiProdigyWakaushi(), // Add single extender option and horns
                 new SuperheavySamuraiMonkBigBenkei(),
-                new SuperheavySamuraiMotorbike(), // Add Conditional Search, Maybe Change It's Level During Search?
+                new SuperheavySamuraiMotorbike(), // Add Conditional Search, Maybe Change the Level of other motorbikes During Search to fix extender issues?
                 new SuperheavySamuraiSoulgaiaBooster(),
 
                 new MathmechCircular(),
@@ -113,7 +116,7 @@ namespace TellarknightApp.Models
                 new InfernobleKnightRenaud(),
                 new FireFlintLady(),
                 new LivingFossil(), // Add Nabla
-                new InfernobleArmsDurendal(), // Turn Into Searcher
+                new InfernobleArmsDurendal(),
 
                 new CalledByTheGrave(),
                 new CrossoutDesignator(),

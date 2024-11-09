@@ -1,5 +1,4 @@
 ﻿using TellarknightApp.Models;
-using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
@@ -20,62 +19,43 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
-            // Pendulum Summon
-            if (hand.Any(x => x.Scale >= 5 && x.Level != 4))
+            Card lowScale = null;
+            Card highScale = null;
+
+            // Setup Scales
+            if (hand.Any(x => x.Scale <= 5))
             {
-                // Temporarily disable scale
-                if (hand.Any(x => x.Scale >= 5 && x.Level != 4))
-                {
-                    hand.FirstOrDefault(x => x.Scale >= 5 && x.Level != 4).Enabled = false;
-                }
-                else
-                {
-                    hand.FirstOrDefault(x => x.Scale >= 5 && x.Level == 4).Enabled = false;
-                }
+                lowScale = this;
 
-                // Zefraxciton/Random Scale
-                if (hand.Any(x => x.Enabled == false && x is not ShaddollZefracore && x is not ZefraniuSecretOfTheYangZing)
-                    && (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Tellarknight")) && x.Level == 4) >= 2) 
-                    || (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Tellarknight")) && x.Level == 4) == 1 
-                    && hand.Any(x => (!x.Archetype.Contains("Zefra") || !x.Archetype.Contains("Tellarknight")) && x.Level == 4)))
+                if (hand.Any(x => x.Scale  >= 5 && x.Level != 4))
+                    highScale = hand.First(x => x.Scale >= 5 && x.Level != 4);
+                else if (hand.Any(x => x.Scale  >= 5 && x.Level == 4 && x is not ShaddollZefracore))
+                    highScale = hand.First(x => x.Scale >= 5 && x.Level == 4 && x is not ShaddollZefracore);
+                else if (hand.Any(x => x is ShaddollZefracore))
+                    highScale = hand.First(x => x is ShaddollZefracore);
+            }
+
+            // Zefra Pend
+            if (lowScale != null && highScale != null)
+            {
+                // At Least One Zefra Lv4 For Pend Summon (Other Could Be Normal Summoned)
+                if ((highScale.Archetype.Contains("Shaddoll") || highScale.Archetype.Contains("Yang Zing"))
+                    && hand.Count(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x != lowScale && x != highScale) >= 1
+                    && hand.Count(x => x.Level == 4 && x != lowScale && x != highScale) >= 2)
                 {
                     localStats.PendulumSummon = true;
-                    foreach (Card card in hand)
-                    {
-                        card.Enabled = true;
-                    }
                     return localStats;
                 }
 
-                // Zefracore Scale
-                if (hand.Any(x => x.Enabled == false && x is ShaddollZefracore)
-                    && (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Shaddoll")) && x.Level == 4) >= 2)
-                    || (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Shaddoll")) && x.Level == 4) == 1
-                    && hand.Any(x => (!x.Archetype.Contains("Zefra") || !x.Archetype.Contains("Shaddoll")) && x.Level == 4)))
-                {
+                // Tellar Pend
+                if ((!lowScale.Archetype.Contains("Shaddoll") && !lowScale.Archetype.Contains("Yang Zing"))
+                    && hand.Count(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x.Level == 4 && x != lowScale && x != highScale) >= 1
+                    && hand.Count(x => x.Level == 4 && x != lowScale && x != highScale) >= 2)
+                {                    
                     localStats.PendulumSummon = true;
-                    foreach (Card card in hand)
-                    {
-                        card.Enabled = true;
-                    }
                     return localStats;
-                }
-
-                // Zefracore Scale
-                if (hand.Any(x => x.Enabled == false && x is ZefraniuSecretOfTheYangZing)
-                    && (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Yang Zing")) && x.Level == 4) >= 2)
-                    || (hand.Count(x => (x.Archetype.Contains("Zefra") || x.Archetype.Contains("Yang Zing")) && x.Level == 4) == 1
-                    && hand.Any(x => (!x.Archetype.Contains("Zefra") || !x.Archetype.Contains("Yang Zing")) && x.Level == 4)))
-                {
-                    localStats.PendulumSummon = true;
-                    foreach (Card card in hand)
-                    {
-                        card.Enabled = true;
-                    }
-                    return localStats;
-
                 }
             }
 

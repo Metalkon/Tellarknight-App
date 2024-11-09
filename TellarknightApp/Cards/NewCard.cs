@@ -1,5 +1,4 @@
 ﻿using TellarknightApp.Models;
-using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
@@ -19,7 +18,7 @@ namespace TellarknightApp.Cards
             Image = "./CardArt/CardBack.png";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
 
 

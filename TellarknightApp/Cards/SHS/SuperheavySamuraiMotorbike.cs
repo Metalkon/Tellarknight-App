@@ -1,5 +1,4 @@
 ﻿using TellarknightApp.Models;
-using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
@@ -20,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
             // SHS Check
             if (deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)
@@ -28,20 +27,19 @@ namespace TellarknightApp.Cards
                 && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
             {
                 localStats.AverageXyzNoTellar = true;
-                return localStats;
+            }
+
+            // Benki + NS Check
+            if (deck.Any(x => x is SuperheavySamuraiProdigyWakaushi) && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei)
+                && hand.Any(x => x.Level == 4 && x != this))
+            {
+                localStats.AverageXyzNoTellar = true;
             }
 
             // Extender Play (NOTE: Needs To Be Fleshed Out for conditonal extenders)
             if (hand.Any(x => x.Role.Contains("Extender") && x.Level == 4))
             {
                 localStats.AverageXyzNoTellar = true;
-                return localStats;
-            }
-
-            // Tellar Spell
-            if (hand.Any(x => x is ConstellarTellarknights) && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4))
-            {
-                localStats.AverageXyzOneTellar = true;
                 return localStats;
             }
 

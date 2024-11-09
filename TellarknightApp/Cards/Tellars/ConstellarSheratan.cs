@@ -1,16 +1,4 @@
-﻿
-/* Unmerged change from project 'TellarknightApp (net8.0-ios)'
-Before:
-using TellarknightApp.Models;
-After:
-using TellarknightApp;
-using TellarknightApp.Cards;
-using TellarknightApp.Cards;
-using TellarknightApp.Cards.Constellar;
-using TellarknightApp.Models;
-*/
-using TellarknightApp.Models;
-using TellarknightApp.Services;
+﻿using TellarknightApp.Models;
 
 namespace TellarknightApp.Cards
 {
@@ -31,7 +19,7 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {            
             // Sheratan + Tellar (No Twinkle)
             if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Constellar") || x.Archetype.Contains("Tellarknight")))

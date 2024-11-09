@@ -20,109 +20,276 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
+            bool superheavySamuraiFull = false;
             bool superheavySamurai = false;
-
-            // Note: due to large size of this method, return localstats at each stage in an appropriate order to improve performance.
+            Card shsMonster = null;
+            Card lowScale = null;
+            Card highScale = null;
 
             // SHS Check
             if ((hand.Any(x => x is SuperheavySamuraiProdigyWakaushi) || (hand.Any(x => x is SuperheavySamuraiMotorbike) && deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)))
-                && (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
                 && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
             {
-                superheavySamurai = true;
+                shsMonster = hand.First(x => x is SuperheavySamuraiProdigyWakaushi || x is SuperheavySamuraiMotorbike);
+                if (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
+                {
+                    superheavySamuraiFull = true;
+                }
+                else 
+                {
+                    superheavySamurai = true;
+                }
             }
             
             // Zefraath + SHS (Oracle)
-            if (superheavySamurai == true 
+            if (superheavySamuraiFull == true 
                 && (hand.Any(x => x is ZefraniuSecretOfTheYangZing) || deck.Any(x => x is ZefraniuSecretOfTheYangZing))
-                && (hand.Any(x => x is OracleOfZefra) || deck.Any(x => x is OracleOfZefra))
-                && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))
+                && (hand.Any(x => x is OracleOfZefra) || deck.Any(x => x is OracleOfZefra) || gy.Any(x => x is OracleOfZefra))
+                && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))                
             {
                 localStats.OracleCombo = true;
                 localStats.PendulumSummon = true;
-                if (hand.Any(x => x.Archetype.Contains("Zefra") && x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Archetype.Contains("Tellarknight") && x.Level == 4))
+                return localStats;
+            }
+
+            // Zefraath + SHS (Oracle, No Booster)
+            if (superheavySamurai == true
+                && (hand.Any(x => x is ZefraniuSecretOfTheYangZing) || deck.Any(x => x is ZefraniuSecretOfTheYangZing))
+                && (hand.Any(x => x is OracleOfZefra) || deck.Any(x => x is OracleOfZefra) || gy.Any(x => x is OracleOfZefra))
+                && ((hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) && hand.Count(x => x.Level == 4 && x != shsMonster) >= 2) 
+                || (deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) && hand.Any(x => x.Level == 4 && x != shsMonster))))
+            {
+                localStats.OracleCombo = true;
+                localStats.PendulumSummon = true;
+                return localStats;
+            }
+
+            // Zefrathuban Hands
+            if (hand.Any(x => x is SatellarknightZefrathuban))
+            {
+                // Thuban (Zefracore From Deck)
+                if (hand.Any(x => x is SatellarknightZefrathuban)
+                    && (hand.Any(x => x is ShaddollZefracore) || deck.Any(x => x is ShaddollZefracore)))
                 {
                     localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
                 }
-                return localStats;
+
+                // Thuban (Without Zefracore)
+                lowScale = hand.FirstOrDefault(x => x is SatellarknightZefrathuban);
+                highScale = hand.FirstOrDefault(x => x is Zefraath);
+                if (lowScale != null && highScale != null
+                    && (deck.Any(x => x is StellarknightZefraxciton) && hand.Count(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x != highScale && x != lowScale) >= 1)
+                    || hand.Count(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x != highScale && x != lowScale) >= 2)
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
             }
 
-            // Zefraath + Deneb/Thuban (Zefracore)
-            if ((hand.Any(x => x is SatellarknightZefrathuban) || (hand.Any(x => x is SatellarknightDeneb) 
-                && deck.Any(x => x is SatellarknightZefrathuban)))
-                && (deck.Any(x => x is ShaddollZefracore) || (hand.Any(x => x is ShaddollZefracore) && deck.Any(x => x is StellarknightZefraxciton))))
+            // Deneb Zefrathuban Search
+            if (hand.Any(x => x is SatellarknightDeneb) && hand.Count(x => x is SatellarknightZefrathuban) == 0
+                && deck.Any(x => x is SatellarknightZefrathuban)
+                && (deck.Any(x => x is ShaddollZefracore) || deck.Any(x => x is StellarknightZefraxciton)))
             {
-                localStats.AverageXyzOneTellar = true;
                 localStats.PendulumSummon = true;
+                localStats.AverageXyzOneTellar = true;
                 return localStats;
             }
 
-            // Zefraath + Skybridge->Deneb/Thuban (Zefracore)
-            if (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) 
-                && hand.Any(x => x is SatellarknightSkybridge) 
+            // Deneb Zefraxciton Search
+            if (hand.Any(x => x is SatellarknightDeneb) && hand.Count(x => x is StellarknightZefraxciton) == 0
+                && deck.Any(x => x is StellarknightZefraxciton)
+                && deck.Any(x => x is SatellarknightZefrathuban))
+            {
+                localStats.PendulumSummon = true;
+                localStats.AverageXyzTwoTellar = true;
+                return localStats;
+            }
+
+            // Zefraxciton Hands
+            if (hand.Any(x => x is SatellarknightZefrathuban))
+            {
+                // Zefraxciton (Thuban Deck and x1 Hand)
+                lowScale = hand.FirstOrDefault(x => x is Zefraath);
+                highScale = hand.FirstOrDefault(x => x is StellarknightZefraxciton);
+                if (lowScale != null && highScale != null
+                    && deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Count(x => x.Level == 4 && x != highScale && x != lowScale) >= 1)
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+            }
+
+            // Zefraniu/Zefracore Hands
+            if (hand.Any(x => x is ShaddollZefracore || x is ZefraniuSecretOfTheYangZing))
+            {
+                // Zefracore
+                lowScale = hand.FirstOrDefault(x => x is Zefraath);
+                highScale = hand.FirstOrDefault(x => x is ShaddollZefracore);
+                if (lowScale != null && highScale != null
+                    && deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Count(x => x.Level == 4 && x.Archetype.Contains("Zefra") && x != highScale && x != lowScale) >= 1
+                    && hand.Count(x => x.Level == 4 && x != highScale && x != lowScale) >= 2)
+                {
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+
+                // Zefraniu
+                lowScale = hand.FirstOrDefault(x => x is Zefraath);
+                highScale = hand.FirstOrDefault(x => x is ZefraniuSecretOfTheYangZing);
+                if (lowScale != null && highScale != null
+                    && deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Count(x => x.Level == 4 && x != highScale && x != lowScale) >= 1)
+                {
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+            }
+
+            // x2 Zefraath Hands
+            if (hand.Count(x => x is Zefraath) >= 2)
+            {
+                lowScale = hand.FirstOrDefault(x => x is Zefraath);
+                highScale = hand.FirstOrDefault(x => x is Zefraath && x != lowScale);
+                if (lowScale != null && highScale != null
+                    && deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Count(x => x.Level == 4 && x != highScale && x != lowScale) >= 1)
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+            }
+
+            // Skybridge In Hand
+            if (hand.Any(x => x is SatellarknightSkybridge) 
+                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not SatellarknightDeneb && x is not TellarknightLyran)
+                && deck.Any(x => x is SatellarknightDeneb))
+            {
+                Card tellar = hand.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not SatellarknightDeneb && x is not TellarknightLyran);
+
+                if (deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x.Level == 4 && x != tellar))                    
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+
+                if (deck.Any(x => x is SatellarknightZefrathuban)
+                    && deck.Any(x => x is StellarknightZefraxciton))
+                {
+                    localStats.AverageXyzTwoTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+            }
+
+            // Lyran Search Skybridge
+            if (hand.Any(x => x is TellarknightLyran) 
+                && deck.Any(x => x is SatellarknightSkybridge)
                 && deck.Any(x => x is SatellarknightDeneb)
-                && deck.Any(x => x is SatellarknightZefrathuban)                
-                && (deck.Any(x => x is ShaddollZefracore) || (hand.Any(x => x is ShaddollZefracore) && deck.Any(x => x is StellarknightZefraxciton))))
+                && deck.Any(x => x is SatellarknightZefrathuban || x is StellarknightZefraxciton))
             {
-                localStats.AverageXyzOneTellar = true;
-                localStats.PendulumSummon = true;
-                return localStats;
+                Card lyran = hand.First(x => x is TellarknightLyran);
+
+                if (deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x.Level == 4 && x != lyran))
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+
+                if (deck.Any(x => x is SatellarknightZefrathuban)
+                    && deck.Any(x => x is StellarknightZefraxciton))
+                {
+                    localStats.AverageXyzTwoTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
             }
 
-            // Zefraath + Zefrathuban (No Zefracore or pend7 in deck)
-            // Add Code Later (Low Priority)
-
-            // Zefraath + Thuban (No Zefracore)
-            if (hand.Any(x => x is SatellarknightZefrathuban)
-                && deck.Any(x => x is StellarknightZefraxciton)
-                && hand.Any(x => x.Level == 4))
+            // Generic Lv4 Low Scale
+            if (hand.Any(x => x is SuperheavySamuraiMonkBigBenkei) && deck.Count(x => x is SuperheavySamuraiMonkBigBenkei) == 0)
             {
-                localStats.AverageXyzOneTellar = true;
-                localStats.PendulumSummon = true;
-                return localStats;
+                lowScale = hand.First(x => x is SuperheavySamuraiMonkBigBenkei);
+            }
+            else
+            {
+                lowScale = hand.FirstOrDefault(x => x.Scale <= 3 && x.Archetype.Contains("Zefra") == false);
+            }
+            highScale = hand.FirstOrDefault(x => x is Zefraath);
+            if (lowScale != null && highScale != null)
+            {
+                if (deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale == 7) && hand.Any(x => x.Level == 4 && x != lowScale && x != highScale))
+                {
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+                if (deck.Count(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale == 7) == 0 && hand.Count(x => x.Level == 4 && x != lowScale && x != highScale) >= 2)
+                {
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
             }
 
-            // Zefraath + Zefraxciton
-            if (hand.Any(x => x is StellarknightZefraxciton) 
-                && deck.Any(x => x is SatellarknightZefrathuban)
-                && hand.Any(x => x.Level == 4))
+            // Generic Lv4 Low Scale
+            if (hand.Any(x => x is SuperheavySamuraiMonkBigBenkei) && deck.Count(x => x is SuperheavySamuraiMonkBigBenkei) == 0)
             {
-                localStats.AverageXyzOneTellar = true;
-                localStats.PendulumSummon = true;
-                return localStats;
+                lowScale = hand.First(x => x is SuperheavySamuraiMonkBigBenkei);
+            }
+            else
+            {
+                lowScale = hand.FirstOrDefault(x => x.Scale <= 3 && x.Archetype.Contains("Zefra") == false);
+            }
+            highScale = hand.FirstOrDefault(x => x is Zefraath);
+            if (lowScale != null && highScale != null)
+            {
+                if (deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale == 7) && hand.Any(x => x.Level == 4 && x != lowScale && x != highScale))
+                {
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+                if (deck.Count(x => x.Archetype.Contains("Zefra") && x.Level == 4 && x.Scale == 7) == 0 && hand.Count(x => x.Level == 4 && x != lowScale && x != highScale) >= 2)
+                {
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
             }
 
-            // Zefraath + Zefraniu
-            if (hand.Any(x => x is ZefraniuSecretOfTheYangZing)
-                && (deck.Any(x => x is OracleOfZefra) || deck.Any(x => x is ZefraProvidence))
-                && deck.Any(x => x.Archetype.Contains("Zefra") && x.Archetype.Contains("Tellarknight") && x.Level == 4)
-                && (hand.Any(x => x is TellarknightLyran) || hand.Any(x => x is SatellarknightVega) || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x is ConstellarTellarknights))))
+            // Generic Lv4 High Scale
+            lowScale = hand.FirstOrDefault(x => x is Zefraath);
+            highScale = hand.FirstOrDefault(x => x.Scale >= 5 && x.Archetype.Contains("Zefra") == false);
+            if (lowScale != null && highScale != null)
             {
-                localStats.AverageXyzOneTellar = true;
-                localStats.PendulumSummon = true;
-                return localStats;
+                if (deck.Any(x => x is SatellarknightZefrathuban) && hand.Any(x => x.Level == 4 && x != lowScale && x != highScale))
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
             }
 
-            // Zefraath + Zefraath/HighScale
-            if ((hand.Count(x => x is Zefraath) >= 2 || hand.Any(x => x.Scale >= 5 && x is not Zefraath))
-                && deck.Any(x => x is SatellarknightZefrathuban)
-                && hand.Any(x => x.Level == 4 && (x.Scale <= 6 || x.Scale == null)))
+            // Zefraniu Scale
+            lowScale = hand.FirstOrDefault(x => x is Zefraath);
+            highScale = hand.FirstOrDefault(x => x is ZefraniuSecretOfTheYangZing);
+            if (lowScale != null && highScale != null)
             {
-                localStats.AverageXyzOneTellar = true;
-                localStats.PendulumSummon = true;
-                return localStats;
-            }
-
-            // Zefraath + Other Pend (Low Scale)
-            if (hand.Any(x => x is not SatellarknightZefrathuban && x.Scale <= 3)
-                && deck.Any(x => x is StellarknightZefraxciton)
-                && hand.Any(x => x.Level == 4 && (x.Scale >= 4 || x.Scale == null)))
-            {
-                localStats.AverageXyzOneTellar = true;
-                localStats.PendulumSummon = true;
-                return localStats;
+                if (deck.Any(x => x is SatellarknightZefrathuban) && hand.Any(x => x.Level == 4 && x != lowScale && x != highScale))
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
             }
 
             return localStats;

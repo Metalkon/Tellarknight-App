@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using TellarknightApp.Models;
-using TellarknightApp.Services;
+﻿using TellarknightApp.Models;
 
 namespace TellarknightApp.Cards
 {

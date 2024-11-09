@@ -1,5 +1,4 @@
 ﻿using TellarknightApp.Models;
-using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
@@ -21,7 +20,7 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
             // Two Warriors and FireFlint(Deck)
             if (hand.Count(x => x.Level == 4 && x.Type == "Warrior") >= 2 && deck.Any(x => x is FireFlintLady))

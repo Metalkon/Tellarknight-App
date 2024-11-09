@@ -1,5 +1,4 @@
 ﻿using TellarknightApp.Models;
-using TellarknightApp.Services;
 
 namespace TellarknightApp.Cards
 {
@@ -20,12 +19,18 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> scales, List<Card> extraDeck)
+        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
             // SHS Check
-            if ((hand.Any(x => x is SuperheavySamuraiProdigyWakaushi) || (hand.Any(x => x is SuperheavySamuraiMotorbike) && deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)))
-                && (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
+            if ((hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
                 && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
+            {
+                localStats.AverageXyzNoTellar = true;
+            }
+
+            // Benki + NS Check
+            if (deck.Any(x => x is SuperheavySamuraiMonkBigBenkei)
+                && hand.Any(x => x.Level == 4 && x != this))
             {
                 localStats.AverageXyzNoTellar = true;
             }
