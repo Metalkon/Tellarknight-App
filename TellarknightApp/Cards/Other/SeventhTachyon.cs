@@ -30,7 +30,14 @@ namespace TellarknightApp.Cards
             if ((hand.Any(x => x is SuperheavySamuraiProdigyWakaushi) || (hand.Any(x => x is SuperheavySamuraiMotorbike) && deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)))
                 && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
             {
-                shsMonster = hand.First(x => x is SuperheavySamuraiProdigyWakaushi || x is SuperheavySamuraiMotorbike);
+                if (hand.Any(x => x is SuperheavySamuraiProdigyWakaushi))
+                {
+                    shsMonster = hand.First(x => x is SuperheavySamuraiProdigyWakaushi);
+                }
+                else
+                {
+                    shsMonster = hand.First(x => x is SuperheavySamuraiMotorbike);
+                }
                 if (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
                 {
                     superheavySamuraiFull = true;
