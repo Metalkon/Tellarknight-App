@@ -22,32 +22,55 @@ namespace TellarknightApp.Cards
 
         public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
-            // Check Xyz Condition
-            if (extraDeck.Any(x => x is Number104Masquerade))
-            {
-                bool superheavySamurai = false;
+            bool superheavySamurai = false;
+            bool superheavySamuraiFull = false;
+            Card shsMonster = null;
 
-                // SHS Check
-                if ((hand.Any(x => x is SuperheavySamuraiProdigyWakaushi) || (hand.Any(x => x is SuperheavySamuraiMotorbike) && deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)))
-                    && (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
-                    && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
+            // SHS Check
+            if ((hand.Any(x => x is SuperheavySamuraiProdigyWakaushi) || (hand.Any(x => x is SuperheavySamuraiMotorbike) && deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)))
+                && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
+            {
+                shsMonster = hand.First(x => x is SuperheavySamuraiProdigyWakaushi || x is SuperheavySamuraiMotorbike);
+                if (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
+                {
+                    superheavySamuraiFull = true;
+                }
+                else
                 {
                     superheavySamurai = true;
                 }
+            }
 
-                // Zefraath or Zefra Spell In Hand + SHS (Oracle Combo)
-                if (superheavySamurai == true
-                    && (hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
-                    && hand.Count(x => x is not SatellarknightZefrathuban || x is not StellarknightZefraxciton) == 0 && deck.Any(x => x is SatellarknightZefrathuban))
-                {
-                    Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
-                    hand.Add(searchedCard);
-                    deck.Remove(searchedCard);
-                    return (hand, deck, extraDeck, gy, searched);
-                }
+            // Confirm Full Oracle Search (Don't Search If Not)
+            if (superheavySamuraiFull == true
+                && hand.Any(x => x is Zefraath || x is OracleOfZefra || x is ZefraProvidence)
+                && (hand.Any(x => x is OracleOfZefra) || deck.Any(x => x is OracleOfZefra))
+                && (hand.Any(x => x is ZefraniuSecretOfTheYangZing) || deck.Any(x => x is ZefraniuSecretOfTheYangZing))
+                && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4)))
+            {
+                hand.Add(new EmptyCard());
+                return (hand, deck, extraDeck, gy, searched);
+            }
 
+            // Confirm Oracle Search (Don't Search If Not)
+            if (superheavySamurai == true
+                && hand.Any(x => x is Zefraath || x is OracleOfZefra || x is ZefraProvidence)
+                && (hand.Any(x => x is OracleOfZefra) || deck.Any(x => x is OracleOfZefra))
+                && (hand.Any(x => x is ZefraniuSecretOfTheYangZing) || deck.Any(x => x is ZefraniuSecretOfTheYangZing))
+                && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4))
+                && hand.Any(x => x.Level == 4 && x != shsMonster))
+            {
+                hand.Add(new EmptyCard());
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+
+            // Check Xyz Condition
+            if (extraDeck.Any(x => x is Number104Masquerade))
+            {
                 // Zefraath or Zefra Spell In Hand
-                if ((hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
+                if (superheavySamurai == false
+                    && (hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
                     && hand.Count(x => x is not SatellarknightZefrathuban) == 0 && deck.Any(x => x is SatellarknightZefrathuban))
                 {
                     Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
