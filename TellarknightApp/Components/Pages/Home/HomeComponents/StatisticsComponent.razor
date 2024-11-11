@@ -306,7 +306,7 @@
         deckStatisticsHand = new DeckStatistics();
         gameState = new GameState();
         gameStateHand = new GameState();
-        decklist = new Decklist();
+        decklist.BuildDecklist(supportedCards);
         handTested = false;
 
         handTest = new List<Card>()

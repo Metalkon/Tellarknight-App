@@ -211,16 +211,8 @@
 
     public void DecklistButton()
     {
-        if (select == true && supportedCards.Cards.Any(x => x.Quantity != 0))
-        {
-            select = !select;
-            decklist.BuildDecklist(supportedCards);
-        }
-        else
-        {
-            select = !select;
-            UpdateState.InvokeAsync();
-        }
+        select = !select;
+        decklist.BuildDecklist(supportedCards);        
     }
 
     public async void CardSearch()
