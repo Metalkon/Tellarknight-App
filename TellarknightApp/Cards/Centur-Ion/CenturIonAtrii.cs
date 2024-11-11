@@ -2,31 +2,25 @@
 
 namespace TellarknightApp.Cards
 {
-    public class Aratama : Card
+    public class CenturIonAtrii : Card
     {
-        public Aratama()
+        public CenturIonAtrii()
         {
-            Name = "Aratama";
-            Type = "Fiend";
+            Name = "Centur-Ion Atrii";
+            Type = "Dragon";
             Attribute = "Dark";
             Level = 4;
-            Attack = 800;
-            Defense = 1800;
+            Attack = 1800;
+            Defense = 1400;
             Scale = null;
             Role = string.Empty;
-            Archetype = new List<string> { "None" };
-            Id = 16889337;
+            Archetype = new List<string> { "Centur-Ion" };
+            Id = 96030710;
             Image = $"./CardArt/{Id}.jpg";
         }
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
-            // Sakitama In Hand/Deck
-            if (hand.Any(x => x is Sakitama) || deck.Any(x => x is Sakitama))
-            {
-                localStats.AverageXyzNoTellar = true;
-            }
-
             return localStats;
         }
     }

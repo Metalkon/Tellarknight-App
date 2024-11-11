@@ -82,6 +82,17 @@ namespace TellarknightApp.Models
                 new SuperheavySamuraiMotorbike(),
                 new SuperheavySamuraiSoulgaiaBooster(),
 
+                new CenturIonPrimera(),
+                new CenturIonTrudea(),
+                new CenturIonAtrii(),
+                new CenturIonChimerea(),
+                new CenturIonGargoyleII(),
+                new CenturIonEmethVI(),
+                new StandUpCenturIon(),
+                new EmblemaOath(),
+                new CenturIonBonds(),
+                new CenturIonTrueAwakening(),
+
                 new MathmechCircular(),
                 new MathmechNabla(),
                 new MathmechDiameter(),
@@ -166,7 +177,6 @@ namespace TellarknightApp.Models
 
 add cards:
 kashtira
-centur-ion
 ryzeal
 melodious
 

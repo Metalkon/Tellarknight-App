@@ -71,7 +71,6 @@ namespace TellarknightApp.Cards
                 return (hand, deck, extraDeck, gy, searched);
             }
 
-
             // Check Xyz Condition
             if (extraDeck.Any(x => x is Number104Masquerade))
             {
@@ -154,6 +153,17 @@ namespace TellarknightApp.Cards
                     && deck.Any(x => x is ConstellarPollux))
                 {
                     Card searchedCard = deck.First(x => x is ConstellarPollux);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
+                // Search Centur-Ion Primera
+                if (deck.Any(x => x is CenturIonPrimera)
+                    && deck.Any(x => x is StandUpCenturIon)
+                    && deck.Any(x => x is not CenturIonPrimera && x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
+                {
+                    Card searchedCard = deck.First(x => x is CenturIonPrimera);
                     hand.Add(searchedCard);
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
