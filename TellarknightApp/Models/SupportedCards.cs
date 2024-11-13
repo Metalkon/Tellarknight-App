@@ -79,7 +79,7 @@ namespace TellarknightApp.Models
 
                 new SuperheavySamuraiProdigyWakaushi(),
                 new SuperheavySamuraiMonkBigBenkei(),
-                new SuperheavySamuraiMotorbike(),
+                new SuperheavySamuraiMotorbike(), // Add Kashtira & Centur-Ion Extenders
                 new SuperheavySamuraiSoulgaiaBooster(),
 
                 new CenturIonPrimera(),
@@ -93,13 +93,6 @@ namespace TellarknightApp.Models
                 new CenturIonBonds(),
                 new CenturIonTrueAwakening(),
 
-                new MathmechCircular(),
-                new MathmechNabla(),
-                new MathmechDiameter(),
-                new MathmechEquation(),
-                new CynetMining(),
-                new MathmechSuperfactorial(),
-
                 new GeriTheRunickFangs(),
                 new RunickTip(),
                 new RunickFreezingCurses(),
@@ -111,6 +104,27 @@ namespace TellarknightApp.Models
                 new RunickGoldenDroplet(),
                 new RunickAllure(),
                 new RunickFountain(),
+
+                // Finish Unicorn, and add code for x7 level 7 becomming arsenal falcon
+
+                new KashtiraFenrir(),
+                new KashtiraUnicorn(),
+                new KashtiraRiseheart(),
+                new KashtiraOgre(),
+                new TearlamentsKashtira(),
+                new ScareclawKashtira(),
+                new PressuredPlanetWraitsoth(),
+                new KashtiraBirth(),
+                new Kashtiratheosis(),
+                new RaidraptorArsenalFalcon(),
+                new BlackwingZephyrostheElite(),
+                
+                new MathmechCircular(),
+                new MathmechNabla(),
+                new MathmechDiameter(),
+                new MathmechEquation(),
+                new CynetMining(),
+                new MathmechSuperfactorial(),
 
                 new ZoodiacThoroughblade(),
                 new ZoodiacRatpier(),

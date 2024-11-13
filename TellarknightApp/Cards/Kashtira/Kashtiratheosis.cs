@@ -2,20 +2,20 @@
 
 namespace TellarknightApp.Cards
 {
-    public class Number104Masquerade : Card
+    public class Kashtiratheosis : Card
     {
-        public Number104Masquerade()
+        public Kashtiratheosis()
         {
-            Name = "Number 104: Masquerade";
-            Type = "Spellcaster";
-            Attribute = "Light";
+            Name = "Kashtiratheosis";
+            Type = "Spell";
+            Attribute = string.Empty;
             Level = null;
-            Attack = 2700;
-            Defense = 1200;
+            Attack = null;
+            Defense = null;
             Scale = null;
-            Role = "Extra Deck";
-            Archetype = new List<string> { "None" };
-            Id = 02061963;
+            Role = string.Empty;
+            Archetype = new List<string> { "Kashtira" };
+            Id = 34447918;
             Image = $"./CardArt/{Id}.jpg";
         }
 

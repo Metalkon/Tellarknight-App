@@ -29,7 +29,14 @@ namespace TellarknightApp.Cards
                 localStats.AverageXyzNoTellar = true;
             }
 
-            // Benki + NS Check
+            // Benkei + NS Check
+            if (deck.Any(x => x is SuperheavySamuraiProdigyWakaushi) && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei)
+                && hand.Any(x => x.Level == 4 && x != this))
+            {
+                localStats.AverageXyzNoTellar = true;
+            }
+
+            // Benkei + NS Check
             if (deck.Any(x => x is SuperheavySamuraiProdigyWakaushi) && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei)
                 && hand.Any(x => x.Level == 4 && x != this))
             {
@@ -38,7 +45,10 @@ namespace TellarknightApp.Cards
 
             // Extender Play (NOTE: Update As Needed)
             if (hand.Any(x => x.Role.Contains("Extender") && x.Level == 4 && x is not MathmechCircular)
-                || (hand.Any(x => x.Archetype.Contains("Runick") && x.Role == "Extender" && x.Type == "Spell") && extraDeck.Any(x => x is GeriTheRunickFangs)))
+                || (hand.Any(x => x.Archetype.Contains("Runick") && x.Role == "Extender" && x.Type == "Spell") && extraDeck.Any(x => x is GeriTheRunickFangs))
+                || (hand.Any(x => x is StandUpCenturIon) && deck.Any(x => x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
+                || (hand.Any(x => x is KashtiraFenrir) && (hand.Any(x => x is KashtiraRiseheart) || deck.Any(x => x is KashtiraRiseheart)))
+                || (hand.Any(x => x is KashtiraUnicorn) && (hand.Any(x => x is Kashtiratheosis) || deck.Any(x => x is Kashtiratheosis)) && deck.Any(x => x is KashtiraFenrir) && (hand.Any(x => x is KashtiraRiseheart) || deck.Any(x => x is KashtiraRiseheart))))                
             {
                 localStats.AverageXyzNoTellar = true;
                 return localStats;

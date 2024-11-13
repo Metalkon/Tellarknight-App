@@ -25,7 +25,6 @@
                     <option value="Trap">Trap</option>
                     <option value="Extender">Extender</option>
                     <option value="Hand Trap">Hand Trap</option>
-
                 </select>
             </div>
             <div class="grid-search-4">
@@ -37,8 +36,9 @@
                     <option value="Zefra">Zefra</option>
                     <option value="SHS">SHS</option>
                     <option value="Centur-Ion">Centur-Ion</option>
-                    <option value="Mathmech">Mathmech</option>
                     <option value="Runick">Runick</option>
+                    <option value="Kashtira">Kashtira</option>
+                    <option value="Mathmech">Mathmech</option>
                 </select>
             </div>
 
@@ -179,9 +179,13 @@
         {
             tooltipLines.Add($"Attribute: {card.Attribute}");
         }
-        if (card.Level.HasValue)
+        if (card.Level.HasValue && card.Role != "Extra Deck")
         {
             tooltipLines.Add($"Level: {card.Level.Value}");
+        }
+        if (card.Level.HasValue && card.Role == "Extra Deck")
+        {
+            tooltipLines.Add($"Level/Rank: {card.Level.Value}");
         }
         if (card.Attack.HasValue || card.Defense.HasValue)
         {

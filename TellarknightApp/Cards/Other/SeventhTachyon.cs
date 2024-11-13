@@ -177,6 +177,15 @@ namespace TellarknightApp.Cards
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
                 }
+
+                // Search Light Level 4
+                if (deck.Any(x => x.Attribute == "Light" && x.Level == 4))
+                {
+                    Card searchedCard = deck.First(x => x.Attribute == "Light" && x.Level == 4);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
             }
             return (hand, deck, extraDeck, gy, searched = false);
         }

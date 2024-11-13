@@ -13,7 +13,7 @@ namespace TellarknightApp.Cards
             Attack = 1000;
             Defense = 3500;
             Scale = 1;
-            Role = "Extender";
+            Role = string.Empty;
             Archetype = new List<string> { "SHS" };
             Id = 19510093;
             Image = $"./CardArt/{Id}.jpg";

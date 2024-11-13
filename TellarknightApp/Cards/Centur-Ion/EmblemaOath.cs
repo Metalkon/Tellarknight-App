@@ -13,7 +13,7 @@ namespace TellarknightApp.Cards
             Attack = null;
             Defense = null;
             Scale = null;
-            Role = "Extender";
+            Role = string.Empty;
             Searcher = true;
             Archetype = new List<string> { "Centur-Ion" };
             Id = 77765207;

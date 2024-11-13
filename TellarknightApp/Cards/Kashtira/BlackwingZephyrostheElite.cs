@@ -2,20 +2,20 @@
 
 namespace TellarknightApp.Cards
 {
-    public class Number104Masquerade : Card
+    public class BlackwingZephyrostheElite : Card
     {
-        public Number104Masquerade()
+        public BlackwingZephyrostheElite()
         {
-            Name = "Number 104: Masquerade";
-            Type = "Spellcaster";
-            Attribute = "Light";
-            Level = null;
-            Attack = 2700;
-            Defense = 1200;
+            Name = "Blackwing - Zephyros the Elite";
+            Type = "Dark";
+            Attribute = "Winged Beast";
+            Level = 4;
+            Attack = 1600;
+            Defense = 1000;
             Scale = null;
-            Role = "Extra Deck";
+            Role = string.Empty;
             Archetype = new List<string> { "None" };
-            Id = 02061963;
+            Id = 14785765;
             Image = $"./CardArt/{Id}.jpg";
         }
 

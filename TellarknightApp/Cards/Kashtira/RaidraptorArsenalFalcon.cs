@@ -2,20 +2,20 @@
 
 namespace TellarknightApp.Cards
 {
-    public class Number104Masquerade : Card
+    public class RaidraptorArsenalFalcon : Card
     {
-        public Number104Masquerade()
+        public RaidraptorArsenalFalcon()
         {
-            Name = "Number 104: Masquerade";
-            Type = "Spellcaster";
-            Attribute = "Light";
-            Level = null;
-            Attack = 2700;
-            Defense = 1200;
+            Name = "Raidraptor - Arsenal Falcon";
+            Type = "Dark";
+            Attribute = "Winged Beast";
+            Level = 7;
+            Attack = 2500;
+            Defense = 2000;
             Scale = null;
             Role = "Extra Deck";
             Archetype = new List<string> { "None" };
-            Id = 02061963;
+            Id = 96157835;
             Image = $"./CardArt/{Id}.jpg";
         }
 
