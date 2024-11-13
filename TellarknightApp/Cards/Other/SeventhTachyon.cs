@@ -74,6 +74,16 @@ namespace TellarknightApp.Cards
             // Check Xyz Condition
             if (extraDeck.Any(x => x is Number104Masquerade))
             {
+                // Ice Ryzeal 1CC
+                if (hand.Any(x => x is IceRyzeal) == false
+                    && deck.Any(x => x is IceRyzeal) && deck.Any(x => x is not IceRyzeal && x.Archetype.Contains("Ryzeal") && x.Level == 4))
+                {
+                    Card searchedCard = deck.First(x => x is IceRyzeal);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
                 // Zefraath or Zefra Spell In Hand
                 if (superheavySamurai == false
                     && (hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))

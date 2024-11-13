@@ -40,6 +40,16 @@ namespace TellarknightApp.Services
             {
                 gameState.LocalStats.AverageXyzNoTellar = true;
             }
+            if (gameState.LocalStats.RyzealLock == true
+                && (gameState.LocalStats.PendulumSummon 
+                || gameState.LocalStats.OracleCombo 
+                || gameState.LocalStats.PendulumSummon 
+                || gameState.LocalStats.AverageXyzNoTellar 
+                || gameState.LocalStats.AverageXyzOneTellar 
+                || gameState.LocalStats.AverageXyzTwoTellar))
+            {
+                gameState.LocalStats.RyzealLock = false;
+            }
 
             // Average Tellar Count
             if (gameState.LocalStats.AverageXyzTwoTellar == true)
@@ -57,7 +67,8 @@ namespace TellarknightApp.Services
                 && !gameState.LocalStats.AverageXyzOneTellar
                 && !gameState.LocalStats.AverageXyzTwoTellar
                 && !gameState.LocalStats.PendulumSummon
-                && !gameState.LocalStats.OracleCombo)
+                && !gameState.LocalStats.OracleCombo
+                && !gameState.LocalStats.RyzealLock)
             {
                 gameState.LocalStats.BrickChance = true;
             }
@@ -76,7 +87,7 @@ namespace TellarknightApp.Services
                 gameState.LocalStats.ArmoredBrick = true;
             }
 
-            // Average Hand Traps/Bystials
+            // Average Hand Traps/Extenders
             stats.AverageHandTraps = stats.AverageHandTraps + gameState.Hand.Count(x => x.Role == "Hand Trap");
             stats.AverageExtenders = stats.AverageExtenders + gameState.Hand.Count(x => x.Role == "Extender");
 

@@ -26,12 +26,15 @@ namespace TellarknightApp.Models
             {
                 new EmptyCard(),
                 new Level4(),
-                new SmallWorld(), // Incomplete
+                //new SmallWorld(), // Incomplete
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
+                new Bonfire(),
                 new SeventhAscension(),
                 new SeventhTachyon(),
                 new Number104Masquerade(),
+                new ArmoredXyz(),
+                new FullArmoredXyz(),
 
                 new SatellarknightDeneb(),
                 new SatellarknightAltair(),
@@ -79,8 +82,17 @@ namespace TellarknightApp.Models
 
                 new SuperheavySamuraiProdigyWakaushi(),
                 new SuperheavySamuraiMonkBigBenkei(),
-                new SuperheavySamuraiMotorbike(), // Add Kashtira & Centur-Ion Extenders
+                new SuperheavySamuraiMotorbike(),
                 new SuperheavySamuraiSoulgaiaBooster(),
+
+                new IceRyzeal(),
+                new ExRyzeal(),
+                new ThodeRyzeal(),
+                new NodeRyzeal(),
+                new PalmaRyzeal(),
+                new RyzealCross(),
+                new RyzealPlugIn(),
+                new RyzealHoleThruster(),
 
                 new CenturIonPrimera(),
                 new CenturIonTrudea(),
@@ -104,8 +116,6 @@ namespace TellarknightApp.Models
                 new RunickGoldenDroplet(),
                 new RunickAllure(),
                 new RunickFountain(),
-
-                // Finish Unicorn, and add code for x7 level 7 becomming arsenal falcon
 
                 new KashtiraFenrir(),
                 new KashtiraUnicorn(),
@@ -135,8 +145,6 @@ namespace TellarknightApp.Models
 
                 new MonsterReborn(),
                 new SpellCardMonsterReborn(),
-                new ArmoredXyz(),
-                new FullArmoredXyz(),
 
                 new CalledByTheGrave(),
                 new CrossoutDesignator(),
