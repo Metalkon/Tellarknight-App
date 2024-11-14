@@ -1,7 +1,12 @@
 # Tellarknight App
-This is a personal project intended to be shared with a small archetype community for the Yu-Gi-Oh Card Game, the project is used for creating Tellarknight Decklists and testing their consistency rates and other statistics.
+This is an windows and android application built for the Tellarknight community for the Yu-Gi-Oh Card Game, it's used for creating Tellarknight Decklists and testing their consistency rates and other statistics to optimize deckbuilding experiences.
 
-#### NOTE: This project is currently in the early process of being rebuilt and updated with new content, the original running app can be downloaded below.
+## Features
+- Deck Statistics that calculate the chances of summoning a Rank 4 monster
+- Deckbuilding with nearly 150 cards that are most commonly used with the Tellarknight Archetype.
+- Indvidual Hand Tests to see the brick rate and your drawn hands.
+- Card searching to easily find the cards you want to work with.
+- The ability to export your decklist as a YDK file to be used with other Yu-Gi-OH services and clients.
 
 -----
 
@@ -18,4 +23,4 @@ This is a personal project intended to be shared with a small archetype communit
 #### Original App Release (Picture Below):
 - https://github.com/Metalkon/Tellarknight-App/releases/tag/v0.1.0beta
 
-![Example Image](tellar_app_window.PNG)
+![Example Image](tellar_app_windows.PNG)
