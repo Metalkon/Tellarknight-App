@@ -12,6 +12,7 @@
         protected override Window CreateWindow(IActivationState activationState)
         {
             var window = base.CreateWindow(activationState);
+            window.Title = "Tellarknight Statistics App";
 
             return window;
         }
