@@ -5,7 +5,7 @@
 
 .app-grid-container {
     display: grid;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 9fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 8fr);
     grid-template-columns: minmax(0, 1fr);
     grid-gap: 10px;
     height: 100%;

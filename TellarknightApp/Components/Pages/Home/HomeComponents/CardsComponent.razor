@@ -58,7 +58,7 @@
         @if (select)
         {
             var filteredCards = supportedCards.Cards
-            .Where(x => string.IsNullOrWhiteSpace(searchQuery) || x.Name.Contains(searchQuery))
+            .Where(x => string.IsNullOrWhiteSpace(searchQuery.ToLower()) || x.Name.ToLower().Contains(searchQuery.ToLower()))
             .Where(x => string.IsNullOrWhiteSpace(archetypeQuery) || x.Archetype.Contains(archetypeQuery))
             .Where(x => string.IsNullOrWhiteSpace(typeQuery) ||
             (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap") :

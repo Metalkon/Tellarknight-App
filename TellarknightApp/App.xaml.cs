@@ -1,4 +1,6 @@
-﻿namespace TellarknightApp
+﻿using CommunityToolkit.Maui.Core;
+
+namespace TellarknightApp
 {
     public partial class App : Application
     {
