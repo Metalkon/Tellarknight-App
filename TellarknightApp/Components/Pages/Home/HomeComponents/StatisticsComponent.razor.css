@@ -112,6 +112,9 @@
     grid-row: 2 / span 1;
     grid-column: 1 / span 1;
     border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .grid-options-3 {
@@ -123,6 +126,9 @@
     grid-row: 2 / span 1;
     grid-column: 2 / span 1;
     border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .grid-options-5 {
@@ -134,6 +140,21 @@
     grid-row: 1 / span 2;
     grid-column: 4 / span 1;
 }
+
+.grid-options-2, .grid-options-4 {
+    display: flex;
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Optional: Centers content horizontally */
+    border: 1px solid black;
+    height: 100%; /* Ensure these elements take the full available height */
+}
+
+    .grid-options-2 > div, .grid-options-4 > div {
+        width: 100%;
+        display: flex;
+        align-items: center; /* Centers the content of the nested div vertically */
+    }
+
 
 .grid-options-1, .grid-options-2, .grid-options-3, .grid-options-4, .grid-options-5, .grid-options-6, .grid-options-7 {
     white-space: nowrap;
