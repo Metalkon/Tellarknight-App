@@ -4,8 +4,11 @@ namespace TellarknightApp
 {
     public partial class App : Application
     {
+        string version = AppInfo.Current.Version.ToString();
+
         public App()
         {
+
             InitializeComponent();
 
             MainPage = new MainPage();
@@ -14,7 +17,7 @@ namespace TellarknightApp
         protected override Window CreateWindow(IActivationState activationState)
         {
             var window = base.CreateWindow(activationState);
-            window.Title = "Tellarknight Statistics App";
+            window.Title = $"Tellarknight Statistics v{version}";
 
             return window;
         }
