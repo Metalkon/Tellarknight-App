@@ -35,10 +35,10 @@ namespace TellarknightApp.Cards
             // Search Centur-Ion Trudea (1CC)
             if (deck.Any(x => x is CenturIonTrudea)
                 && (hand.Any(x => x is CenturIonPrimera) || deck.Any(x => x is CenturIonPrimera))
-                && (hand.Any(x => x is StandUpCenturIon) && deck.Any(x => x is StandUpCenturIon))
+                && (hand.Any(x => x is StandUpCenturIon) || deck.Any(x => x is StandUpCenturIon))
                 && deck.Any(x => x is not CenturIonTrudea && x is not CenturIonPrimera && x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
             {
-                Card searchedCard = deck.First(x => x is IceRyzeal);
+                Card searchedCard = deck.First(x => x is CenturIonTrudea);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 return (hand, deck, extraDeck, gy, searched);

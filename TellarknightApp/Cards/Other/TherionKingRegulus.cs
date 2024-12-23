@@ -9,7 +9,7 @@ namespace TellarknightApp.Cards
             Name = "Therion \"King\" Regulusa";
             Type = "Machine";
             Attribute = "Earth";
-            Level = 4;
+            Level = 8;
             Attack = 2800;
             Defense = 1600;
             Scale = null;

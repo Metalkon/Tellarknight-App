@@ -6,7 +6,7 @@ namespace TellarknightApp.Cards
     {
         public CenturIonGargoyleII()
         {
-            Name = "Gargoyle II";
+            Name = "Centur-Ion Gargoyle II";
             Type = "Dragon";
             Attribute = "Dark";
             Level = 8;
