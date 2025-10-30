@@ -59,21 +59,57 @@ namespace TellarknightApp.Cards
                 return (hand, deck, extraDeck, gy, searched);
             }
 
-            // Confirm Oracle Search (Don't Search If Not)
-            if (superheavySamurai == true
-                && hand.Any(x => x is Zefraath || x is OracleOfZefra || x is ZefraProvidence)
-                && (hand.Any(x => x is OracleOfZefra) || deck.Any(x => x is OracleOfZefra))
-                && (hand.Any(x => x is ZefraniuSecretOfTheYangZing) || deck.Any(x => x is ZefraniuSecretOfTheYangZing))
-                && (hand.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Zefra") && x.Level == 4))
-                && hand.Any(x => x.Level == 4 && x != shsMonster))
-            {
-                hand.Add(new EmptyCard());
-                return (hand, deck, extraDeck, gy, searched);
-            }
-
             // Check Xyz Condition
             if (extraDeck.Any(x => x is Number104Masquerade))
             {
+                // Zefraath or Zefra Spell In Hand (Non-Oracle Combo, To Search Thuban)
+                if ((hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
+                    && hand.Count(x => x is not SatellarknightZefrathuban) == 0 && deck.Any(x => x is SatellarknightZefrathuban)
+                    && (deck.Any(x => x is ShaddollZefracore) || deck.Any(x => x is StellarknightZefraxciton)))
+                {
+                    if (deck.Any(x => x is ConstellarCastor && deck.Any(x => x is TellarknightCygnian)))
+                    {
+                        Card searchedCard = deck.First(x => x is ConstellarCastor);
+                        hand.Add(searchedCard);
+                        deck.Remove(searchedCard);
+                        return (hand, deck, extraDeck, gy, searched);
+                    }
+                    if (deck.Any(x => x is TellarknightCygnian))
+                    {
+                        Card searchedCard = deck.First(x => x is TellarknightCygnian);
+                        hand.Add(searchedCard);
+                        deck.Remove(searchedCard);
+                        return (hand, deck, extraDeck, gy, searched);
+                    }
+                    if (deck.Any(x => x is SatellarknightDeneb))
+                    {
+                        Card searchedCard = deck.First(x => x is SatellarknightDeneb);
+                        hand.Add(searchedCard);
+                        deck.Remove(searchedCard);
+                        return (hand, deck, extraDeck, gy, searched);
+                    }
+                }
+
+                // Search Castor
+                if (deck.Any(x => x is not ConstellarCastor && x.Level == 4 && x.Archetype.Contains("Constellar"))
+                    && deck.Any(x => x is ConstellarCastor))
+                {
+                    Card searchedCard = deck.First(x => x is ConstellarCastor);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
+                // Search Cygnian
+                if (deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))
+                    && deck.Any(x => x is TellarknightCygnian) && deck.Count(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) >= 2)
+                {
+                    Card searchedCard = deck.First(x => x is TellarknightCygnian);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
                 // Ice Ryzeal 1CC
                 if (hand.Any(x => x is IceRyzeal) == false
                     && deck.Any(x => x is IceRyzeal) && deck.Any(x => x is not IceRyzeal && x.Archetype.Contains("Ryzeal") && x.Level == 4))
@@ -84,23 +120,12 @@ namespace TellarknightApp.Cards
                     return (hand, deck, extraDeck, gy, searched);
                 }
 
-                // Zefraath or Zefra Spell In Hand
-                if (superheavySamurai == false
-                    && (hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
-                    && hand.Count(x => x is not SatellarknightZefrathuban) == 0 && deck.Any(x => x is SatellarknightZefrathuban))
+                // Search Centur-Ion Primera 1CC
+                if (deck.Any(x => x is CenturIonPrimera)
+                    && deck.Any(x => x is StandUpCenturIon)
+                    && deck.Any(x => x is not CenturIonPrimera && x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
                 {
-                    Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
-                    hand.Add(searchedCard);
-                    deck.Remove(searchedCard);
-                    return (hand, deck, extraDeck, gy, searched);
-                }
-
-                // Search Lyran (Zefraath)
-                if ((hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
-                    && hand.Any(x => x is SatellarknightZefrathuban)
-                    && hand.Count(x => x is not TellarknightLyran) == 0 && deck.Any(x => x is TellarknightLyran))
-                {
-                    Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
+                    Card searchedCard = deck.First(x => x is CenturIonPrimera);
                     hand.Add(searchedCard);
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
@@ -168,21 +193,29 @@ namespace TellarknightApp.Cards
                     return (hand, deck, extraDeck, gy, searched);
                 }
 
-                // Search Centur-Ion Primera
-                if (deck.Any(x => x is CenturIonPrimera)
-                    && deck.Any(x => x is StandUpCenturIon)
-                    && deck.Any(x => x is not CenturIonPrimera && x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
+                // Search Algiedi
+                if (hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4)
+                    && deck.Any(x => x is ConstellarAlgiedi))
                 {
-                    Card searchedCard = deck.First(x => x is CenturIonPrimera);
+                    Card searchedCard = deck.First(x => x is ConstellarAlgiedi);
                     hand.Add(searchedCard);
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
                 }
 
                 // Search Light Extender
-                if (deck.Any(x => x.Attribute == "Light" && x.Role == "Extender" && x.Level == 4))
+                if (hand.Any(x => x.Level == 4 && deck.Any(x => x.Attribute == "Light" && x.Role == "Extender" && x.Level == 4)))
                 {
                     Card searchedCard = deck.First(x => x.Attribute == "Light" && x.Role == "Extender" && x.Level == 4);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
+                // Search Any Tellar
+                if (deck.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4))
+                {
+                    Card searchedCard = deck.First(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4);
                     hand.Add(searchedCard);
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
@@ -197,6 +230,7 @@ namespace TellarknightApp.Cards
                     return (hand, deck, extraDeck, gy, searched);
                 }
             }
+
             return (hand, deck, extraDeck, gy, searched = false);
         }
     }

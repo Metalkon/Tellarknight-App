@@ -26,21 +26,18 @@ namespace TellarknightApp.Models
             {
                 new EmptyCard(),
                 new Level4(),
-                //new SmallWorld(), // Incomplete
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
-                new Bonfire(),
+                new SmallWorld(), // Incomplete
                 new SeventhAscension(),
                 new SeventhTachyon(),
                 new Number104Masquerade(),
-                new ArmoredXyz(),
-                new FullArmoredXyz(),
-
                 new SatellarknightDeneb(),
                 new SatellarknightAltair(),
                 new SatellarknightVega(),
                 new SatellarknightUnukalhai(),
                 new SatellarknightSirius(),
+                new TellarknightCygnian(),
                 new TellarknightLyran(),
                 new TellarknightAltairan(),
                 new SatellarknightAlsahm(),
@@ -48,15 +45,17 @@ namespace TellarknightApp.Models
                 new SatellarknightCapella(),
                 new SatellarknightProcyon(),
                 new SatellarknightRigel(),
-                new TellarknightGenesis(),
-                new SatellarknightSkybridge(),
+                new StellarnovaBonds(),
                 new ConstellarTellarknights(),
+                new SatellarknightSkybridge(),
+                new TellarknightGenesis(),
+                new ConstellarCastor(),
                 new ConstellarCaduceus(),
-                new ConstellarSheratan(),
                 new ConstellarPollux(),
+                new ConstellarSombre(),
                 new ConstellarAlgiedi(),
                 new ConstellarKaus(),
-                new ConstellarSombre(),
+                new ConstellarSheratan(),
                 new ConstellarTwinkle(),
 
                 new PhotonThrasher(),
@@ -93,6 +92,7 @@ namespace TellarknightApp.Models
                 new RyzealCross(),
                 new RyzealPlugIn(),
                 new RyzealHoleThruster(),
+                new Bonfire(),
 
                 new CenturIonPrimera(),
                 new CenturIonTrudea(),
@@ -164,6 +164,9 @@ namespace TellarknightApp.Models
                 new LivingFossil(),
                 new InfernobleArmsDurendal(),
                 
+                new ArmoredXyz(),
+                new FullArmoredXyz(),
+
                 new TheBystialLubellion(),
                 new BystialBaldrake(),
                 new BystialDruiswurm(),

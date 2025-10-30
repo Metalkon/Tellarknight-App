@@ -21,10 +21,11 @@ namespace TellarknightApp.Cards
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
-            // Lyran and Zefraath, Skybridge->Deneb->Thuban
+
+            // Lyran and Zefraath, Skybridge->Deneb/Cygnian->Thuban
             if (hand.Any(x => x is Zefraath) && hand.Count(x => x is SatellarknightZefrathuban) == 0
                 && (hand.Any(x => x is SatellarknightSkybridge) || deck.Any(x => x is SatellarknightSkybridge))
-                && deck.Any(x => x is SatellarknightDeneb))
+                && (deck.Any(x => x is TellarknightCygnian) || deck.Any(x => x is SatellarknightDeneb)))
             {
                 localStats.AverageXyzTwoTellar = true;
                 localStats.PendulumSummon = true;

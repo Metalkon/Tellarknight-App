@@ -27,6 +27,7 @@ namespace TellarknightApp.Services
             var searcherTypes = new List<Type>
             {
                 typeof(Terraforming),
+                typeof(StellarnovaBonds),
                 typeof(SeventhAscension),
                 typeof(SeventhTachyon),
                 typeof(ReinforcementOfTheArmy),

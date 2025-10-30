@@ -46,6 +46,30 @@ namespace TellarknightApp.Cards
                 return (hand, deck, extraDeck, gy, searched);
             }
 
+            // Zefraath (Normal/Castor)
+            if (superheavySamurai == false
+                && hand.Count(x => x is Zefraath) == 0
+                && (hand.Any(x => x is SatellarknightZefrathuban) || (hand.Any(x => x is ConstellarCastor) && deck.Any(x => x is TellarknightCygnian) && deck.Any(x => x is SatellarknightZefrathuban)))
+                && deck.Any(x => x is Zefraath))
+            {
+                Card searchedCard = deck.First(x => x is Zefraath);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // Zefraath (Normal/Cygnian)
+            if (superheavySamurai == false
+                && hand.Count(x => x is Zefraath) == 0
+                && (hand.Any(x => x is SatellarknightZefrathuban) || (hand.Any(x => x is TellarknightCygnian) && deck.Any(x => x is SatellarknightZefrathuban)))
+                && deck.Any(x => x is Zefraath))
+            {
+                Card searchedCard = deck.First(x => x is Zefraath);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
             // Zefraath (Normal/Deneb)
             if (superheavySamurai == false
                 && hand.Count(x => x is Zefraath) == 0
@@ -58,12 +82,27 @@ namespace TellarknightApp.Cards
                 return (hand, deck, extraDeck, gy, searched);
             }
 
-            // Zefraath (Skybridge, Note: No Vega)
+            // Zefraath (Skybridge Cygnian)
+            if (superheavySamurai == false
+                && hand.Count(x => x is Zefraath) == 0
+                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not TellarknightCygnian)
+                && (hand.Any(x => x is SatellarknightSkybridge) || (hand.Any(x => x is TellarknightLyran) && deck.Any(x => x is SatellarknightSkybridge)))
+                && (deck.Any(x => x is TellarknightCygnian) || deck.Any(x => x is TellarknightCygnian))
+                && deck.Any(x => x is SatellarknightZefrathuban)
+                && deck.Any(x => x is Zefraath))
+            {
+                Card searchedCard = deck.First(x => x is Zefraath);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // Zefraath (Skybridge Deneb)
             if (superheavySamurai == false
                 && hand.Count(x => x is Zefraath) == 0
                 && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb)
                 && (hand.Any(x => x is SatellarknightSkybridge) || (hand.Any(x => x is TellarknightLyran) && deck.Any(x => x is SatellarknightSkybridge)))
-                && deck.Any(x => x is SatellarknightDeneb)
+                && (deck.Any(x => x is SatellarknightDeneb) || deck.Any(x => x is SatellarknightDeneb))
                 && deck.Any(x => x is SatellarknightZefrathuban)
                 && deck.Any(x => x is Zefraath))
             {

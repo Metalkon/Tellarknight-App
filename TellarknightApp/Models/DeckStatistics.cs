@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TellarknightApp.Models
 {
-    internal class DeckStatistics
+    public class DeckStatistics
     {
         public float BrickChance { get; set; } = 0;
         public float AverageTellars { get; set; } = 0;

@@ -98,8 +98,28 @@ namespace TellarknightApp.Cards
                 }
             }
 
-            // Deneb Zefrathuban Search
-            if (hand.Any(x => x is SatellarknightDeneb) && hand.Count(x => x is SatellarknightZefrathuban) == 0
+            // Castor->Crygnian Zefrathuban Search
+            if (hand.Any(x => x is ConstellarCastor) && hand.Count(x => x is SatellarknightZefrathuban) == 0
+                && deck.Any(x => x is SatellarknightZefrathuban) && deck.Any(x => x is TellarknightCygnian)
+                && (deck.Any(x => x is ShaddollZefracore) || deck.Any(x => x is StellarknightZefraxciton)))
+            {
+                localStats.PendulumSummon = true;
+                localStats.AverageXyzOneTellar = true;
+                return localStats;
+            }
+
+            // Castor->Crygnian Zefraxciton Search
+            if (hand.Any(x => x is ConstellarCastor) && hand.Count(x => x is StellarknightZefraxciton) == 0
+                && deck.Any(x => x is StellarknightZefraxciton) && deck.Any(x => x is TellarknightCygnian)
+                && deck.Any(x => x is SatellarknightZefrathuban))
+            {
+                localStats.PendulumSummon = true;
+                localStats.AverageXyzTwoTellar = true;
+                return localStats;
+            }
+
+            // Deneb/Cygnian Zefrathuban Search
+            if (hand.Any(x => x is SatellarknightDeneb || x is TellarknightCygnian) && hand.Count(x => x is SatellarknightZefrathuban) == 0
                 && deck.Any(x => x is SatellarknightZefrathuban)
                 && (deck.Any(x => x is ShaddollZefracore) || deck.Any(x => x is StellarknightZefraxciton)))
             {
@@ -109,7 +129,7 @@ namespace TellarknightApp.Cards
             }
 
             // Deneb Zefraxciton Search
-            if (hand.Any(x => x is SatellarknightDeneb) && hand.Count(x => x is StellarknightZefraxciton) == 0
+            if (hand.Any(x => x is SatellarknightDeneb || x is TellarknightCygnian) && hand.Count(x => x is StellarknightZefraxciton) == 0
                 && deck.Any(x => x is StellarknightZefraxciton)
                 && deck.Any(x => x is SatellarknightZefrathuban))
             {
@@ -176,12 +196,12 @@ namespace TellarknightApp.Cards
                 }
             }
 
-            // Skybridge In Hand
+            // Skybridge In Hand (Cygnian)
             if (hand.Any(x => x is SatellarknightSkybridge) 
-                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not SatellarknightDeneb && x is not TellarknightLyran)
-                && deck.Any(x => x is SatellarknightDeneb))
+                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not TellarknightCygnian && x is not TellarknightLyran)
+                && (deck.Any(x => x is TellarknightCygnian) || deck.Any(x => x is TellarknightCygnian)))
             {
-                Card tellar = hand.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not SatellarknightDeneb && x is not TellarknightLyran);
+                Card tellar = hand.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not TellarknightCygnian && x is not TellarknightLyran);
 
                 if (deck.Any(x => x is SatellarknightZefrathuban)
                     && hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x.Level == 4 && x != tellar))                    
@@ -200,10 +220,34 @@ namespace TellarknightApp.Cards
                 }
             }
 
+            // Skybridge In Hand (Deneb)
+            if (hand.Any(x => x is SatellarknightSkybridge)
+                && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not SatellarknightDeneb && x is not TellarknightLyran)
+                && deck.Any(x => x is SatellarknightDeneb))
+            {
+                Card tellar = hand.First(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x.Scale == null & x is not SatellarknightDeneb && x is not TellarknightLyran);
+
+                if (deck.Any(x => x is SatellarknightZefrathuban)
+                    && hand.Any(x => (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Zefra")) && x.Level == 4 && x != tellar))
+                {
+                    localStats.AverageXyzOneTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+
+                if (deck.Any(x => x is SatellarknightZefrathuban)
+                    && deck.Any(x => x is StellarknightZefraxciton))
+                {
+                    localStats.AverageXyzTwoTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+            }
+
             // Lyran Search Skybridge
             if (hand.Any(x => x is TellarknightLyran) 
                 && deck.Any(x => x is SatellarknightSkybridge)
-                && deck.Any(x => x is SatellarknightDeneb)
+                && (deck.Any(x => x is TellarknightCygnian)|| deck.Any(x => x is SatellarknightDeneb))
                 && deck.Any(x => x is SatellarknightZefrathuban || x is StellarknightZefraxciton))
             {
                 Card lyran = hand.First(x => x is TellarknightLyran);

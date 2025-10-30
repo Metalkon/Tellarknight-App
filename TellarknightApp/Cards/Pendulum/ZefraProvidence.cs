@@ -75,6 +75,29 @@ namespace TellarknightApp.Cards
                 return (hand, deck, extraDeck, gy, searched);
             }
 
+            // Zefraath (Normal/Castor)
+            if (superheavySamurai == false
+                && hand.Count(x => x is Zefraath) == 0
+                && (hand.Any(x => x is SatellarknightZefrathuban) || (hand.Any(x => x is ConstellarCastor) && deck.Any(x => x is TellarknightCygnian) && deck.Any(x => x is SatellarknightZefrathuban)))
+                && deck.Any(x => x is Zefraath))
+            {
+                Card searchedCard = deck.First(x => x is Zefraath);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // Zefraath (Normal/Cygnian)
+            if (superheavySamurai == false
+                && hand.Count(x => x is Zefraath) == 0
+                && (hand.Any(x => x is SatellarknightZefrathuban) || (hand.Any(x => x is TellarknightCygnian) && deck.Any(x => x is SatellarknightZefrathuban)))
+                && deck.Any(x => x is Zefraath))
+            {
+                Card searchedCard = deck.First(x => x is Zefraath);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
 
             // Zefraath (Normal/Deneb)
             if (superheavySamurai == false

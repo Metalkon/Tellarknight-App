@@ -41,11 +41,33 @@ namespace TellarknightApp.Cards
                 return localStats;
             }
 
+            // Cygnian -> Skybridge -> Vega
+            if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) == 1
+                && hand.Count(x => x is TellarknightCygnian) == 1
+                && deck.Any(x => x is SatellarknightVega)
+                && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightVega && x is not TellarknightCygnian))
+            {
+                localStats.AverageXyzTwoTellar = true;
+                return localStats;
+            }
+
             // Deneb -> Skybridge -> Vega
             if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) == 1
                 && hand.Count(x => x is SatellarknightDeneb) == 1
                 && deck.Any(x => x is SatellarknightVega)
                 && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightVega && x is not SatellarknightDeneb))
+            {
+                localStats.AverageXyzTwoTellar = true;
+                return localStats;
+            }
+
+            // Cygnian -> Skybridge -> Lyran -> Cont. Spell
+            if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) == 1
+                && hand.Any(x => x is TellarknightCygnian)
+                && lyran != null
+                && (hand.Any(x => x is ConstellarTellarknights) || deck.Any(x => x is ConstellarTellarknights))
+                && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not TellarknightCygnian && x != lyran))
+
             {
                 localStats.AverageXyzTwoTellar = true;
                 return localStats;
@@ -90,7 +112,19 @@ namespace TellarknightApp.Cards
             Card lowScale = null;
             Card highScale = null;
 
-            // Setup Scales (High Search)
+            // Setup Scales (High Search, Cygnian)
+            if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not TellarknightCygnian) >= 1
+                && deck.Any(x => x is TellarknightCygnian)
+                && hand.Any(x => x.Scale <= 3) && deck.Any(x => x is StellarknightZefraxciton))
+            {
+                highScale = deck.First(x => x is StellarknightZefraxciton);
+                if (hand.Any(x => x.Scale  <= 3 && x.Level != 4))
+                    lowScale = hand.First(x => x.Scale <= 3 && x.Level != 4);
+                else
+                    lowScale = hand.First(x => x.Scale <= 3 && x.Level == 4);
+            }
+
+            // Setup Scales (High Search, Deneb)
             if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb) >= 1
                 && deck.Any(x => x is SatellarknightDeneb)
                 && hand.Any(x => x.Scale <= 3) && deck.Any(x => x is StellarknightZefraxciton))
@@ -102,7 +136,19 @@ namespace TellarknightApp.Cards
                     lowScale = hand.First(x => x.Scale <= 3 && x.Level == 4);
             }
 
-            // Setup Scales (Low Search)
+            // Setup Scales (Low Search, Cygnian)
+            if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not TellarknightCygnian) >= 1
+                && deck.Any(x => x is TellarknightCygnian)
+                && hand.Any(x => x.Scale >= 5) && deck.Any(x => x is SatellarknightZefrathuban))
+            {
+                lowScale = deck.First(x => x is SatellarknightZefrathuban);
+                if (hand.Any(x => x.Scale >= 5 && x.Level != 4))
+                    highScale = hand.First(x => x.Scale >= 5 && x.Level != 4);
+                else
+                    highScale = hand.First(x => x.Scale >= 5 && x.Level == 4);
+            }
+
+            // Setup Scales (Low Search, Deneb)
             if (hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb) >= 1
                 && deck.Any(x => x is SatellarknightDeneb)
                 && hand.Any(x => x.Scale >= 5) && deck.Any(x => x is SatellarknightZefrathuban))
@@ -114,7 +160,23 @@ namespace TellarknightApp.Cards
                     highScale = hand.First(x => x.Scale >= 5 && x.Level == 4);
             }
 
-            // Zefra Pend
+            // Zefra Pend (Cygnian)
+            if (lowScale != null && highScale != null
+                && hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not TellarknightCygnian) >= 1
+                && deck.Any(x => x is TellarknightCygnian)
+                && (lowScale.Archetype.Contains("Zefra") || highScale.Archetype.Contains("Zefra")))
+            {
+                // Zefra Tellar and Neutral Scales (Tellar Locked)
+                if ((!highScale.Archetype.Contains("Shaddoll") && !highScale.Archetype.Contains("Yang Zing"))
+                    && hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x != this && x != lowScale && x != highScale))
+                {
+                    localStats.AverageXyzTwoTellar = true;
+                    localStats.PendulumSummon = true;
+                    return localStats;
+                }
+            }
+
+            // Zefra Pend (Deneb)
             if (lowScale != null && highScale != null
                 && hand.Count(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb) >= 1
                 && deck.Any(x => x is SatellarknightDeneb)
