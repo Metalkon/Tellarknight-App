@@ -22,13 +22,15 @@ namespace TellarknightApp.Cards
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
             // Extender + Any Lv4 "Tellar"
-            if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))) && deck.Any(x => x is not MathmechCircular && x.Archetype.Contains("Mathmech") && x.Level == 4))
+            if ((hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))) || (hand.Any(x => x is StellarnovaBonds) 
+                && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")))) && deck.Any(x => x is not MathmechCircular && x.Archetype.Contains("Mathmech") && x.Level == 4))
             {
                 localStats.AverageXyzOneTellar = true;
             }
 
             // Extender + Any Other Lv4
-            if (hand.Any(x => x != this && x.Level == 4) && deck.Any(x => x is not MathmechCircular && x.Archetype.Contains("Mathmech") && x.Level == 4))
+            if ((hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))) || (hand.Any(x => x is StellarnovaBonds) && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")))) 
+                && deck.Any(x => x is not MathmechCircular && x.Archetype.Contains("Mathmech") && x.Level == 4))
             {
                 localStats.AverageXyzNoTellar = true;
             }
@@ -37,3 +39,4 @@ namespace TellarknightApp.Cards
         }
     }
 }
+

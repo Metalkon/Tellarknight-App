@@ -39,7 +39,7 @@ namespace TellarknightApp.Cards
                 }
 
                 // Search Riseheart as Extender
-                if (deck.Any(x => x is KashtiraRiseheart) && hand.Any(x => x.Level == 4 && x is not PhotonThrasher))
+                if (deck.Any(x => x is KashtiraRiseheart) && (hand.Any(x => x.Level == 4 && x is not PhotonThrasher) || (hand.Any(x => x is StellarnovaBonds) && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")))))
                 {
                     localStats.AverageXyzNoTellar = true;
                     if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))

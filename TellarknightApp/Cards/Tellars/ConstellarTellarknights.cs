@@ -1,4 +1,5 @@
-﻿using TellarknightApp.Models;
+﻿using System.Linq;
+using TellarknightApp.Models;
 
 namespace TellarknightApp.Cards
 {
@@ -40,6 +41,15 @@ namespace TellarknightApp.Cards
             if ((hand.Any(x => x is SatellarknightDeneb) 
                 || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x is SatellarknightSkybridge) && deck.Any(x => x is SatellarknightDeneb)))
                 && deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4 && x is not SatellarknightDeneb))
+            {
+                localStats.AverageXyzTwoTellar = true;
+                return localStats;
+            }
+
+            // Cygnian Search (Also Skybridge)
+            if (hand.Any(x => x is TellarknightCygnian) && (deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4))
+                || (hand.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) && hand.Any(x => x is SatellarknightSkybridge) && deck.Any(x => x is TellarknightCygnian)
+                && (deck.Any(x => x.Archetype.Contains("Tellarknight") && x.Level == 4) || deck.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4))))
             {
                 localStats.AverageXyzTwoTellar = true;
                 return localStats;

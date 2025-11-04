@@ -22,7 +22,7 @@ namespace TellarknightApp.Cards
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
             // Any Level 4
-            if (hand.Any(x => x.Level == 4) && deck.Any(x => x.Archetype.Contains("Zoodiac") && x.Level == 4))
+            if ((hand.Any(x => x.Level == 4) || (hand.Any(x => x is StellarnovaBonds) && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")))) && deck.Any(x => x.Archetype.Contains("Zoodiac") && x.Level == 4))
             {
                 localStats.AverageXyzNoTellar = true;
                 if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))

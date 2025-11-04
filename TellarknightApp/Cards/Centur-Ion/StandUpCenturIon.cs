@@ -14,7 +14,6 @@ namespace TellarknightApp.Cards
             Defense = null;
             Scale = null;
             Role = "Extender";
-            Searcher = true;
             Archetype = new List<string> { "Centur-Ion" };
             Id = 41371602;
             Image = $"./CardArt/{Id}.jpg";
@@ -62,7 +61,7 @@ namespace TellarknightApp.Cards
             }
 
             // Extender + Lv4
-            if (hand.Any(x => x.Level == 4)
+            if ((hand.Any(x => x.Level == 4) || (hand.Any(x => x is StellarnovaBonds) && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
                 && deck.Any(x => x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
             {
                 localStats.AverageXyzNoTellar = true;
