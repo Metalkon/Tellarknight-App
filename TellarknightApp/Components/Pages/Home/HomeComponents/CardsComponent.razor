@@ -12,14 +12,14 @@
     <div class="item grid-search">
         <div class="grid-search-container">
             <div class="grid-search-1">
-                <input id="searchQuery" type="text" class="search-input" @bind="searchQuery" />
+                <input id="SearchValues.SearchQuery" type="text" class="search-input" @bind="SearchValues.SearchQuery" />
             </div>
             <div class="size grid-search-2">
-                <button class="btn btn-primary" @onclick="CardSearch">Search</button>
+                <button class="btn btn-primary" @onclick="() => CardSearch.InvokeAsync(SearchValues)">Search</button>
             </div>
             <div class="grid-search-3">
-                <select @onchange="HandleTypeChange" style="height: 100%; width: 100%;">
-                    <option value="" selected>Type/Role</option>
+                <select @bind="SearchValues.TypeQuery" style="height: 100%; width: 100%;">
+                    <option value="">Type/Role</option>
                     <option value="Monster">Monster</option>
                     <option value="Spell">Spell</option>
                     <option value="Trap">Trap</option>
@@ -28,8 +28,8 @@
                 </select>
             </div>
             <div class="grid-search-4">
-                <select @onchange="HandleArchetypeChange" style="height: 100%; width: 100%;">
-                    <option value="" selected>Archetype</option>
+                <select @bind="SearchValues.ArchetypeQuery" style="height: 100%; width: 100%;">
+                    <option value="">Archetype</option>
                     <option value="None">None</option>
                     <option value="Tellarknight">Tellarknight</option>
                     <option value="Constellar">Constellar</option>
@@ -42,36 +42,27 @@
                     <option value="Mathmech">Mathmech</option>
                 </select>
             </div>
-
-            <div class="grid-search-5">
-                <button class="btn btn-danger" @onclick="DecklistButton">
-                    @(select ? "View Decklist" : "Select Cards")
-                </button>
-            </div>
-            <div class="grid-search-6">
-                <button class="btn btn-secondary" @onclick="SaveFile">Export YDK</button>
-            </div>
         </div>
     </div>
 
     <div class="grid-cards">
-        @if (select)
+        @if (SearchValues.Select)
         {
             var filteredCards = supportedCards.Cards
-            .Where(x => string.IsNullOrWhiteSpace(searchQuery.ToLower()) || x.Name.ToLower().Contains(searchQuery.ToLower()))
-            .Where(x => string.IsNullOrWhiteSpace(archetypeQuery) || x.Archetype.Contains(archetypeQuery))
-            .Where(x => string.IsNullOrWhiteSpace(typeQuery) ||
-            (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap") :
-            (typeQuery == "Spell (includes Field Spell)" ? (x.Type == "Spell" || x.Type == "Field Spell") :
-            (typeQuery == "Extender" ? x.Role == "Extender" :
-            (typeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == typeQuery)))))
+            .Where(x => string.IsNullOrWhiteSpace(SearchValues.SearchQuery.ToLower()) || x.Name.ToLower().Contains(SearchValues.SearchQuery.ToLower()))
+            .Where(x => string.IsNullOrWhiteSpace(SearchValues.ArchetypeQuery) || x.Archetype.Contains(SearchValues.ArchetypeQuery))
+            .Where(x => string.IsNullOrWhiteSpace(SearchValues.TypeQuery) ||
+            (SearchValues.TypeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap") :
+            (SearchValues.TypeQuery == "Spell (includes Field Spell)" ? (x.Type == "Spell" || x.Type == "Field Spell") :
+            (SearchValues.TypeQuery == "Extender" ? x.Role == "Extender" :
+            (SearchValues.TypeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == SearchValues.TypeQuery)))))
             .ToList();
 
 
-            totalItems = filteredCards.Count;
+            SearchValues.TotalItems = filteredCards.Count;
             var pagedCards = filteredCards
-            .Skip((currentPage - 1) * itemsPerPage)
-            .Take(itemsPerPage);
+            .Skip((SearchValues.CurrentPage - 1) * SearchValues.ItemsPerPage)
+            .Take(SearchValues.ItemsPerPage);
 
             <div class="card-container">
                 @foreach (Card card in pagedCards)
@@ -79,9 +70,9 @@
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                         <div class="quantity-control">
-                            <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
+                            <button class="btn-quantity" @onclick="() => DecreaseQuantity.InvokeAsync(card)">-</button>
                             <input type="text" class="item-input" @bind="card.Quantity" />
-                            <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
+                            <button class="btn-quantity" @onclick="() => IncreaseQuantity.InvokeAsync(card)">+</button>
                         </div>
                     </div>
                 }
@@ -95,16 +86,16 @@
                 <button class="btn-primary"
                         style="width: 12.5%; height: 40px;"
                         @onclick="PreviousPage"
-                        disabled="@(currentPage == 1)">
+                        disabled="@(SearchValues.CurrentPage == 1)">
                     Previous Page
                 </button>
                 <p style="font-size: clamp(12px, 1.5vw, 36px); margin: 0; line-height: 40px; padding: 0 2%;">
-                    @($"{currentPage}/{(totalItems + itemsPerPage - 1) / itemsPerPage}")
+                    @($"{SearchValues.CurrentPage}/{(SearchValues.TotalItems + SearchValues.ItemsPerPage - 1) / SearchValues.ItemsPerPage}")
                 </p>
                 <button class="btn-primary"
                         style="width: 12.5%; height: 40px;"
                         @onclick="NextPage"
-                        disabled="@(currentPage * itemsPerPage >= totalItems)">
+                        disabled="@(SearchValues.CurrentPage * SearchValues.ItemsPerPage >= SearchValues.TotalItems)">
                     Next Page
                 </button>
             </div>
@@ -155,147 +146,45 @@
 @code {
     [Parameter]
     public EventCallback UpdateState { get; set; }
-    private string searchQuery = string.Empty;
-    private string typeQuery = string.Empty;
-    private string archetypeQuery = string.Empty;
-    private bool select = true;
-    private List<string> optionsType = new List<string>
-    {
-        "Monster",
-        "Spell",
-        "Trap",
-    };
+    [Parameter]
+    public SearchComponentValues SearchValues { get; set; }
+    [Parameter]
+    public EventCallback<SearchComponentValues> CardSearch { get; set; }
+    public EventCallback NextPage { get; set; }
+    public EventCallback PreviousPage { get; set; }
+    public EventCallback IncreaseQuantity { get; set; }
+    public EventCallback DecreaseQuantity { get; set; }    
 
-    private int currentPage = 1;
-    private const int itemsPerPage = 30;
-    private int totalItems;
-    private string GenerateCardTooltip(Card card)
+    private void HandleTypeChange(ChangeEventArgs e)
+    {
+        SearchValues.TypeQuery = e.Value?.ToString();
+        CardSearch.InvokeAsync(SearchValues);
+    }
+    private void HandleArchetypeChange(ChangeEventArgs e)
+    {
+        SearchValues.ArchetypeQuery = e.Value?.ToString();
+        CardSearch.InvokeAsync(SearchValues);
+    }
+
+    public static string GenerateCardTooltip(Card card)
     {
         var tooltipLines = new List<string>
-    {
-        $"Name: {card.Name}",
-        $"Type: {card.Type}"
-    };
+            {
+                $"Name: {card.Name}",
+                $"Type: {card.Type}"
+            };
         if (!string.IsNullOrWhiteSpace(card.Attribute))
-        {
             tooltipLines.Add($"Attribute: {card.Attribute}");
-        }
         if (card.Level.HasValue && card.Role != "Extra Deck")
-        {
             tooltipLines.Add($"Level: {card.Level.Value}");
-        }
         if (card.Level.HasValue && card.Role == "Extra Deck")
-        {
             tooltipLines.Add($"Level/Rank: {card.Level.Value}");
-        }
         if (card.Attack.HasValue || card.Defense.HasValue)
-        {
             tooltipLines.Add($"ATK/DEF: {(card.Attack?.ToString() ?? "N/A")}/{(card.Defense?.ToString() ?? "N/A")}");
-        }
         if (card.Scale.HasValue)
-        {
             tooltipLines.Add($"Scale: {card.Scale.Value}");
-        }
-
         tooltipLines.Add($"Archetype: {(card.Archetype != null ? string.Join(", ", card.Archetype) : "N/A")}");
 
         return string.Join("\n", tooltipLines);
     }
-
-    private void HandleTypeChange(ChangeEventArgs e)
-    {
-        typeQuery = e.Value?.ToString();
-        CardSearch();
-    }
-
-    private void HandleArchetypeChange(ChangeEventArgs e)
-    {
-        archetypeQuery = e.Value?.ToString();
-        CardSearch();
-    }
-
-    public void DecklistButton()
-    {
-        select = !select;
-        decklist.BuildDecklist(supportedCards);        
-    }
-
-    public async void CardSearch()
-    {
-        totalItems = supportedCards.Cards
-            .Where(x => string.IsNullOrWhiteSpace(searchQuery) ? true : x.Name.Contains(searchQuery))
-            .Where(x => string.IsNullOrWhiteSpace(archetypeQuery) ? true : x.Archetype.Contains(archetypeQuery))
-            .Where(x => string.IsNullOrWhiteSpace(typeQuery) ? true : (typeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") : x.Type == typeQuery))
-            .Count();
-
-        currentPage = 1;
-        await OnInitializedAsync();
-    }
-
-    public void IncreaseQuantity(Card card)
-    {
-        card.Quantity++;
-    }
-
-    public void DecreaseQuantity(Card card)
-    {
-        card.Quantity--;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        supportedCards.Action += StateHasChanged;
-        decklist.Action += StateHasChanged;
-    }
-
-    private void NextPage()
-    {
-        if (currentPage * itemsPerPage < totalItems)
-            currentPage++;
-    }
-
-    private void PreviousPage()
-    {
-        if (currentPage > 1)
-            currentPage--;
-    }
-
-    private string GenerateYdk()
-    {
-        decklist.BuildDecklist(supportedCards);
-        var sb = new StringBuilder();
-
-        sb.AppendLine("#main");
-        foreach (var card in decklist.MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
-        {
-            sb.AppendLine(card.Id.ToString());
-        }
-
-        sb.AppendLine("#extra");
-        foreach (var card in decklist.ExtraDeck.Where(x => x.Id != 0))
-        {
-            sb.AppendLine(card.Id.ToString());
-        }
-
-        sb.AppendLine("!side");
-
-        return sb.ToString();
-    }
-
-    async Task SaveFile()
-    {
-        using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
-        var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
-
-        if (fileSaverResult.IsSuccessful)
-        {
-            await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show();
-        }
-        else
-        {
-            await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
-        }
-    }
-
-
 }

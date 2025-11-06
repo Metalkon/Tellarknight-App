@@ -1,34 +1,29 @@
 ﻿@page "/"
+@using TellarknightApp.Services
+@using TellarknightApp.Models
+@using CommunityToolkit.Maui
+@using System.Text
+@using CommunityToolkit.Maui.Storage
+@using CommunityToolkit.Maui.Alerts
 @using TellarknightApp.Components.Pages.Home.HomeComponents;
 @inject SupportedCards supportedCards
 @inject Decklist decklist
+@inject SupportedCards supportedCards
+@inject Decklist decklist
+@inject IFileSaver FileSaver
 
 <div class="app-grid-container">
     <div class="item grid-statistics">
         <StatisticsComponent DeckStatistics="@deckStatistics" DeckStatisticsHand="@deckStatisticsHand" StatValues="@statValues" HandTest="@handTest" CheckDeck="CheckDeck" CheckHand="CheckHand" ResetCards="ResetCards"></StatisticsComponent>
     </div>
     <div class="item grid-cards">
-        <CardsComponent></CardsComponent>
+        <CardsComponent SearchValues="@searchValues" CardSearch="CardSearch"></CardsComponent>
     </div>
 </div>
 
-<!--
-code {
-
-    public async Task UpdateState()
-    {
-        await InvokeAsync(StateHasChanged);
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        supportedCards.Action += StateHasChanged;
-        decklist.Action += StateHasChanged;
-    }
-}
--->
 @code{
     public StatisticsComponentValues statValues = new StatisticsComponentValues();
+    public SearchComponentValues searchValues { get; set; } = new SearchComponentValues();
     private DeckStatistics deckStatistics = new DeckStatistics();
     private DeckStatistics deckStatisticsHand = new DeckStatistics();
     private GameState gameState = new GameState();
@@ -41,6 +36,67 @@ code {
         new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
         new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
     };
+
+
+
+
+    [Parameter]
+    public EventCallback UpdateState { get; set; }
+    private string searchQuery = string.Empty;
+    private string typeQuery = string.Empty;
+    private string archetypeQuery = string.Empty;
+    private bool select = true;
+    private List<string> optionsType = new List<string>
+    {
+        "Monster",
+        "Spell",
+        "Trap",
+    };
+
+    private int currentPage = 1;
+    private const int itemsPerPage = 30;
+    private int totalItems;
+    private string GenerateCardTooltip(Card card)
+    {
+        var tooltipLines = new List<string>
+    {
+        $"Name: {card.Name}",
+        $"Type: {card.Type}"
+    };
+        if (!string.IsNullOrWhiteSpace(card.Attribute))
+        {
+            tooltipLines.Add($"Attribute: {card.Attribute}");
+        }
+        if (card.Level.HasValue && card.Role != "Extra Deck")
+        {
+            tooltipLines.Add($"Level: {card.Level.Value}");
+        }
+        if (card.Level.HasValue && card.Role == "Extra Deck")
+        {
+            tooltipLines.Add($"Level/Rank: {card.Level.Value}");
+        }
+        if (card.Attack.HasValue || card.Defense.HasValue)
+        {
+            tooltipLines.Add($"ATK/DEF: {(card.Attack?.ToString() ?? "N/A")}/{(card.Defense?.ToString() ?? "N/A")}");
+        }
+        if (card.Scale.HasValue)
+        {
+            tooltipLines.Add($"Scale: {card.Scale.Value}");
+        }
+
+        tooltipLines.Add($"Archetype: {(card.Archetype != null ? string.Join(", ", card.Archetype) : "N/A")}");
+
+        return string.Join("\n", tooltipLines);
+    }
+
+
+
+
+
+
+    // --------------------------
+    // Statistics Code
+    // --------------------------
 
     private async Task CheckDeck()
     {
@@ -185,5 +241,102 @@ code {
     {
         supportedCards.Action += StateHasChanged;
         decklist.Action += StateHasChanged;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // --------------------------
+    // Card Search Code
+    // --------------------------
+
+    public void DecklistButton()
+    {
+        searchValues.Select = !searchValues.Select;
+        decklist.BuildDecklist(supportedCards);
+    }
+
+    public async void CardSearch()
+    {
+        searchValues.TotalItems = supportedCards.Cards
+            .Where(x => string.IsNullOrWhiteSpace(searchValues.SearchQuery) ? true : x.Name.Contains(searchValues.SearchQuery))
+            .Where(x => string.IsNullOrWhiteSpace(searchValues.ArchetypeQuery) ? true : x.Archetype.Contains(searchValues.ArchetypeQuery))
+            .Where(x => string.IsNullOrWhiteSpace(searchValues.TypeQuery) ? true : (searchValues.TypeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") : x.Type == searchValues.TypeQuery))
+            .Count();
+
+        searchValues.CurrentPage = 1;
+        await OnInitializedAsync();
+    }
+
+    public void IncreaseQuantity(Card card)
+    {
+        card.Quantity++;
+    }
+
+    public void DecreaseQuantity(Card card)
+    {
+        card.Quantity--;
+    }
+
+    private void NextPage()
+    {
+        if (searchValues.CurrentPage * searchValues.ItemsPerPage < searchValues.TotalItems)
+            searchValues.CurrentPage++;
+    }
+
+    private void PreviousPage()
+    {
+        if (searchValues.CurrentPage > 1)
+            searchValues.CurrentPage--;
+    }
+
+    private string GenerateYdk()
+    {
+        decklist.BuildDecklist(supportedCards);
+        var sb = new StringBuilder();
+
+        sb.AppendLine("#main");
+        foreach (var card in decklist.MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
+        {
+            sb.AppendLine(card.Id.ToString());
+        }
+
+        sb.AppendLine("#extra");
+        foreach (var card in decklist.ExtraDeck.Where(x => x.Id != 0))
+        {
+            sb.AppendLine(card.Id.ToString());
+        }
+
+        sb.AppendLine("!side");
+
+        return sb.ToString();
+    }
+
+    async Task SaveFile()
+    {
+        using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
+        var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
+
+        if (fileSaverResult.IsSuccessful)
+        {
+            await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show();
+        }
+        else
+        {
+            await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
+        }
     }
 }
