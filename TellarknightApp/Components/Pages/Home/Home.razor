@@ -5,18 +5,180 @@
 
 <div class="app-grid-container">
     <div class="item grid-statistics">
-        <StatisticsComponent UpdateState="UpdateState"></StatisticsComponent>
+        <StatisticsComponent DeckStatistics="@deckStatistics" DeckStatisticsHand="@deckStatisticsHand" StatValues="@statValues" HandTest="@handTest" CheckDeck="CheckDeck" CheckHand="CheckHand" ResetCards="ResetCards"></StatisticsComponent>
     </div>
     <div class="item grid-cards">
-        <CardsComponent UpdateState="UpdateState"></CardsComponent>
+        <CardsComponent></CardsComponent>
     </div>
 </div>
 
-@code {
+<!--
+code {
 
     public async Task UpdateState()
     {
         await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        supportedCards.Action += StateHasChanged;
+        decklist.Action += StateHasChanged;
+    }
+}
+-->
+@code{
+    public StatisticsComponentValues statValues = new StatisticsComponentValues();
+    private DeckStatistics deckStatistics = new DeckStatistics();
+    private DeckStatistics deckStatisticsHand = new DeckStatistics();
+    private GameState gameState = new GameState();
+    private GameState gameStateHand = new GameState();
+    private List<Card> handTest = new List<Card>()
+    {
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }, 
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+        new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
+    };
+
+    private async Task CheckDeck()
+    {
+        statValues.MaximumCount = (statValues.MaximumCount > 100000) ? 100000 : (statValues.MaximumCount < 5000 ? 5000 : statValues.MaximumCount);
+        statValues.StartingHand = (statValues.StartingHand < 1) ? 1 : (statValues.StartingHand > 6 ? 6 : statValues.StartingHand);
+
+        statValues.Idle = false;
+        statValues.Active = true;
+        statValues.CurrentCount = 0;
+        deckStatistics = new DeckStatistics();
+
+        int tempCount = 0;
+        int tempCountNext = (int)(statValues.MaximumCount * 0.001);
+        Random random = new Random();
+
+        decklist.BuildDecklist(supportedCards);
+        await InvokeAsync(StateHasChanged);
+
+        // Testing
+
+        // Main Loop
+        for (int i = 0; i < statValues.MaximumCount; i++)
+        {
+            gameState = RefreshGameState(gameState);
+            gameState = ShuffleDeck(gameState);
+            gameState = DrawHand(gameState);
+
+            // Check Hand & Deck For Optimal Searches
+            gameState = CardSearcher.CardSearch(gameState);
+
+            // Analyze Hand & Update Hand Statistics
+            deckStatistics = HandAnalyzer.HandCheck(gameState, deckStatistics);
+
+            // Visual updates
+            statValues.CurrentCount++;
+            tempCount++;
+            if (tempCount >= tempCountNext)
+            {
+                tempCountNext = tempCountNext + random.Next((int)(statValues.MaximumCount * 0.0005), (int)(statValues.MaximumCount * 0.015));
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        statValues.Active = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CheckHand()
+    {
+        statValues.StartingHand = (statValues.StartingHand < 1) ? 1 : (statValues.StartingHand > 6 ? 6 : statValues.StartingHand);
+
+        deckStatisticsHand = new DeckStatistics();
+        gameStateHand = new GameState();
+        handTest = new List<Card>();
+
+        decklist.BuildDecklist(supportedCards);
+        gameStateHand = RefreshGameState(gameStateHand);
+        gameStateHand = ShuffleDeck(gameStateHand);
+        gameStateHand = DrawHand(gameStateHand);
+
+        foreach(Card card in gameStateHand.Hand)
+        {
+            handTest.Add(card);
+        }
+
+        gameStateHand = CardSearcher.CardSearch(gameStateHand);
+        deckStatisticsHand = HandAnalyzer.HandCheck(gameStateHand, deckStatisticsHand);
+
+        statValues.HandTested = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    // Clears the gamestate and transfer decklist contents to gamestate
+    private GameState RefreshGameState(GameState gameStateInput)
+    {
+        gameStateInput = new GameState();
+        foreach (Card card in decklist.MainDeck)
+        {
+            gameStateInput.Deck.Add(card.Clone());
+        }
+        foreach (Card card in decklist.ExtraDeck)
+        {
+            gameStateInput.ExtraDeck.Add(card.Clone());
+        }
+        return gameStateInput;
+
+    }
+
+    // Shuffles the deck fisher-yates style
+    private GameState ShuffleDeck(GameState gameStateInput)
+    {
+        var random = new Random();
+        int deckCount = gameStateInput.Deck.Count;
+        for (int i = 0; i < 3; i++)
+        {
+            while (deckCount > 1)
+            {
+                deckCount--;
+                int randomIndex = random.Next(deckCount + 1);
+                var tempCard = gameStateInput.Deck[randomIndex];
+                gameStateInput.Deck[randomIndex] = gameStateInput.Deck[deckCount];
+                gameStateInput.Deck[deckCount] = tempCard;
+            }
+        }
+        return gameStateInput;
+
+    }
+
+    public GameState DrawHand(GameState gameStateInput)
+    {
+        for (int i = 0; i < statValues.StartingHand; i++)
+        {
+            gameStateInput.Hand.Add(gameStateInput.Deck[0]);
+            gameStateInput.Deck.RemoveAt(0);
+        }
+        return gameStateInput;
+    }
+
+    public void ResetCards()
+    {
+        statValues.CurrentCount = 0;
+        deckStatistics = new DeckStatistics();
+        deckStatisticsHand = new DeckStatistics();
+        gameState = new GameState();
+        gameStateHand = new GameState();
+        decklist = new Decklist();
+        statValues.HandTested = false;
+
+        handTest = new List<Card>()
+        {
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
+        };
+
+        supportedCards.RefreshUpdate();
+        statValues.Idle = true;
     }
 
     protected override async Task OnInitializedAsync()
