@@ -1,5 +1,8 @@
 ﻿@page "/deck"
 @inherits Components.BaseComponent
+@inject CardManager CardManager
+@inject StatisticsManager StatisticsManager
+@inject GameState GameState
 
 <div class="app-grid-container">
     <div class="item grid-search">
@@ -63,9 +66,9 @@
                     <div class="grid-item">
                         <img src="@card.Image" alt="@card.Name" class="item-image" title="@GenerateCardTooltip(card)" />
                         <div class="quantity-control">
-                            <button class="btn-quantity" @onclick="() => DecreaseQuantity.InvokeAsync(card)">-</button>
+                            <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
                             <input type="text" class="item-input" @bind="card.Quantity" />
-                            <button class="btn-quantity" @onclick="() => IncreaseQuantity.InvokeAsync(card)">+</button>
+                            <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
                         </div>
                     </div>
                 }
@@ -137,16 +140,8 @@
 
 
 @code {
-    //[Parameter]
-    //public EventCallback UpdateState { get; set; }
-    [Parameter]
     public SearchValues SearchValues { get; set; } = new SearchValues(); // temp
-    //[Parameter]
-    //public EventCallback<SearchComponentValues> CardSearch { get; set; }
-    public EventCallback NextPage { get; set; }
-    public EventCallback PreviousPage { get; set; }
-    public EventCallback IncreaseQuantity { get; set; }
-    public EventCallback DecreaseQuantity { get; set; }    
+ 
 
     private void HandleTypeChange(ChangeEventArgs e)
     {
@@ -179,5 +174,58 @@
         tooltipLines.Add($"Archetype: {(card.Archetype != null ? string.Join(", ", card.Archetype) : "N/A")}");
 
         return string.Join("\n", tooltipLines);
+    }
+
+    private List<string> optionsType = new List<string>
+    {
+        "Monster",
+        "Spell",
+        "Trap",
+    };
+
+
+
+    // --------------------------
+    // Card Search Code
+    // --------------------------
+
+    public void DecklistButton()
+    {
+        SearchValues.Select = !SearchValues.Select;
+        decklist.BuildDecklist(supportedCards);
+    }
+
+    public async void CardSearch()
+    {
+        SearchValues.TotalItems = supportedCards.Cards
+            .Where(x => string.IsNullOrWhiteSpace(SearchValues.SearchQuery) ? true : x.Name.Contains(SearchValues.SearchQuery))
+            .Where(x => string.IsNullOrWhiteSpace(SearchValues.ArchetypeQuery) ? true : x.Archetype.Contains(SearchValues.ArchetypeQuery))
+            .Where(x => string.IsNullOrWhiteSpace(SearchValues.TypeQuery) ? true : (SearchValues.TypeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Trap") : x.Type == SearchValues.TypeQuery))
+            .Count();
+
+        SearchValues.CurrentPage = 1;
+        await OnInitializedAsync();
+    }
+
+    public void IncreaseQuantity(Card card)
+    {
+        card.Quantity++;
+    }
+
+    public void DecreaseQuantity(Card card)
+    {
+        card.Quantity--;
+    }
+
+    private void NextPage()
+    {
+        if (SearchValues.CurrentPage * SearchValues.ItemsPerPage < SearchValues.TotalItems)
+            SearchValues.CurrentPage++;
+    }
+
+    private void PreviousPage()
+    {
+        if (SearchValues.CurrentPage > 1)
+            SearchValues.CurrentPage--;
     }
 }

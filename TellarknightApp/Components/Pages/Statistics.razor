@@ -1,5 +1,8 @@
 ﻿@page "/statistics"
 @inherits Components.BaseComponent
+@inject CardManager CardManager
+@inject StatisticsManager StatisticsManager
+@inject GameState GameState
 
 <div class="app-grid-container">
     <!-- Options & Start Button -->
@@ -11,7 +14,7 @@
             <div class="grid-options-2">
                 <div style="width: 100%; height: 100%; position: relative;">
                     <div style="width: 100%; background-color: transparent; height: 100%; position: absolute;"></div>
-                    <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatValues.StartingHand">
+                    <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.StartingHand">
                 </div>
             </div>
             <div class="grid-options-3">
@@ -19,23 +22,23 @@
             </div>
             <div class="grid-options-4">
                 <div style="width: 100%; height: 100%; position: relative;">
-                    <div style="width: @($"{(double)StatValues.CurrentCount / StatValues.MaximumCount * 100}%"); background-color: lightgreen; height: 100%; position: absolute;"></div>
-                    @if (StatValues.Active == true)
+                    <div style="width: @($"{(double)StatisticsManager.StatValues.CurrentCount / StatisticsManager.StatValues.MaximumCount * 100}%"); background-color: lightgreen; height: 100%; position: absolute;"></div>
+                    @if (StatisticsManager.StatValues.Active == true)
                     {
-                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatValues.CurrentCount" readonly>
+                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.CurrentCount" readonly>
                     }
                     else
                     {
-                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatValues.MaximumCount">
+                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.MaximumCount">
                     }
 
                 </div>
             </div>
             <div class="grid-options-5">
-                <button class="btn btn-danger" HorizontalOptions="Center" @onclick="@(() => ResetCards.InvokeAsync())">Reset</button>
+                <!--<button class="btn btn-danger" HorizontalOptions="Center" @onclick="@(() => ResetCards.InvokeAsync())">Reset</button>-->
             </div>
             <div class="grid-options-7">
-                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@(() => CheckDeck.InvokeAsync())">Check Deck</button>
+                <!--<button class="btn btn-primary" HorizontalOptions="Center" @onclick="@(() => CheckDeck.InvokeAsync())">Check Deck</button>-->
             </div>
         </div>
     </div>
@@ -47,17 +50,17 @@
                     <b>Basic Stats:</b>
                 </div>
                 <div>
-                    Deck Size: @(!StatValues.Idle ? decklist.MainDeck.Count() : 40) <br />
+                    Deck Size: @(!StatisticsManager.StatValues.Idle ? decklist.MainDeck.Count() : 40) <br />
 
                     Total Monsters: @decklist.MainDeck.Count(x => x.Level != null) <br />
 
-                    Combo Chance: @(!StatValues.Idle ? Math.Round(((StatValues.CurrentCount - DeckStatistics.BrickChance) / StatValues.CurrentCount) * 100, 2)
+                    Combo Chance: @(!StatisticsManager.StatValues.Idle ? Math.Round(((StatisticsManager.StatValues.CurrentCount - StatisticsManager.DeckStatistics.BrickChance) / StatisticsManager.StatValues.CurrentCount) * 100, 2)
                     : 0)% <br />
 
-                    Brick Chance: @(!StatValues.Idle ? Math.Round((DeckStatistics.BrickChance / StatValues.CurrentCount) * 100, 2)
+                    Brick Chance: @(!StatisticsManager.StatValues.Idle ? Math.Round((StatisticsManager.DeckStatistics.BrickChance / StatisticsManager.StatValues.CurrentCount) * 100, 2)
                     : 100)% <br />
 
-                    (1 In @(!StatValues.Idle ? Math.Round(StatValues.CurrentCount / (double)DeckStatistics.BrickChance, 2)
+                    (1 In @(!StatisticsManager.StatValues.Idle ? Math.Round(StatisticsManager.StatValues.CurrentCount / (double)StatisticsManager.DeckStatistics.BrickChance, 2)
                     : 1)) <br />
                 </div>
             </div>
@@ -66,19 +69,19 @@
                     <b>Summon Stats:</b>
                 </div>
                 <div>
-                    Xyz Summon (0 Tellars): @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.AverageXyzNoTellar / StatValues.CurrentCount) * 100, 2)}%"
+                    Xyz Summon (0 Tellars): @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.AverageXyzNoTellar / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
                     
-                    Xyz Summon (1 Tellars): @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.AverageXyzOneTellar / StatValues.CurrentCount) * 100, 2)}%"
+                    Xyz Summon (1 Tellars): @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.AverageXyzOneTellar / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
 
-                    Xyz Summon (2 Tellars): @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.AverageXyzTwoTellar / StatValues.CurrentCount) * 100, 2)}%"
+                    Xyz Summon (2 Tellars): @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.AverageXyzTwoTellar / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
 
-                    Pendulum Chance: @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.PendulumSummon / StatValues.CurrentCount) * 100, 2)}%"
+                    Pendulum Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.PendulumSummon / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
 
-                    Oracle Combo Chance: @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.OracleCombo / StatValues.CurrentCount) * 100, 2)}%"
+                    Oracle Combo Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.OracleCombo / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
 
                 </div>
@@ -88,13 +91,13 @@
                     <b>Hand Stats:</b>
                 </div>
                 <div>
-                    Average # Tellars: @(!StatValues.Idle ? $"{Math.Round(DeckStatistics.AverageTellars / StatValues.CurrentCount, 2)}"
+                    Average # Tellars: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round(StatisticsManager.DeckStatistics.AverageTellars / StatisticsManager.StatValues.CurrentCount, 2)}"
                     : "N/A") <br />
                     
-                    Average # Extenders: @(!StatValues.Idle ? $"{Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2)}"
+                    Average # Extenders: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round(StatisticsManager.DeckStatistics.AverageExtenders / StatisticsManager.StatValues.CurrentCount, 2)}"
                     : "N/A") <br />
 
-                    Average # Hand Traps: @(!StatValues.Idle ? $"{Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2)}"
+                    Average # Hand Traps: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round(StatisticsManager.DeckStatistics.AverageHandTraps / StatisticsManager.StatValues.CurrentCount, 2)}"
                     : "N/A") <br />
 
 
@@ -105,13 +108,13 @@
                     <b>Other Stats:</b>
                 </div>
                 <div>
-                    Isolde Brick Chance: @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.IsoldeBrick / StatValues.CurrentCount) * 100, 2)}%"
+                    Isolde Brick Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.IsoldeBrick / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
 
-                    Armored Brick Chance: @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.ArmoredBrick / StatValues.CurrentCount) * 100, 2)}%"
+                    Armored Brick Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.ArmoredBrick / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
                     
-                    Ryzeal Lock Chance: @(!StatValues.Idle ? $"{Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2)}%"
+                    Ryzeal Lock Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.RyzealLock / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
                     : "N/A") <br />
 
                 </div>
@@ -121,14 +124,14 @@
                 <div class="hand-test-container">
                     <!-- Button Section -->
                     <div class="card-button">
-                        <button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand.InvokeAsync())">Check Hand</button>
+                                    <!--<button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand.InvokeAsync())">Check Hand</button>-->
                         <text class="check-hand-text">
                             <b style="margin-right: 3px; font-size: clamp(6px, 1vw, 36px);">Result: </b>
-                            @if (StatValues.HandTested == true && DeckStatisticsHand.BrickChance != 0)
+                                        @if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance != 0)
                             {
                                 <text> Bricked!</text>
                             }
-                            else if (StatValues.HandTested == true && DeckStatisticsHand.BrickChance == 0)
+                                        else if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance == 0)
                             {
                                 <text> Success!</text>
                             }
@@ -140,14 +143,14 @@
                     </div>
                     <!-- Card Grid Section -->
                     <div class="card-container">
-                        @foreach (Card card in HandTest)
+                                    @foreach (Card card in StatisticsManager.StatValues.HandTest)
                         {
                             <div class="grid-item">
                                 <img src="@card.Image" alt="@card.Name" class="item-image" />
                             </div>
                         }
-
-                        @if (HandTest.Count == 5)
+                        
+                        @if (StatisticsManager.StatValues.HandTest.Count == 5)
                         {
                             <div class="grid-item">
                                 <img src="./CardArt/Empty.jpg" alt="Empty" class="item-image" />
@@ -162,18 +165,88 @@
 </div>
 
 @code{
-    [Parameter]
-    public EventCallback CheckDeck { get; set; }
-    [Parameter]
-    public EventCallback CheckHand { get; set; }
-    [Parameter]
-    public EventCallback ResetCards { get; set; }
-    [Parameter]
-    public StatValues StatValues { get; set; }
-    [Parameter]
-    public DeckStatistics DeckStatistics { get; set; }
-    [Parameter]
-    public DeckStatistics DeckStatisticsHand { get; set; }
-    [Parameter]
-    public List<Card> HandTest { get; set; }
+    // --------------------------
+    // Statistics Code
+    // --------------------------
+
+    private async Task CheckDeck()
+    {
+        StatisticsManager.StatValues.MaximumCount = (StatisticsManager.StatValues.MaximumCount > 100000) ? 100000 : (StatisticsManager.StatValues.MaximumCount < 5000 ? 5000 : StatisticsManager.StatValues.MaximumCount);
+        StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
+
+        StatisticsManager.StatValues.Idle = false;
+        StatisticsManager.StatValues.Active = true;
+        StatisticsManager.StatValues.CurrentCount = 0;
+        StatisticsManager.DeckStatistics = new DeckStatistics();
+
+        int tempCount = 0;
+        int tempCountNext = (int)(StatisticsManager.StatValues.MaximumCount * 0.001);
+        Random random = new Random();
+
+        decklist.BuildDecklist(supportedCards);
+        await InvokeAsync(StateHasChanged);
+
+        // Testing
+
+        // Main Loop
+        for (int i = 0; i < StatisticsManager.StatValues.MaximumCount; i++)
+        {
+            //GameState = RefreshGameState(GameState);
+            //GameState = ShuffleDeck(GameState);
+            //GameState = DrawHand(GameState);
+
+            // Check Hand & Deck For Optimal Searches
+            GameState = CardSearcher.CardSearch(GameState);
+
+            // Analyze Hand & Update Hand Statistics
+            StatisticsManager.DeckStatistics = HandAnalyzer.HandCheck(GameState, StatisticsManager.DeckStatistics);
+
+            // Visual updates
+            StatisticsManager.StatValues.CurrentCount++;
+            tempCount++;
+            if (tempCount >= tempCountNext)
+            {
+                tempCountNext = tempCountNext + random.Next((int)(StatisticsManager.StatValues.MaximumCount * 0.0005), (int)(StatisticsManager.StatValues.MaximumCount * 0.015));
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        StatisticsManager.StatValues.Active = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CheckHand()
+    {
+        /*
+        StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
+
+        StatisticsManager.eckStatisticsHand = new DeckStatistics();
+        GameStateHand = new GameState();
+        handTest = new List<Card>();
+
+        decklist.BuildDecklist(supportedCards);
+        GameStateHand = RefreshGameState(GameStateHand);
+        GameStateHand = ShuffleDeck(GameStateHand);
+        GameStateHand = DrawHand(GameStateHand);
+
+        foreach (Card card in GameStateHand.Hand)
+        {
+            handTest.Add(card);
+        }
+
+        GameStateHand = CardSearcher.CardSearch(GameStateHand);
+        deckStatisticsHand = HandAnalyzer.HandCheck(GameStateHand, deckStatisticsHand);
+
+        StatisticsManager.StatValues.HandTested = true;
+        await InvokeAsync(StateHasChanged);
+        */
+    }
+
+    // Resets everything to the start of the app
+    public void ResetCards()
+    {
+        StatisticsManager.RefreshStatistics();
+        CardManager.RefreshCards();
+        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
+        supportedCards.RefreshUpdate();
+    }
 }

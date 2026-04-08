@@ -6,7 +6,14 @@
     protected SupportedCards supportedCards { get; set; } = default!;
 
     [Inject]
-    protected Decklist decklist { get; set; } = default!;
+    protected Decklist decklist { get; set; } = default!; // old/delete
+
+    [Inject]
+    protected CardManager cardManager { get; set; } = default!;
+
+    [Inject]
+    protected StatisticsManager statisticsManager { get; set; } = default!;
+
     [Inject]
     protected IFileSaver fileSaver { get; set; } = default!;
 }

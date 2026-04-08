@@ -5,27 +5,34 @@ namespace TellarknightApp.Services
 {
     public class CardManager
     {
+        private readonly SupportedCards _supportedCards;
+
         public List<Card> MainDeck { get; set; }
         public List<Card> ExtraDeck { get; set; }
-        public GameState GameState { get; set; }
-        public GameState GameStateHand { get; set; }
         public SearchValues SearchValues { get; set; }
 
-
-        public CardManager()
+        public CardManager(SupportedCards supportedCards)
         {
+            _supportedCards = supportedCards;
+
             MainDeck = new List<Card>();
             ExtraDeck = new List<Card>();
-            GameState = new GameState();
-            GameStateHand = new GameState();
+            SearchValues = new SearchValues();
         }
 
-        public void BuildDecklist(SupportedCards supportedCards)
+        // Clears the statistics
+        public void RefreshCards()
+        {
+            SearchValues = new SearchValues();
+            BuildDecklist();
+        }
+
+        public void BuildDecklist()
         {
             MainDeck.Clear();
             ExtraDeck.Clear();
 
-            foreach (Card card in supportedCards.Cards)
+            foreach (Card card in _supportedCards.Cards)
             {
                 if (card.Quantity > 3 && card is not Level4 && card is not EmptyCard)
                 {
