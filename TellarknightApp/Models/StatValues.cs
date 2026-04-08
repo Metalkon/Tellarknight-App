@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TellarknightApp.Models
 {
-    public class StatisticsComponentValues
+    public class StatValues
     {
         public bool Active { get; set; }
         public int StartingHand { get; set; }
@@ -15,7 +15,7 @@ namespace TellarknightApp.Models
         public bool Idle { get; set; }
         public bool HandTested { get; set; }
 
-        public StatisticsComponentValues() 
+        public StatValues() 
         {
             Active = false;
             StartingHand = 5;

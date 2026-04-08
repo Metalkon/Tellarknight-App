@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Storage;
 using Microsoft.Extensions.Logging;
 using TellarknightApp.Models;
+using TellarknightApp.Services;
 
 namespace TellarknightApp
 {
@@ -19,13 +20,16 @@ namespace TellarknightApp
                 });
 
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddSingleton<IFileSaver>(FileSaver.Default);
             builder.Services
-                .AddSingleton<Decklist>()
-                .AddSingleton<SupportedCards>();
+                .AddSingleton<IFileSaver>(FileSaver.Default)
+                .AddSingleton<CardManager>()
+                .AddSingleton<StatisticsManager>()
+                .AddSingleton<SupportedCards>()
+                .AddSingleton<Decklist>(); // old/remove later
+
 
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
 

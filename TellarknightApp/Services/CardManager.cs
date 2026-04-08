@@ -1,18 +1,23 @@
 ﻿using TellarknightApp.Cards;
+using TellarknightApp.Models;
 
-namespace TellarknightApp.Models
+namespace TellarknightApp.Services
 {
-    // old will be replaced with cardmanager
-    public class Decklist
+    public class CardManager
     {
-        public event Action? Action;
         public List<Card> MainDeck { get; set; }
         public List<Card> ExtraDeck { get; set; }
+        public GameState GameState { get; set; }
+        public GameState GameStateHand { get; set; }
+        public SearchValues SearchValues { get; set; }
 
-        public Decklist()
+
+        public CardManager()
         {
             MainDeck = new List<Card>();
             ExtraDeck = new List<Card>();
+            GameState = new GameState();
+            GameStateHand = new GameState();
         }
 
         public void BuildDecklist(SupportedCards supportedCards)
@@ -45,7 +50,7 @@ namespace TellarknightApp.Models
             {
                 MainDeck.Add(new EmptyCard());
             }
-            Action?.Invoke();
+            //Action?.Invoke();
         }
     }
 }

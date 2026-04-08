@@ -1,12 +1,5 @@
-﻿@using TellarknightApp.Services
-@using TellarknightApp.Models
-@using CommunityToolkit.Maui
-@using System.Text
-@using CommunityToolkit.Maui.Storage
-@using CommunityToolkit.Maui.Alerts
-@inject SupportedCards supportedCards
-@inject Decklist decklist
-@inject IFileSaver FileSaver
+﻿@page "/deck"
+@inherits Components.BaseComponent
 
 <div class="app-grid-container">
     <div class="item grid-search">
@@ -15,7 +8,7 @@
                 <input id="SearchValues.SearchQuery" type="text" class="search-input" @bind="SearchValues.SearchQuery" />
             </div>
             <div class="size grid-search-2">
-                <button class="btn btn-primary" @onclick="() => CardSearch.InvokeAsync(SearchValues)">Search</button>
+                <!--<button class="btn btn-primary" @onclick="() => CardSearch.InvokeAsync(SearchValues)">Search</button>-->
             </div>
             <div class="grid-search-3">
                 <select @bind="SearchValues.TypeQuery" style="height: 100%; width: 100%;">
@@ -144,12 +137,12 @@
 
 
 @code {
+    //[Parameter]
+    //public EventCallback UpdateState { get; set; }
     [Parameter]
-    public EventCallback UpdateState { get; set; }
-    [Parameter]
-    public SearchComponentValues SearchValues { get; set; }
-    [Parameter]
-    public EventCallback<SearchComponentValues> CardSearch { get; set; }
+    public SearchValues SearchValues { get; set; } = new SearchValues(); // temp
+    //[Parameter]
+    //public EventCallback<SearchComponentValues> CardSearch { get; set; }
     public EventCallback NextPage { get; set; }
     public EventCallback PreviousPage { get; set; }
     public EventCallback IncreaseQuantity { get; set; }
@@ -157,13 +150,13 @@
 
     private void HandleTypeChange(ChangeEventArgs e)
     {
-        SearchValues.TypeQuery = e.Value?.ToString();
-        CardSearch.InvokeAsync(SearchValues);
+        //SearchValues.TypeQuery = e.Value?.ToString();
+        //CardSearch.InvokeAsync(SearchValues);
     }
     private void HandleArchetypeChange(ChangeEventArgs e)
     {
-        SearchValues.ArchetypeQuery = e.Value?.ToString();
-        CardSearch.InvokeAsync(SearchValues);
+        //SearchValues.ArchetypeQuery = e.Value?.ToString();
+        //CardSearch.InvokeAsync(SearchValues);
     }
 
     public static string GenerateCardTooltip(Card card)

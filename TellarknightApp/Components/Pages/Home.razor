@@ -1,17 +1,7 @@
 ﻿@page "/"
-@using TellarknightApp.Services
-@using TellarknightApp.Models
-@using CommunityToolkit.Maui
-@using System.Text
-@using CommunityToolkit.Maui.Storage
-@using CommunityToolkit.Maui.Alerts
-@using TellarknightApp.Components.Pages.Home.HomeComponents;
-@inject SupportedCards supportedCards
-@inject Decklist decklist
-@inject SupportedCards supportedCards
-@inject Decklist decklist
-@inject IFileSaver FileSaver
+@inherits Components.BaseComponent
 
+<!-- 
 <div class="app-grid-container">
     <div class="item grid-statistics">
         <StatisticsComponent DeckStatistics="@deckStatistics" DeckStatisticsHand="@deckStatisticsHand" StatValues="@statValues" HandTest="@handTest" CheckDeck="CheckDeck" CheckHand="CheckHand" ResetCards="ResetCards"></StatisticsComponent>
@@ -19,15 +9,9 @@
     <div class="item grid-cards">
         <CardsComponent SearchValues="@searchValues" CardSearch="CardSearch"></CardsComponent>
     </div>
-</div>
+</div>-->
 
 @code{
-    public StatisticsComponentValues statValues = new StatisticsComponentValues();
-    public SearchComponentValues searchValues { get; set; } = new SearchComponentValues();
-    private DeckStatistics deckStatistics = new DeckStatistics();
-    private DeckStatistics deckStatisticsHand = new DeckStatistics();
-    private GameState gameState = new GameState();
-    private GameState gameStateHand = new GameState();
     private List<Card> handTest = new List<Card>()
     {
         new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }, 
@@ -36,16 +20,6 @@
         new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
         new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
     };
-
-
-
-
-    [Parameter]
-    public EventCallback UpdateState { get; set; }
-    private string searchQuery = string.Empty;
-    private string typeQuery = string.Empty;
-    private string archetypeQuery = string.Empty;
-    private bool select = true;
     private List<string> optionsType = new List<string>
     {
         "Monster",
@@ -53,9 +27,6 @@
         "Trap",
     };
 
-    private int currentPage = 1;
-    private const int itemsPerPage = 30;
-    private int totalItems;
     private string GenerateCardTooltip(Card card)
     {
         var tooltipLines = new List<string>

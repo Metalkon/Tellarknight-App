@@ -1,6 +1,6 @@
 ﻿namespace TellarknightApp.Models
 {
-    public class SearchComponentValues
+    public class SearchValues
     {
         public string SearchQuery { get; set; }
         public string TypeQuery { get; set; }
@@ -11,7 +11,7 @@
         public int TotalItems { get; set; }
         public List<string> OptionsType { get; set; }
 
-        public SearchComponentValues() 
+        public SearchValues() 
         {
             SearchQuery = string.Empty;
             TypeQuery = string.Empty;

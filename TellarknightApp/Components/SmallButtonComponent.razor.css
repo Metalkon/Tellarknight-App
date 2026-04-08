@@ -1,0 +1,31 @@
+.display-btn {
+    width: 100px;
+    max-width: 20vw;
+    padding: 5px 0;
+    color: rgba(255,255,255,0.85);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    background: #2a2a2a;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+    .display-btn:hover {
+        background: #333333;
+        border-color: rgba(255, 255, 255, 0.55);
+        color: white;
+    }
+
+.display-sep {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 300;
+    font-size: 1rem;
+    user-select: none;
+}
+
+
+

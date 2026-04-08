@@ -1,5 +1,5 @@
-﻿@inject SupportedCards supportedCards
-@inject Decklist decklist
+﻿@page "/statistics"
+@inherits Components.BaseComponent
 
 <div class="app-grid-container">
     <!-- Options & Start Button -->
@@ -169,7 +169,7 @@
     [Parameter]
     public EventCallback ResetCards { get; set; }
     [Parameter]
-    public StatisticsComponentValues StatValues { get; set; }
+    public StatValues StatValues { get; set; }
     [Parameter]
     public DeckStatistics DeckStatistics { get; set; }
     [Parameter]
