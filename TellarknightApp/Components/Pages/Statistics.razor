@@ -50,9 +50,9 @@
                     <b>Basic Stats:</b>
                 </div>
                 <div>
-                    Deck Size: @(!StatisticsManager.StatValues.Idle ? decklist.MainDeck.Count() : 40) <br />
+                    Deck Size: @(!StatisticsManager.StatValues.Idle ? CardManager.MainDeck.Count() : 40) <br />
 
-                    Total Monsters: @decklist.MainDeck.Count(x => x.Level != null) <br />
+                    Total Monsters: @CardManager.MainDeck.Count(x => x.Level != null) <br />
 
                     Combo Chance: @(!StatisticsManager.StatValues.Idle ? Math.Round(((StatisticsManager.StatValues.CurrentCount - StatisticsManager.DeckStatistics.BrickChance) / StatisticsManager.StatValues.CurrentCount) * 100, 2)
                     : 0)% <br />
@@ -183,7 +183,7 @@
         int tempCountNext = (int)(StatisticsManager.StatValues.MaximumCount * 0.001);
         Random random = new Random();
 
-        decklist.BuildDecklist(supportedCards);
+        CardManager.BuildDecklist();
         await InvokeAsync(StateHasChanged);
 
         // Testing
@@ -223,7 +223,7 @@
         GameStateHand = new GameState();
         handTest = new List<Card>();
 
-        decklist.BuildDecklist(supportedCards);
+        CardManager.BuildDecklist(supportedCards);
         GameStateHand = RefreshGameState(GameStateHand);
         GameStateHand = ShuffleDeck(GameStateHand);
         GameStateHand = DrawHand(GameStateHand);
@@ -247,6 +247,6 @@
         StatisticsManager.RefreshStatistics();
         CardManager.RefreshCards();
         GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
-        supportedCards.RefreshUpdate();
+        //supportedCards.RefreshUpdate();
     }
 }

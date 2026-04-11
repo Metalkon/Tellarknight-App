@@ -18,7 +18,7 @@
             ArchetypeQuery = string.Empty;
             Select = true;
             CurrentPage = 1;
-            ItemsPerPage = 30;
+            ItemsPerPage = 21;
             TotalItems = 0;
 
             OptionsType = new List<string>()

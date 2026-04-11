@@ -10,6 +10,7 @@ namespace TellarknightApp.Services
         public List<Card> MainDeck { get; set; }
         public List<Card> ExtraDeck { get; set; }
         public SearchValues SearchValues { get; set; }
+        public List<Card> CardResults { get; set; }
 
         public CardManager(SupportedCards supportedCards)
         {
@@ -18,6 +19,7 @@ namespace TellarknightApp.Services
             MainDeck = new List<Card>();
             ExtraDeck = new List<Card>();
             SearchValues = new SearchValues();
+            CardResults = _supportedCards.Cards.ToList();
         }
 
         // Clears the statistics
@@ -59,5 +61,55 @@ namespace TellarknightApp.Services
             }
             //Action?.Invoke();
         }
+
+        public async Task Search()
+        {
+            var filtered = _supportedCards.Cards
+                .Where(x =>
+                    string.IsNullOrEmpty(SearchValues.SearchQuery) ||
+                    x.Name.ToLower().Contains(SearchValues.SearchQuery.ToLower()))
+
+                .Where(x =>
+                    string.IsNullOrEmpty(SearchValues.ArchetypeQuery) ||
+                    (x.Archetype != null && x.Archetype.Contains(SearchValues.ArchetypeQuery)))
+
+                .Where(x =>
+                    string.IsNullOrEmpty(SearchValues.TypeQuery) ||
+                    (SearchValues.TypeQuery == "Monster"
+                        ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap")
+                    : SearchValues.TypeQuery == "Spell (includes Field Spell)"
+                        ? (x.Type == "Spell" || x.Type == "Field Spell")
+                    : SearchValues.TypeQuery == "Extender"
+                        ? x.Role == "Extender"
+                    : SearchValues.TypeQuery == "Hand Trap"
+                        ? x.Role == "Hand Trap"
+                    : x.Type == SearchValues.TypeQuery))
+                .ToList();
+
+            SearchValues.TotalItems = filtered.Count;
+
+            CardResults = filtered
+                .Skip((SearchValues.CurrentPage - 1) * SearchValues.ItemsPerPage)
+                .Take(SearchValues.ItemsPerPage)
+                .ToList();
+        }
     }
 }
+
+/*
+            var filteredCards = CardManager.CardResults
+            .Where(x => string.IsNullOrWhiteSpace(CardManager.SearchValues.SearchQuery.ToLower()) || x.Name.ToLower().Contains(CardManager.SearchValues.SearchQuery.ToLower()))
+            .Where(x => string.IsNullOrWhiteSpace(CardManager.SearchValues.ArchetypeQuery) || x.Archetype.Contains(CardManager.SearchValues.ArchetypeQuery))
+            .Where(x => string.IsNullOrWhiteSpace(CardManager.SearchValues.TypeQuery) ||
+            (CardManager.SearchValues.TypeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap") :
+            (CardManager.SearchValues.TypeQuery == "Spell (includes Field Spell)" ? (x.Type == "Spell" || x.Type == "Field Spell") :
+            (CardManager.SearchValues.TypeQuery == "Extender" ? x.Role == "Extender" :
+            (CardManager.SearchValues.TypeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == CardManager.SearchValues.TypeQuery)))))
+            .ToList();
+
+
+            CardManager.SearchValues.TotalItems = filteredCards.Count;
+            var pagedCards = filteredCards
+            .Skip((CardManager.SearchValues.CurrentPage - 1) * CardManager.SearchValues.ItemsPerPage)
+            .Take(CardManager.SearchValues.ItemsPerPage);
+*/

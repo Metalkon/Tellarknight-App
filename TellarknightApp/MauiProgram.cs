@@ -25,8 +25,7 @@ namespace TellarknightApp
                 .AddSingleton<SupportedCards>()
                 .AddSingleton<CardManager>()
                 .AddSingleton<StatisticsManager>()
-                .AddSingleton<GameState>()
-                .AddSingleton<Decklist>(); // old/remove later
+                .AddSingleton<GameState>();
 
 
 #if DEBUG
