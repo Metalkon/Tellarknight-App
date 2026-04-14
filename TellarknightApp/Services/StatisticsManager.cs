@@ -32,6 +32,8 @@ namespace TellarknightApp.Services
             DeckStatistics = new DeckStatistics();
             DeckStatisticsHand = new DeckStatistics();
             DeckStatisticsRecord = new List<DeckStatistics>();
+            StatValues.CurrentCount = 0;
+            ActionRefresh?.Invoke();
         }
 
         public async Task CheckDeck(List<Card> mainDeck, List<Card> extraDeck)
@@ -69,6 +71,7 @@ namespace TellarknightApp.Services
                     DeckStatisticsRecord.Add(DeckStatistics.Clone());
                     nextCheckpoint += interval;
                     ActionRefresh?.Invoke();
+                    await Task.Yield(); // Releases the thread so Blazor can re-render
                 }
             }
 

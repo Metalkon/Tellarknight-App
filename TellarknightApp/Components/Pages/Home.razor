@@ -4,37 +4,23 @@
 @inject StatisticsManager StatisticsManager
 @inject GameState GameState
 
-<!-- 
-<div class="app-grid-container">
-    <div class="item grid-statistics">
-        <StatisticsComponent DeckStatistics="@deckStatistics" DeckStatisticsHand="@deckStatisticsHand" StatisticsManager.StatValues="@StatisticsManager.StatValues" HandTest="@handTest" CheckDeck="CheckDeck" CheckHand="CheckHand" ResetCards="ResetCards"></StatisticsComponent>
-    </div>
-    <div class="item grid-cards">
-        <CardsComponent SearchValues="@searchValues" CardSearch="CardSearch"></CardsComponent>
-    </div>
-</div>-->
+<br />
+<div >
+    <button class="btn btn-secondary" @onclick="SaveFile">Import YDK</button>
+    <button class="btn btn-secondary" @onclick="SaveFile">Export YDK</button>
+
+</div>
+<br />
+<div style="color: white;">
+    Updates/PatchNotes:
+</div>
 
 @code{
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
 
     protected override async Task OnInitializedAsync()
     {
         //supportedCards.Action += StateHasChanged;
-        //decklist.Action += StateHasChanged;
+        //CardManager.Action += StateHasChanged;
     }
 
 
@@ -55,19 +41,19 @@
 
     
 
-    /*private string GenerateYdk()
+    private string GenerateYdk()
     {
-        decklist.BuildDecklist(supportedCards);
+        CardManager.BuildDecklist();
         var sb = new StringBuilder();
 
         sb.AppendLine("#main");
-        foreach (var card in decklist.MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
+        foreach (var card in CardManager.MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
         {
             sb.AppendLine(card.Id.ToString());
         }
 
         sb.AppendLine("#extra");
-        foreach (var card in decklist.ExtraDeck.Where(x => x.Id != 0))
+        foreach (var card in CardManager.ExtraDeck.Where(x => x.Id != 0))
         {
             sb.AppendLine(card.Id.ToString());
         }
@@ -90,5 +76,5 @@
         {
             await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
         }
-    }*/
+    }
 }

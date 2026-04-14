@@ -5,138 +5,55 @@
 @inject GameState GameState
 
 <div class="app-grid-container">
-    <div class="item grid-search">
-        <div class="grid-search-container">
-            <div class="grid-search-1">
-                <input id="CardManager.SearchValues.SearchQuery" type="text" class="search-input" @bind="CardManager.SearchValues.SearchQuery" />
-            </div>
-            <div class="size grid-search-2">
-                <button class="btn btn-primary" @onclick="CardSearch">Search</button>
-            </div>
-            <div class="grid-search-3">
-                <select @bind="CardManager.SearchValues.TypeQuery" style="height: 100%; width: 100%;">
-                    <option value="">Type/Role</option>
-                    <option value="Monster">Monster</option>
-                    <option value="Spell">Spell</option>
-                    <option value="Trap">Trap</option>
-                    <option value="Extender">Extender</option>
-                    <option value="Hand Trap">Hand Trap</option>
-                </select>
-            </div>
-            <div class="grid-search-4">
-                <select @bind="CardManager.SearchValues.ArchetypeQuery" style="height: 100%; width: 100%;">
-                    <option value="">Archetype</option>
-                    <option value="None">None</option>
-                    <option value="Tellarknight">Tellarknight</option>
-                    <option value="Constellar">Constellar</option>
-                    <option value="Zefra">Zefra</option>
-                    <option value="SHS">SHS</option>
-                    <option value="Ryzeal">Ryzeal</option>
-                    <option value="Centur-Ion">Centur-Ion</option>
-                    <option value="Runick">Runick</option>
-                    <option value="Kashtira">Kashtira</option>
-                    <option value="Mathmech">Mathmech</option>
-                </select>
-            </div>
-        </div>
+
+    <div class="grid-search">
+        <SmallButtonComponent Text="Search" OnClick="@(() => navigationManager.NavigateTo("search"))" />
     </div>
 
     <div class="grid-cards">
+        <div class="card-container">
+            @foreach (Card card in CardManager.MainDeck)
+            {
+                <div class="grid-item">
+                    <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
+                </div>
+            }
 
-            <div class="card-container">
-                @foreach (Card card in CardManager.CardResults)
-                {
-                    <div class="grid-item">
-                        <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
-                        <div class="quantity-control">
-                            <button class="btn-quantity" @onclick="() => DecreaseQuantity(card)">-</button>
-                            <input type="text" class="item-input" @bind="card.Quantity" />
-                            <button class="btn-quantity" @onclick="() => IncreaseQuantity(card)">+</button>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div style="display: flex; justify-content: center;">
-                <hr style="width: 90%;" />
-            </div>
-
-            <div style="display: flex; justify-content: center; align-items: center;">
-                <button class="btn-primary"
-                        style="width: 12.5%; height: 40px;"
-                        @onclick="PreviousPage"
-                        disabled="@(CardManager.SearchValues.CurrentPage == 1)">
-                    Previous Page
-                </button>
-                <p style="font-size: clamp(12px, 1.5vw, 36px); margin: 0; line-height: 40px; padding: 0 2%;">
-                    @($"{CardManager.SearchValues.CurrentPage}/{(CardManager.SearchValues.TotalItems + CardManager.SearchValues.ItemsPerPage - 1) / CardManager.SearchValues.ItemsPerPage}")
-                </p>
-                <button class="btn-primary"
-                        style="width: 12.5%; height: 40px;"
-                        @onclick="NextPage"
-                        disabled="@(CardManager.SearchValues.CurrentPage * CardManager.SearchValues.ItemsPerPage >= CardManager.SearchValues.TotalItems)">
-                    Next Page
-                </button>
-            </div>
-
-            <div style="display: flex; justify-content: center;">
-                <hr style="width: 90%;" />
-            </div>
-        
-
+            @foreach (Card card in CardManager.ExtraDeck)
+            {
+                <div class="grid-item">
+                    <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
+                </div>
+            }
+        </div>
     </div>
+
 </div>
 
-
 @code {
+
     protected override async Task OnInitializedAsync()
     {
-        await CardSearch();
+        CardManager.BuildDecklist();
+        StatisticsManager.ActionRefresh += OnRefresh;
     }
 
-    public async Task CardSearch()
+    private async void OnRefresh()
     {
-        CardManager.SearchValues.CurrentPage = 1;
-        await CardManager.Search();
-        StateHasChanged();
-    }
-
-    public void IncreaseQuantity(Card card)
-    {
-        card.Quantity++;
-    }
-
-    public void DecreaseQuantity(Card card)
-    {
-        card.Quantity--;
-    }
-
-    private async Task NextPage()
-    {
-        if (CardManager.SearchValues.CurrentPage * CardManager.SearchValues.ItemsPerPage < CardManager.SearchValues.TotalItems)
-            CardManager.SearchValues.CurrentPage++;
-        await CardManager.Search();
-        StateHasChanged();
-    }
-
-    private async Task PreviousPage()
-    {
-        if (CardManager.SearchValues.CurrentPage > 1)
-            CardManager.SearchValues.CurrentPage--;
-        await CardManager.Search();
-        StateHasChanged();
+        CardManager.BuildDecklist();
+        await InvokeAsync(StateHasChanged);
     }
 
     public static string GenerateCardTooltip(Card card)
     {
-        var lines = new List<string> { $"Name: {card.Name}"};
+        var lines = new List<string> { $"Name: {card.Name}" };
 
         if (!string.IsNullOrEmpty(card.Type))
             lines.Add($"Type: {card.Type}");
         if (!string.IsNullOrEmpty(card.Attribute))
             lines.Add($"Attribute: {card.Attribute}");
         if (card.Level.HasValue)
-            lines.Add($"Level/Rank: {card.Level}");       
+            lines.Add($"Level/Rank: {card.Level}");
         if (card.Scale.HasValue)
             lines.Add($"Scale: {card.Scale}");
         if (card.Attack.HasValue || card.Defense.HasValue)
@@ -148,10 +65,5 @@
             lines.Add("Archetype: N/A");
 
         return string.Join("\n", lines);
-    }
-
-    public void DecklistButton()
-    {
-        // nav to decklist page or display a deck dropdown
     }
 }

@@ -35,8 +35,8 @@
                 </div>
             </div>
             <div class="grid-options-5">
-                <!--<button class="btn btn-danger" HorizontalOptions="Center" @onclick="@(() => ResetCards.InvokeAsync())">Reset</button>-->
-            </div>
+                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckHandOld">Check Hand</button>
+                </div>
             <div class="grid-options-7">
                 <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckDeck">Check Deck</button>
             </div>
@@ -126,7 +126,7 @@
                     <div class="card-button">
                                     <!--<button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand.InvokeAsync())">Check Hand</button>-->
                         <text class="check-hand-text">
-                            <b style="margin-right: 3px; font-size: clamp(6px, 1vw, 36px);">Result: </b>
+                            <b style="margin-right: 3px; font-size: clamp(12px, 1vw, 36px);">Result: </b>
                                         @if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance != 0)
                             {
                                 <text> Bricked!</text>
@@ -166,64 +166,25 @@
 
 @code{
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        StatisticsManager.ActionRefresh += StateHasChanged;
+        StatisticsManager.ActionRefresh += OnRefresh;
         CardManager.BuildDecklist();
+    }
+
+    private async void OnRefresh()
+    {
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task CheckDeck()
     {
-        await StatisticsManager.CheckDeck(CardManager.MainDeck, CardManager.ExtraDeck);
+        if(!StatisticsManager.StatValues.Active)
+            await StatisticsManager.CheckDeck(CardManager.MainDeck, CardManager.ExtraDeck);
     }
 
 
-    private async Task CheckDeckOld()
-    {
-        StatisticsManager.StatValues.MaximumCount = (StatisticsManager.StatValues.MaximumCount > 100000) ? 100000 : (StatisticsManager.StatValues.MaximumCount < 5000 ? 5000 : StatisticsManager.StatValues.MaximumCount);
-        StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
-
-        StatisticsManager.StatValues.Idle = false;
-        StatisticsManager.StatValues.Active = true;
-        StatisticsManager.StatValues.CurrentCount = 0;
-        StatisticsManager.DeckStatistics = new DeckStatistics();
-
-        int tempCount = 0;
-        int tempCountNext = (int)(StatisticsManager.StatValues.MaximumCount * 0.001);
-        Random random = new Random();
-
-        CardManager.BuildDecklist();
-        await InvokeAsync(StateHasChanged);
-
-        // Testing
-
-        // Main Loop
-        for (int i = 0; i < StatisticsManager.StatValues.MaximumCount; i++)
-        {
-            //GameState = RefreshGameState(GameState);
-            //GameState = ShuffleDeck(GameState);
-            //GameState = DrawHand(GameState);
-
-            // Check Hand & Deck For Optimal Searches
-            GameState = CardSearcher.CardSearch(GameState);
-
-            // Analyze Hand & Update Hand Statistics
-            StatisticsManager.DeckStatistics = HandAnalyzer.HandCheck(GameState, StatisticsManager.DeckStatistics);
-
-            // Visual updates
-            StatisticsManager.StatValues.CurrentCount++;
-            tempCount++;
-            if (tempCount >= tempCountNext)
-            {
-                tempCountNext = tempCountNext + random.Next((int)(StatisticsManager.StatValues.MaximumCount * 0.0005), (int)(StatisticsManager.StatValues.MaximumCount * 0.015));
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-        StatisticsManager.StatValues.Active = false;
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task CheckHand()
+    private async Task CheckHandOld()
     {
         /*
         StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
@@ -248,14 +209,5 @@
         StatisticsManager.StatValues.HandTested = true;
         await InvokeAsync(StateHasChanged);
         */
-    }
-
-    // Resets everything to the start of the app
-    public void ResetCards()
-    {
-        StatisticsManager.RefreshStatistics();
-        CardManager.RefreshCards();
-        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
-        //supportedCards.RefreshUpdate();
     }
 }

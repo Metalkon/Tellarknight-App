@@ -1,11 +1,25 @@
-@inject NavigationManager navigationManager
+@inherits Components.BaseComponent
+@inject CardManager CardManager
+@inject StatisticsManager StatisticsManager
+@inject GameState GameState
+@inject SupportedCards SupportedCards
 
-<nav class="nav-center">
+<nav class="nav-center" style="">
     <div>
         <SmallButtonComponent Text="Home" OnClick="@(() => navigationManager.NavigateTo("/"))" />
         <SmallButtonComponent Text="Stats" OnClick="@(() => navigationManager.NavigateTo("statistics"))" />
-        <SmallButtonComponent Text="Deck" OnClick="@(() => navigationManager.NavigateTo("deck"))" />
-        <SmallButtonComponent Text="Other" OnClick="@(() => navigationManager.NavigateTo("other"))" />
+        <SmallButtonComponent Text="Deck" OnClick="@(() => navigationManager.NavigateTo("search"))" />
+        <SmallButtonComponent CustomStyle="" Text="Reset" OnClick="ResetCards" />
     </div>
-
 </nav>
+
+@code{
+    public async Task ResetCards()
+    {
+        CardManager.RefreshCards();
+        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
+        SupportedCards.RefreshUpdate();
+        StatisticsManager.StatValues.Idle = true;
+        StatisticsManager.RefreshStatistics();
+    }
+}

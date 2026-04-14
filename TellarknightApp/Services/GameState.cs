@@ -65,8 +65,5 @@ namespace TellarknightApp.Services
                 }
             }
         }
-
-
-
     }
 }
