@@ -20,6 +20,8 @@ namespace TellarknightApp.Services
             ExtraDeck = new List<Card>();
             SearchValues = new SearchValues();
             CardResults = _supportedCards.Cards.ToList();
+
+            BuildDecklist();
         }
 
         // Clears the statistics

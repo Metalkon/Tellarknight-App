@@ -101,15 +101,6 @@
         StateHasChanged();
     }
 
-    private void HandleTypeChange(ChangeEventArgs e)
-    {
-        CardManager.SearchValues.TypeQuery = e.Value?.ToString();
-    }
-    private void HandleArchetypeChange(ChangeEventArgs e)
-    {
-        CardManager.SearchValues.ArchetypeQuery = e.Value?.ToString();
-    }
-
     public void IncreaseQuantity(Card card)
     {
         card.Quantity++;
@@ -159,23 +150,8 @@
         return string.Join("\n", lines);
     }
 
-
-
-
-
-    // --------------------------
-    // Card Search Code
-    // --------------------------
-
     public void DecklistButton()
     {
-        //CardManager.SearchValues.Select = !CardManager.SearchValues.Select;
-        //CardManager.BuildDecklist(supportedCards);
+        // nav to decklist page or display a deck dropdown
     }
-
-
-
-
-
-
 }

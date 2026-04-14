@@ -56,6 +56,11 @@ namespace TellarknightApp.Models
             return (Card)Activator.CreateInstance(this.GetType());
         }
 
+        public virtual Card CloneTest()
+        {
+            return (Card)MemberwiseClone();
+        }
+
         public (List<Card>, List<Card>, List<Card>) SearchSwap(List<Card> hand, List<Card> deck, List<Card> gy, Card card)
         {
             hand.Add(card);

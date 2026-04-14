@@ -38,7 +38,7 @@
                 <!--<button class="btn btn-danger" HorizontalOptions="Center" @onclick="@(() => ResetCards.InvokeAsync())">Reset</button>-->
             </div>
             <div class="grid-options-7">
-                <!--<button class="btn btn-primary" HorizontalOptions="Center" @onclick="@(() => CheckDeck.InvokeAsync())">Check Deck</button>-->
+                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckDeck">Check Deck</button>
             </div>
         </div>
     </div>
@@ -165,11 +165,20 @@
 </div>
 
 @code{
-    // --------------------------
-    // Statistics Code
-    // --------------------------
+
+    protected override async Task OnInitializedAsync()
+    {
+        StatisticsManager.ActionRefresh += StateHasChanged;
+        CardManager.BuildDecklist();
+    }
 
     private async Task CheckDeck()
+    {
+        await StatisticsManager.CheckDeck(CardManager.MainDeck, CardManager.ExtraDeck);
+    }
+
+
+    private async Task CheckDeckOld()
     {
         StatisticsManager.StatValues.MaximumCount = (StatisticsManager.StatValues.MaximumCount > 100000) ? 100000 : (StatisticsManager.StatValues.MaximumCount < 5000 ? 5000 : StatisticsManager.StatValues.MaximumCount);
         StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
