@@ -1,6 +1,7 @@
 ﻿using TellarknightApp.Cards;
+using TellarknightApp.Models;
 
-namespace TellarknightApp.Models
+namespace TellarknightApp.Services
 {
     public class SupportedCards
     {

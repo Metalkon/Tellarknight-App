@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Storage;
 using Microsoft.Extensions.Logging;
-using TellarknightApp.Models;
 using TellarknightApp.Services;
 
 namespace TellarknightApp

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using TellarknightApp.Components.Pages;
 using TellarknightApp.Models;
@@ -12,6 +13,7 @@ namespace TellarknightApp.Services
 
         public event Action? ActionRefresh;
         public StatValues StatValues { get; set; }
+        public DisplayValues DisplayValues { get; set; }
         public DeckStatistics DeckStatistics { get; set; }
         public DeckStatistics DeckStatisticsHand { get; set; }
         public List<DeckStatistics> DeckStatisticsRecord { get; set; }
@@ -21,6 +23,7 @@ namespace TellarknightApp.Services
             _gameState = gameState;
 
             StatValues = new StatValues();
+            DisplayValues = new DisplayValues();
             DeckStatistics = new DeckStatistics();
             DeckStatisticsHand = new DeckStatistics();
             DeckStatisticsRecord = new List<DeckStatistics>();
@@ -63,12 +66,10 @@ namespace TellarknightApp.Services
                 // Analyze Hand & Update Hand Statistics
                 HandAnalyzer.HandCheck(_gameState, DeckStatistics);
 
-                // Visual updates (old)
-                StatValues.CurrentCount++;
-
                 if (StatValues.CurrentCount == nextCheckpoint)
                 {
                     DeckStatisticsRecord.Add(DeckStatistics.Clone());
+                    UpdateValues(mainDeck, extraDeck);
                     nextCheckpoint += interval;
                     ActionRefresh?.Invoke();
                     await Task.Yield(); // Releases the thread so Blazor can re-render
@@ -92,6 +93,34 @@ namespace TellarknightApp.Services
 
 
             StatValues.Active = false;
+        }
+
+        public void UpdateValues(List<Card> mainDeck, List<Card> extraDeck)
+        {
+            DisplayValues.DeckSize = mainDeck.Count();
+            DisplayValues.TotalMonsters = mainDeck.Count(x => x.Level != null);
+
+            DisplayValues.BrickChance.Value = Math.Round((DeckStatistics.BrickChance / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.ComboChance.Value = Math.Round(100 - DisplayValues.BrickChance.Value, 2);
+            DisplayValues.BrickRate.Value = Math.Round(StatValues.CurrentCount / (double)DeckStatistics.BrickChance, 2);
+
+
+            DisplayValues.XyzSummonZero.Value = Math.Round((DeckStatistics.AverageXyzNoTellar / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.XyzSummonOne.Value = Math.Round((DeckStatistics.AverageXyzOneTellar / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.XyzSummonTwo.Value = Math.Round((DeckStatistics.AverageXyzTwoTellar / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.PendulumnChance.Value = Math.Round((DeckStatistics.PendulumSummon / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.OracleChance.Value = Math.Round((DeckStatistics.OracleCombo / StatValues.CurrentCount) * 100, 2);
+
+            DisplayValues.AverageHandTellars.Value = Math.Round(DeckStatistics.AverageTellars / StatValues.CurrentCount, 2);
+            DisplayValues.AverageHandExtenders.Value = Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2);
+            DisplayValues.AverageHandHT.Value = Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2);
+
+            DisplayValues.IsoldeBrickChance.Value = Math.Round((DeckStatistics.IsoldeBrick / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.ArmoredBrickChance.Value = Math.Round((DeckStatistics.ArmoredBrick / StatValues.CurrentCount) * 100, 2);
+            DisplayValues.RyzealLockChance.Value = Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2);
+
+
+
         }
     }
 }

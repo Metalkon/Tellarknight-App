@@ -3,6 +3,7 @@
 @inject CardManager CardManager
 @inject StatisticsManager StatisticsManager
 @inject GameState GameState
+@using System.Text.Json
 
 <div class="app-grid-container">
     <!-- Options & Start Button -->
@@ -50,18 +51,11 @@
                     <b>Basic Stats:</b>
                 </div>
                 <div>
-                    Deck Size: @(!StatisticsManager.StatValues.Idle ? CardManager.MainDeck.Count() : 40) <br />
-
-                    Total Monsters: @CardManager.MainDeck.Count(x => x.Level != null) <br />
-
-                    Combo Chance: @(!StatisticsManager.StatValues.Idle ? Math.Round(((StatisticsManager.StatValues.CurrentCount - StatisticsManager.DeckStatistics.BrickChance) / StatisticsManager.StatValues.CurrentCount) * 100, 2)
-                    : 0)% <br />
-
-                    Brick Chance: @(!StatisticsManager.StatValues.Idle ? Math.Round((StatisticsManager.DeckStatistics.BrickChance / StatisticsManager.StatValues.CurrentCount) * 100, 2)
-                    : 100)% <br />
-
-                    (1 In @(!StatisticsManager.StatValues.Idle ? Math.Round(StatisticsManager.StatValues.CurrentCount / (double)StatisticsManager.DeckStatistics.BrickChance, 2)
-                    : 1)) <br />
+                    Deck Size: @StatisticsManager.DisplayValues.DeckSize <br />
+                    Total Monsters: @StatisticsManager.DisplayValues.TotalMonsters <br />
+                    Combo Chance: @StatisticsManager.DisplayValues.ComboChance.Value% <br />
+                    Brick Chance: @StatisticsManager.DisplayValues.BrickChance.Value% <br />
+                    (1 In @StatisticsManager.DisplayValues.BrickRate.Value) <br />
                 </div>
             </div>
             <div class="grid-statistics-2">
@@ -69,21 +63,11 @@
                     <b>Summon Stats:</b>
                 </div>
                 <div>
-                    Xyz Summon (0 Tellars): @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.AverageXyzNoTellar / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-                    
-                    Xyz Summon (1 Tellars): @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.AverageXyzOneTellar / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-
-                    Xyz Summon (2 Tellars): @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.AverageXyzTwoTellar / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-
-                    Pendulum Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.PendulumSummon / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-
-                    Oracle Combo Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.OracleCombo / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-
+                    Xyz Summon (0 Tellars): @StatisticsManager.DisplayValues.XyzSummonZero.Value% <br />
+                    Xyz Summon (1 Tellars): @StatisticsManager.DisplayValues.XyzSummonOne.Value% <br />
+                    Xyz Summon (2 Tellars): @StatisticsManager.DisplayValues.XyzSummonTwo.Value% <br />
+                    Pendulum Chance: @StatisticsManager.DisplayValues.PendulumnChance.Value% <br />
+                    Oracle Combo Chance: @StatisticsManager.DisplayValues.OracleChance.Value% <br />
                 </div>
             </div>
             <div class="grid-statistics-3">
@@ -91,16 +75,9 @@
                     <b>Hand Stats:</b>
                 </div>
                 <div>
-                    Average # Tellars: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round(StatisticsManager.DeckStatistics.AverageTellars / StatisticsManager.StatValues.CurrentCount, 2)}"
-                    : "N/A") <br />
-                    
-                    Average # Extenders: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round(StatisticsManager.DeckStatistics.AverageExtenders / StatisticsManager.StatValues.CurrentCount, 2)}"
-                    : "N/A") <br />
-
-                    Average # Hand Traps: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round(StatisticsManager.DeckStatistics.AverageHandTraps / StatisticsManager.StatValues.CurrentCount, 2)}"
-                    : "N/A") <br />
-
-
+                    Average # Tellars: @StatisticsManager.DisplayValues.AverageHandTellars.Value <br />
+                    Average # Extenders: @StatisticsManager.DisplayValues.AverageHandExtenders.Value <br />
+                    Average # Hand Traps: @StatisticsManager.DisplayValues.AverageHandHT.Value <br />
                 </div>
             </div>
             <div class="grid-statistics-4">
@@ -108,17 +85,32 @@
                     <b>Other Stats:</b>
                 </div>
                 <div>
-                    Isolde Brick Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.IsoldeBrick / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-
-                    Armored Brick Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.ArmoredBrick / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-                    
-                    Ryzeal Lock Chance: @(!StatisticsManager.StatValues.Idle ? $"{Math.Round((StatisticsManager.DeckStatistics.RyzealLock / StatisticsManager.StatValues.CurrentCount) * 100, 2)}%"
-                    : "N/A") <br />
-
+                    Isolde Brick Chance: @StatisticsManager.DisplayValues.IsoldeBrickChance.Value% <br />
+                    Armored Brick Chance: @StatisticsManager.DisplayValues.ArmoredBrickChance.Value% <br />                    
+                    Ryzeal Lock Chance: @StatisticsManager.DisplayValues.RyzealLockChance.Value% <br />
                 </div>
             </div>
+
+            <!--
+            // Statistics Testing Only
+            <div style="height: 90%; color:blanchedalmond;">
+                <div>
+                    <p>CurrentCount: @StatisticsManager.StatValues.CurrentCount</p>
+                    <p>BrickChance: @StatisticsManager.DeckStatistics.BrickChance</p>
+                    <p>AverageTellars: @StatisticsManager.DeckStatistics.AverageTellars</p>
+                    <p>AverageXyzNoTellar: @StatisticsManager.DeckStatistics.AverageXyzNoTellar</p>
+                    <p>AverageXyzOneTellar: @StatisticsManager.DeckStatistics.AverageXyzOneTellar</p>
+                    <p>AverageXyzTwoTellar: @StatisticsManager.DeckStatistics.AverageXyzTwoTellar</p>
+                    <p>PendulumSummon: @StatisticsManager.DeckStatistics.PendulumSummon</p>
+                    <p>OracleCombo: @StatisticsManager.DeckStatistics.OracleCombo</p>
+                    <p>ZefraComboWithNormalAvailable: @StatisticsManager.DeckStatistics.ZefraComboWithNormalAvailable</p>
+                    <p>AverageHandTraps: @StatisticsManager.DeckStatistics.AverageHandTraps</p>
+                    <p>AverageExtenders: @StatisticsManager.DeckStatistics.AverageExtenders</p>
+                    <p>IsoldeBrick: @StatisticsManager.DeckStatistics.IsoldeBrick</p>
+                    <p>ArmoredBrick: @StatisticsManager.DeckStatistics.ArmoredBrick</p>
+                    <p>RyzealLock: @StatisticsManager.DeckStatistics.RyzealLock</p>
+                </div>
+            </div>-->
 
             <div class="grid-statistics-extra">
                 <div class="hand-test-container">
