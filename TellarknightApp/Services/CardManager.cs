@@ -1,4 +1,7 @@
-﻿using TellarknightApp.Cards;
+﻿using CommunityToolkit.Maui.Storage;
+using Microsoft.AspNetCore.Components;
+using System.Text;
+using TellarknightApp.Cards;
 using TellarknightApp.Models;
 
 namespace TellarknightApp.Services
@@ -95,23 +98,73 @@ namespace TellarknightApp.Services
                 .Take(SearchValues.ItemsPerPage)
                 .ToList();
         }
+
+        public async Task ExportYdk()
+        {
+            using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
+            var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
+        }
+
+        public async Task ImportYdk()
+        {
+            var YdkFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> { { DevicePlatform.WinUI, new[] { ".ydk" } } });
+
+            var result = await FilePicker.PickAsync(new PickOptions { FileTypes = YdkFileType });
+
+            if (result is null)
+                return;
+
+            using var stream = await result.OpenReadAsync();
+            using var reader = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+
+            ReadYdk(content);
+        }
+
+        private string GenerateYdk()
+        {
+            BuildDecklist();
+            var sb = new StringBuilder();
+
+            sb.AppendLine("#main");
+            foreach (var card in MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
+            {
+                sb.AppendLine(card.Id.ToString());
+            }
+
+            sb.AppendLine("#extra");
+            foreach (var card in ExtraDeck.Where(x => x.Id != 0))
+            {
+                sb.AppendLine(card.Id.ToString());
+            }
+
+            sb.AppendLine("!side");
+
+            return sb.ToString();
+        }
+
+        private void ReadYdk(string content)
+        {
+            RefreshCards();
+            _supportedCards.RefreshUpdate();
+
+            var lines = content.Split('\n');
+
+            foreach (var line in lines)
+            {
+                var isCardId = int.TryParse(line.Trim(), out int cardId);
+
+                if (!isCardId)
+                    continue;
+
+                var card = _supportedCards.Cards.FirstOrDefault(x => x.Id == cardId);
+
+                if (card != null)
+                    card.Quantity++;
+                else
+                    _supportedCards.Cards.FirstOrDefault(x => x is EmptyCard).Quantity++;
+            }
+        }
     }
 }
 
-/*
-            var filteredCards = CardManager.CardResults
-            .Where(x => string.IsNullOrWhiteSpace(CardManager.SearchValues.SearchQuery.ToLower()) || x.Name.ToLower().Contains(CardManager.SearchValues.SearchQuery.ToLower()))
-            .Where(x => string.IsNullOrWhiteSpace(CardManager.SearchValues.ArchetypeQuery) || x.Archetype.Contains(CardManager.SearchValues.ArchetypeQuery))
-            .Where(x => string.IsNullOrWhiteSpace(CardManager.SearchValues.TypeQuery) ||
-            (CardManager.SearchValues.TypeQuery == "Monster" ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap") :
-            (CardManager.SearchValues.TypeQuery == "Spell (includes Field Spell)" ? (x.Type == "Spell" || x.Type == "Field Spell") :
-            (CardManager.SearchValues.TypeQuery == "Extender" ? x.Role == "Extender" :
-            (CardManager.SearchValues.TypeQuery == "Hand Trap" ? x.Role == "Hand Trap" : x.Type == CardManager.SearchValues.TypeQuery)))))
-            .ToList();
-
-
-            CardManager.SearchValues.TotalItems = filteredCards.Count;
-            var pagedCards = filteredCards
-            .Skip((CardManager.SearchValues.CurrentPage - 1) * CardManager.SearchValues.ItemsPerPage)
-            .Take(CardManager.SearchValues.ItemsPerPage);
-*/

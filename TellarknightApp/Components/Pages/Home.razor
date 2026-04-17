@@ -27,82 +27,20 @@
 
 @code{
 
-    private readonly FilePickerFileType YdkFileType = new(
-    new Dictionary<DevicePlatform, IEnumerable<string>> {
-        { DevicePlatform.WinUI, new[] { ".ydk" } }
-    });
-
     protected override async Task OnInitializedAsync()
     {
         await NewsService.GetNewsAsync();
     }
-        
+
     async Task ExportYdk()
     {
-        using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
-        var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
+        await CardManager.ExportYdk();
     }
 
     async Task ImportYdk()
     {
-        var result = await FilePicker.PickAsync(new PickOptions { FileTypes = YdkFileType });
-
-        if (result is null)
-            return;
-
-        using var stream = await result.OpenReadAsync();
-        using var reader = new StreamReader(stream);
-        var content = await reader.ReadToEndAsync();
-
-        ReadYdk(content);
+        await CardManager.ImportYdk();
         navigationManager.NavigateTo("deck");
     }
 
-    private string GenerateYdk()
-    {
-        CardManager.BuildDecklist();
-        var sb = new StringBuilder();
-
-        sb.AppendLine("#main");
-        foreach (var card in CardManager.MainDeck.Where(x => x.Role != "Extra Deck" && x.Id != 0))
-        {
-            sb.AppendLine(card.Id.ToString());
-        }
-
-        sb.AppendLine("#extra");
-        foreach (var card in CardManager.ExtraDeck.Where(x => x.Id != 0))
-        {
-            sb.AppendLine(card.Id.ToString());
-        }
-
-        sb.AppendLine("!side");
-
-        return sb.ToString();
-    }
-
-    private void ReadYdk(string content)
-    {
-        CardManager.RefreshCards();
-        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
-        SupportedCards.RefreshUpdate();
-        StatisticsManager.StatValues.Idle = true;
-        StatisticsManager.RefreshStatistics();
-
-        var lines = content.Split('\n');
-
-        foreach (var line in lines)
-        {
-            var isCardId = int.TryParse(line.Trim(), out int cardId);
-
-            if (!isCardId)
-                continue;
-
-            var card = SupportedCards.Cards.FirstOrDefault(x => x.Id == cardId);
-
-            if (card != null)
-                card.Quantity++;
-            else
-                SupportedCards.Cards.FirstOrDefault(x => x is EmptyCard).Quantity++;
-        }
-    }
 }
