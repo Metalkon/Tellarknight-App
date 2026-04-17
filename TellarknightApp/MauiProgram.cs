@@ -19,6 +19,7 @@ namespace TellarknightApp
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddHttpClient<NewsService>();
             builder.Services
                 .AddSingleton<IFileSaver>(FileSaver.Default)
                 .AddSingleton<SupportedCards>()

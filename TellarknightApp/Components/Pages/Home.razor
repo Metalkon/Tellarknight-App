@@ -4,6 +4,8 @@
 @inject StatisticsManager StatisticsManager
 @inject GameState GameState
 @inject SupportedCards SupportedCards
+@inject NewsService NewsService
+
 
 <br />
 <div >
@@ -14,13 +16,27 @@
 <br />
 <div style="color: white;">
     Updates/PatchNotes:
+    @foreach (var entry in newsEntries)
+    {
+        <div>
+            <b>@entry.Header</b> | @entry.Version | @entry.Date
+            <p>@entry.Content</p>
+        </div>
+    }
 </div>
 
 @code{
+    public List<NewsEntry> newsEntries = new List<NewsEntry>();
+
     private readonly FilePickerFileType YdkFileType = new(
     new Dictionary<DevicePlatform, IEnumerable<string>> {
         { DevicePlatform.WinUI, new[] { ".ydk" } }
     });
+
+    protected override async Task OnInitializedAsync()
+    {
+        newsEntries = await NewsService.GetNewsAsync();
+    }
 
     async Task ExportYdk()
     {
