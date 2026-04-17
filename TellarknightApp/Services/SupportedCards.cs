@@ -1,10 +1,11 @@
 ﻿using TellarknightApp.Cards;
+using TellarknightApp.Models;
 
-namespace TellarknightApp.Models
+namespace TellarknightApp.Services
 {
     public class SupportedCards
     {
-        public event Action? Action;
+        //public event Action? Action;
         public List<Card> Cards { get; set; }
 
         public SupportedCards()
@@ -13,11 +14,11 @@ namespace TellarknightApp.Models
         }
 
         // Resets the Cards list
-        public async Task RefreshUpdate()
+        public void RefreshUpdate()
         {
             Cards.Clear();
             InitializeCards();
-            Action?.Invoke();
+            //Action?.Invoke();
         }
 
         private void InitializeCards()
@@ -28,7 +29,7 @@ namespace TellarknightApp.Models
                 new Level4(),
                 new Terraforming(),
                 new ReinforcementOfTheArmy(),
-                new SmallWorld(), // Incomplete
+                //new SmallWorld(), // Incomplete
                 new SeventhAscension(),
                 new SeventhTachyon(),
                 new Number104Masquerade(),

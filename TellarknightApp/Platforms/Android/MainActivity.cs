@@ -8,7 +8,7 @@ namespace TellarknightApp
         Theme = "@style/Maui.SplashTheme",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density,
-        ScreenOrientation = ScreenOrientation.SensorLandscape)] // Use SensorLandscape for both horizontal orientations
+        ScreenOrientation = ScreenOrientation.Portrait)]  // 👈 changed from SensorLandscape
     public class MainActivity : MauiAppCompatActivity
     {
     }

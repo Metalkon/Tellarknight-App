@@ -1,0 +1,205 @@
+﻿@page "/statistics"
+@inherits Components.BaseComponent
+@inject CardManager CardManager
+@inject StatisticsManager StatisticsManager
+@inject GameState GameState
+@using System.Text.Json
+
+<div class="app-grid-container">
+    <!-- Options & Start Button -->
+    <div class="item grid-options">
+        <div class="grid-options-container">
+            <div class="grid-options-1">
+                <b>Hand:</b>
+            </div>
+            <div class="grid-options-2">
+                <div style="width: 100%; height: 100%; position: relative;">
+                    <div style="width: 100%; background-color: transparent; height: 100%; position: absolute;"></div>
+                    <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.StartingHand">
+                </div>
+            </div>
+            <div class="grid-options-3">
+                <b>Sample:</b>
+            </div>
+            <div class="grid-options-4">
+                <div style="width: 100%; height: 100%; position: relative;">
+                    <div style="width: @($"{(double)StatisticsManager.StatValues.CurrentCount / StatisticsManager.StatValues.MaximumCount * 100}%"); background-color: lightgreen; height: 100%; position: absolute;"></div>
+                    @if (StatisticsManager.StatValues.Active == true)
+                    {
+                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.CurrentCount" readonly>
+                    }
+                    else
+                    {
+                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.MaximumCount">
+                    }
+
+                </div>
+            </div>
+            <div class="grid-options-5">
+                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckHandOld">Check Hand</button>
+                </div>
+            <div class="grid-options-7">
+                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckDeck">Check Deck</button>
+            </div>
+        </div>
+    </div>
+    <!-- Deck Statistics -->
+    <div class="item grid-statistics">
+        <div class="grid-statistics-container">
+            <div class="grid-statistics-1">
+                <div class="title">
+                    <b>Basic Stats:</b>
+                </div>
+                <div>
+                    Deck Size: @StatisticsManager.DisplayValues.DeckSize <br />
+                    Total Monsters: @StatisticsManager.DisplayValues.TotalMonsters <br />
+                    Combo Chance: @StatisticsManager.DisplayValues.ComboChance.Value% <br />
+                    Brick Chance: @StatisticsManager.DisplayValues.BrickChance.Value% <br />
+                    (1 In @StatisticsManager.DisplayValues.BrickRate.Value) <br />
+                </div>
+            </div>
+            <div class="grid-statistics-2">
+                <div class="title">
+                    <b>Summon Stats:</b>
+                </div>
+                <div>
+                    Xyz Summon (0 Tellars): @StatisticsManager.DisplayValues.XyzSummonZero.Value% <br />
+                    Xyz Summon (1 Tellars): @StatisticsManager.DisplayValues.XyzSummonOne.Value% <br />
+                    Xyz Summon (2 Tellars): @StatisticsManager.DisplayValues.XyzSummonTwo.Value% <br />
+                    Pendulum Chance: @StatisticsManager.DisplayValues.PendulumnChance.Value% <br />
+                    Oracle Combo Chance: @StatisticsManager.DisplayValues.OracleChance.Value% <br />
+                </div>
+            </div>
+            <div class="grid-statistics-3">
+                <div class="title">
+                    <b>Hand Stats:</b>
+                </div>
+                <div>
+                    Average # Tellars: @StatisticsManager.DisplayValues.AverageHandTellars.Value <br />
+                    Average # Extenders: @StatisticsManager.DisplayValues.AverageHandExtenders.Value <br />
+                    Average # Hand Traps: @StatisticsManager.DisplayValues.AverageHandHT.Value <br />
+                </div>
+            </div>
+            <div class="grid-statistics-4">
+                <div class="title">
+                    <b>Other Stats:</b>
+                </div>
+                <div>
+                    Isolde Brick Chance: @StatisticsManager.DisplayValues.IsoldeBrickChance.Value% <br />
+                    Armored Brick Chance: @StatisticsManager.DisplayValues.ArmoredBrickChance.Value% <br />                    
+                    Ryzeal Lock Chance: @StatisticsManager.DisplayValues.RyzealLockChance.Value% <br />
+                </div>
+            </div>
+
+            <!--
+            // Statistics Testing Only
+            <div style="height: 90%; color:blanchedalmond;">
+                <div>
+                    <p>CurrentCount: @StatisticsManager.StatValues.CurrentCount</p>
+                    <p>BrickChance: @StatisticsManager.DeckStatistics.BrickChance</p>
+                    <p>AverageTellars: @StatisticsManager.DeckStatistics.AverageTellars</p>
+                    <p>AverageXyzNoTellar: @StatisticsManager.DeckStatistics.AverageXyzNoTellar</p>
+                    <p>AverageXyzOneTellar: @StatisticsManager.DeckStatistics.AverageXyzOneTellar</p>
+                    <p>AverageXyzTwoTellar: @StatisticsManager.DeckStatistics.AverageXyzTwoTellar</p>
+                    <p>PendulumSummon: @StatisticsManager.DeckStatistics.PendulumSummon</p>
+                    <p>OracleCombo: @StatisticsManager.DeckStatistics.OracleCombo</p>
+                    <p>ZefraComboWithNormalAvailable: @StatisticsManager.DeckStatistics.ZefraComboWithNormalAvailable</p>
+                    <p>AverageHandTraps: @StatisticsManager.DeckStatistics.AverageHandTraps</p>
+                    <p>AverageExtenders: @StatisticsManager.DeckStatistics.AverageExtenders</p>
+                    <p>IsoldeBrick: @StatisticsManager.DeckStatistics.IsoldeBrick</p>
+                    <p>ArmoredBrick: @StatisticsManager.DeckStatistics.ArmoredBrick</p>
+                    <p>RyzealLock: @StatisticsManager.DeckStatistics.RyzealLock</p>
+                </div>
+            </div>-->
+
+            <div class="grid-statistics-extra">
+                <div class="hand-test-container">
+                    <!-- Button Section -->
+                    <div class="card-button">
+                                    <!--<button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand.InvokeAsync())">Check Hand</button>-->
+                        <text class="check-hand-text">
+                            <b style="margin-right: 3px; font-size: clamp(12px, 1vw, 36px);">Result: </b>
+                                        @if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance != 0)
+                            {
+                                <text> Bricked!</text>
+                            }
+                                        else if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance == 0)
+                            {
+                                <text> Success!</text>
+                            }
+                            else
+                            {
+                                <text> N/A</text>
+                            }
+                        </text>
+                    </div>
+                    <!-- Card Grid Section -->
+                    <div class="card-container">
+                                    @foreach (Card card in StatisticsManager.StatValues.HandTest)
+                        {
+                            <div class="grid-item">
+                                <img src="@card.Image" alt="@card.Name" class="item-image" />
+                            </div>
+                        }
+                        
+                        @if (StatisticsManager.StatValues.HandTest.Count == 5)
+                        {
+                            <div class="grid-item">
+                                <img src="./CardArt/Empty.jpg" alt="Empty" class="item-image" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code{
+
+    protected override void OnInitialized()
+    {
+        StatisticsManager.ActionRefresh += OnRefresh;
+        CardManager.BuildDecklist();
+    }
+
+    private async void OnRefresh()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CheckDeck()
+    {
+        if(!StatisticsManager.StatValues.Active)
+            await StatisticsManager.CheckDeck(CardManager.MainDeck, CardManager.ExtraDeck);
+    }
+
+
+    private async Task CheckHandOld()
+    {
+        /*
+        StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
+
+        StatisticsManager.eckStatisticsHand = new DeckStatistics();
+        GameStateHand = new GameState();
+        handTest = new List<Card>();
+
+        CardManager.BuildDecklist(supportedCards);
+        GameStateHand = RefreshGameState(GameStateHand);
+        GameStateHand = ShuffleDeck(GameStateHand);
+        GameStateHand = DrawHand(GameStateHand);
+
+        foreach (Card card in GameStateHand.Hand)
+        {
+            handTest.Add(card);
+        }
+
+        GameStateHand = CardSearcher.CardSearch(GameStateHand);
+        deckStatisticsHand = HandAnalyzer.HandCheck(GameStateHand, deckStatisticsHand);
+
+        StatisticsManager.StatValues.HandTested = true;
+        await InvokeAsync(StateHasChanged);
+        */
+    }
+}

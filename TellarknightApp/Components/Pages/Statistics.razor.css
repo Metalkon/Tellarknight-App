@@ -80,7 +80,7 @@
 
 .grid-statistics-1, .grid-statistics-2, .grid-statistics-3, .grid-statistics-4 {
     white-space: nowrap;
-    font-size: clamp(6px, 1vw, 24px);
+    font-size: clamp(12px, 1vw, 24px);
     padding-left: 5%;
     padding-top: 3%;
     padding-right: 2%;
@@ -150,7 +150,7 @@
 
 .grid-options-1, .grid-options-2, .grid-options-3, .grid-options-4, .grid-options-5, .grid-options-6, .grid-options-7 {
     white-space: nowrap;
-    font-size: clamp(6px, 1vw, 24px);
+    font-size: clamp(12px, 1vw, 24px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -160,7 +160,7 @@
     white-space: nowrap;
     height: 100%;
     width: 100%;
-    font-size: clamp(6px, 1vw, 36px);
+    font-size: clamp(12px, 1vw, 36px);
 }
 
 /* Hand Test */
@@ -182,7 +182,7 @@
 
 .check-hand-text {
     display: flex;
-    font-size: clamp(6px, 1vw, 24px);
+    font-size: clamp(12px, 1vw, 24px);
     color: black;
     white-space: nowrap;
     display: flex;

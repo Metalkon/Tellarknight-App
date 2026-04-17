@@ -19,7 +19,10 @@ namespace TellarknightApp
             var window = base.CreateWindow(activationState);
             window.Title = $"Tellarknight Statistics v{version}";
 
+            window.Width = 640;
+            window.Height = 800;
             return window;
+
         }
     }
 }

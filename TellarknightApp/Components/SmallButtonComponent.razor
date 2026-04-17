@@ -1,0 +1,9 @@
+﻿<button class="display-btn" style="@CustomStyle" @onclick="OnClick">
+    @Text
+</button>
+
+@code {
+    [Parameter] public string Text { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public string CustomStyle { get; set; }
+}

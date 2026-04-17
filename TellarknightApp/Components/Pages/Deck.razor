@@ -1,0 +1,69 @@
+﻿@page "/deck"
+@inherits Components.BaseComponent
+@inject CardManager CardManager
+@inject StatisticsManager StatisticsManager
+@inject GameState GameState
+
+<div class="app-grid-container">
+
+    <div class="grid-search">
+        <SmallButtonComponent Text="Search" OnClick="@(() => navigationManager.NavigateTo("search"))" />
+    </div>
+
+    <div class="grid-cards">
+        <div class="card-container">
+            @foreach (Card card in CardManager.MainDeck)
+            {
+                <div class="grid-item">
+                    <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
+                </div>
+            }
+
+            @foreach (Card card in CardManager.ExtraDeck)
+            {
+                <div class="grid-item">
+                    <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        CardManager.BuildDecklist();
+        StatisticsManager.ActionRefresh += OnRefresh;
+    }
+
+    private async void OnRefresh()
+    {
+        CardManager.BuildDecklist();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public static string GenerateCardTooltip(Card card)
+    {
+        var lines = new List<string> { $"Name: {card.Name}" };
+
+        if (!string.IsNullOrEmpty(card.Type))
+            lines.Add($"Type: {card.Type}");
+        if (!string.IsNullOrEmpty(card.Attribute))
+            lines.Add($"Attribute: {card.Attribute}");
+        if (card.Level.HasValue)
+            lines.Add($"Level/Rank: {card.Level}");
+        if (card.Scale.HasValue)
+            lines.Add($"Scale: {card.Scale}");
+        if (card.Attack.HasValue || card.Defense.HasValue)
+            lines.Add($"ATK/DEF: {card.Attack.Value.ToString()}/{card.Defense.Value.ToString()}");
+
+        if (card.Archetype != null && card.Archetype.Count > 0)
+            lines.Add($"Archetype: {string.Join(", ", card.Archetype)}");
+        else
+            lines.Add("Archetype: N/A");
+
+        return string.Join("\n", lines);
+    }
+}

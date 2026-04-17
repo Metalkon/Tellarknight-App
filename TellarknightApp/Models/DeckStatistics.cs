@@ -22,5 +22,25 @@ namespace TellarknightApp.Models
         public float ArmoredBrick { get; set; } = 0;
         public float RyzealLock { get; set; } = 0;
 
+
+        public DeckStatistics Clone()
+        {
+            return new DeckStatistics
+            {
+                BrickChance = this.BrickChance,
+                AverageTellars = this.AverageTellars,
+                AverageXyzNoTellar = this.AverageXyzNoTellar,
+                AverageXyzOneTellar = this.AverageXyzOneTellar,
+                AverageXyzTwoTellar = this.AverageXyzTwoTellar,
+                PendulumSummon = this.PendulumSummon,
+                OracleCombo = this.OracleCombo,
+                ZefraComboWithNormalAvailable = this.ZefraComboWithNormalAvailable,
+                AverageHandTraps = this.AverageHandTraps,
+                AverageExtenders = this.AverageExtenders,
+                IsoldeBrick = this.IsoldeBrick,
+                ArmoredBrick = this.ArmoredBrick,
+                RyzealLock = this.RyzealLock
+            };
+        }
     }
 }

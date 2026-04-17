@@ -74,17 +74,12 @@
 
 .grid-search-5 {
     grid-row: 1 / span 2;
-    grid-column: 4 / span 1;
-}
-
-.grid-search-6 {
-    grid-row: 1 / span 2;
-    grid-column: 5 / span 1;
+    grid-column: 4 / span 2;
 }
 
 .grid-search-1, .grid-search-2, .grid-search-3, .grid-search-4, .grid-search-5, .grid-search-6 {
     white-space: nowrap;
-    font-size: clamp(6px, 1vw, 24px);
+    font-size: clamp(12px, 1vw, 24px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,7 +89,7 @@
     white-space: nowrap;
     height: 100%;
     width: 100%;
-    font-size: clamp(6px, 1vw, 32px);
+    font-size: clamp(12px, 1vw, 32px);
 }
 
 /* Card Display */
