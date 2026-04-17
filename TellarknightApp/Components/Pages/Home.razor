@@ -3,11 +3,12 @@
 @inject CardManager CardManager
 @inject StatisticsManager StatisticsManager
 @inject GameState GameState
+@inject SupportedCards SupportedCards
 
 <br />
 <div >
-    <button class="btn btn-secondary" @onclick="SaveFile">Import YDK</button>
-    <button class="btn btn-secondary" @onclick="SaveFile">Export YDK</button>
+    <button class="btn btn-secondary" @onclick="ImportYdk">Import YDK</button>
+    <button class="btn btn-secondary" @onclick="ExportYdk">Export YDK</button>
 
 </div>
 <br />
@@ -16,30 +17,31 @@
 </div>
 
 @code{
+    private readonly FilePickerFileType YdkFileType = new(
+    new Dictionary<DevicePlatform, IEnumerable<string>> {
+        { DevicePlatform.WinUI, new[] { ".ydk" } }
+    });
 
-    protected override async Task OnInitializedAsync()
+    async Task ExportYdk()
     {
-        //supportedCards.Action += StateHasChanged;
-        //CardManager.Action += StateHasChanged;
+        using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
+        var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
     }
 
+    async Task ImportYdk()
+    {
+        var result = await FilePicker.PickAsync(new PickOptions { FileTypes = YdkFileType });
 
+        if (result is null)
+            return;
 
+        using var stream = await result.OpenReadAsync();
+        using var reader = new StreamReader(stream);
+        var content = await reader.ReadToEndAsync();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+        ReadYdk(content);
+        navigationManager.NavigateTo("deck");
+    }
 
     private string GenerateYdk()
     {
@@ -63,18 +65,29 @@
         return sb.ToString();
     }
 
-    async Task SaveFile()
+    private void ReadYdk(string content)
     {
-        using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
-        var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
+        CardManager.RefreshCards();
+        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
+        SupportedCards.RefreshUpdate();
+        StatisticsManager.StatValues.Idle = true;
+        StatisticsManager.RefreshStatistics();
 
-        if (fileSaverResult.IsSuccessful)
+        var lines = content.Split('\n');
+
+        foreach (var line in lines)
         {
-            await Toast.Make($"The file was saved successfully to location: {fileSaverResult.FilePath}").Show();
-        }
-        else
-        {
-            await Toast.Make($"The file was not saved successfully with error: {fileSaverResult.Exception.Message}").Show();
+            var isCardId = int.TryParse(line.Trim(), out int cardId);
+
+            if (!isCardId)
+                continue;
+
+            var card = SupportedCards.Cards.FirstOrDefault(x => x.Id == cardId);
+
+            if (card != null)
+                card.Quantity++;
+            else
+                SupportedCards.Cards.FirstOrDefault(x => x is EmptyCard).Quantity++;
         }
     }
 }
