@@ -7,23 +7,30 @@ namespace TellarknightApp.Services
 {
     public class NewsService
     {
-        private readonly HttpClient _http;
-        private const string SheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSucAIVLHb6_L10XKCrEkLA270gF0eljGACEe2umn8Y6iDR3CSMRCKFaUPWuEvBKphFTo7woE5RDUWb/pub?output=csv";
+        public List<NewsEntry> Entries { get; set; } 
 
-        public NewsService(HttpClient http) => _http = http;
-
-        public async Task<List<NewsEntry>> GetNewsAsync()
+        public NewsService()
         {
-            var csv = await _http.GetStringAsync(SheetUrl);
+            Entries = new List<NewsEntry>();
+        }
+
+        public async Task GetNewsAsync()
+        {
+            if (Entries.Count > 0) 
+                return;
+
+            Entries.Clear();
+            HttpClient client = new HttpClient();
+            var csv = await client.GetStringAsync("https://docs.google.com/spreadsheets/d/e/2PACX-1vSucAIVLHb6_L10XKCrEkLA270gF0eljGACEe2umn8Y6iDR3CSMRCKFaUPWuEvBKphFTo7woE5RDUWb/pub?output=csv");
 
             var lines = csv.Split('\n');
-            var entries = new List<NewsEntry>();
 
             for (int i = 1; i < lines.Length; i++)
             {
                 var cols = lines[i].Trim().Split(',');
 
-                if (cols.Length < 4) continue;
+                if (cols.Length < 4) 
+                    continue;
 
                 var entry = new NewsEntry
                 {
@@ -33,10 +40,8 @@ namespace TellarknightApp.Services
                     Content = cols[3]
                 };
 
-                entries.Add(entry);
+                Entries.Add(entry);
             }
-
-            return entries;
         }
     }
 }

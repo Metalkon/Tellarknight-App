@@ -16,7 +16,7 @@
 <br />
 <div style="color: white;">
     Updates/PatchNotes:
-    @foreach (var entry in newsEntries)
+    @foreach (var entry in NewsService.Entries)
     {
         <div>
             <b>@entry.Header</b> | @entry.Version | @entry.Date
@@ -26,7 +26,6 @@
 </div>
 
 @code{
-    public List<NewsEntry> newsEntries = new List<NewsEntry>();
 
     private readonly FilePickerFileType YdkFileType = new(
     new Dictionary<DevicePlatform, IEnumerable<string>> {
@@ -35,9 +34,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        newsEntries = await NewsService.GetNewsAsync();
+        await NewsService.GetNewsAsync();
     }
-
+        
     async Task ExportYdk()
     {
         using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
