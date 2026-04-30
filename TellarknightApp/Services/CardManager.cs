@@ -152,6 +152,10 @@ namespace TellarknightApp.Services
 
             foreach (var line in lines)
             {
+
+                if (line.Trim().Equals("!side", StringComparison.OrdinalIgnoreCase))
+                    break;
+
                 var isCardId = int.TryParse(line.Trim(), out int cardId);
 
                 if (!isCardId)
