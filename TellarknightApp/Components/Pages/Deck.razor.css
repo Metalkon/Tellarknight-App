@@ -7,7 +7,7 @@
     display: grid;
     grid-template-rows: minmax(0, 1fr) minmax(0, 8fr);
     grid-template-columns: minmax(0, 1fr);
-    grid-gap: 10px;
+    row-gap: 10px;
     height: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -19,15 +19,10 @@
     box-sizing: border-box;
 }
 
-.grid-search {
-    grid-row: 1 / span 1;
-    grid-column: 1 / span 1;
-    background-color: white;
+.center {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
-    border-radius: 5px;
 }
 
 .grid-cards {
@@ -40,45 +35,58 @@
 
 /* Search Display */
 
-.grid-search-container {
+.grid-menu-container {
     display: grid;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-columns: repeat(6, 1fr);
-    box-sizing: border-box;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5px;
+    height: 100%;
+    width: 100%;
     padding: 5px;
-    grid-gap: 1%;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: white;
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
+}
+
+.item {
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.grid-menu-1 {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 1;
     height: 100%;
     width: 100%;
+    /*background-color: white;*/
 }
 
-.grid-search-1 {
-    grid-row: 1 / span 2;
-    grid-column: 1 / span 2;
-}
-
-.grid-search-2 {
-    grid-row: 1 / span 2;
-    grid-column: 3 / span 2;
-}
-
-.grid-search-3 {
-    grid-row: 1 / span 2;
-    grid-column: 5 / span 2;
-}
-
-.grid-search-1, .grid-search-2, .grid-search-3 {
-    white-space: nowrap;
-    font-size: clamp(12px, 1vw, 24px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-primary, .btn-danger,.btn-secondary, .search-input {
-    white-space: nowrap;
+.grid-menu-2 {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-row: 1 / span 1;
+    grid-column: 2 / span 1;
     height: 100%;
     width: 100%;
-    font-size: clamp(12px, 1vw, 32px);
+    /*background-color: white;*/
+}
+
+.grid-menu-3 {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    grid-row: 1 / span 1;
+    grid-column: 3 / span 1;
+    height: 100%;
+    width: 100%;
+    /*background-color: white;*/
 }
 
 /* Card Display */
@@ -131,3 +139,36 @@
     .btn-quantity:hover {
         background-color: #e0e0e0;
     }
+
+.ydk-backdrop {
+    position: fixed;
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80vw;
+    max-width: 800px; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.ydk-button-row {
+    display: flex;
+    gap: 1%;
+}
+
+.ydk-button {
+    flex: 1; 
+    min-width: 0; 
+}
+
+ydk-text {
+    white-space: nowrap;
+    font-size: clamp(0.7rem, 1.2vw, 1rem);
+}

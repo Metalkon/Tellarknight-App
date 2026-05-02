@@ -8,10 +8,9 @@ html, body {
     display: grid;
     grid-template-rows: 1fr minmax(40px, 10vh);
     grid-template-columns: 100%;
-    padding-top: 5px;
-    padding-bottom: 5px;
     height: 100vh;
     width: 100%;
+    padding: 5px;
     box-sizing: border-box;
 }
 

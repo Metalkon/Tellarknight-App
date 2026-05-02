@@ -6,13 +6,6 @@
 @inject SupportedCards SupportedCards
 @inject NewsService NewsService
 
-
-<br />
-<div >
-    <button class="btn btn-secondary" @onclick="ImportYdk">Import YDK</button>
-    <button class="btn btn-secondary" @onclick="ExportYdk">Export YDK</button>
-
-</div>
 <br />
 <div style="color: white;">
     Updates/PatchNotes:
@@ -31,16 +24,4 @@
     {
         await NewsService.GetNewsAsync();
     }
-
-    async Task ExportYdk()
-    {
-        await CardManager.ExportYdk();
-    }
-
-    async Task ImportYdk()
-    {
-        await CardManager.ImportYdk();
-        navigationManager.NavigateTo("deck");
-    }
-
 }

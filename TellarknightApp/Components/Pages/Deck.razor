@@ -5,20 +5,19 @@
 @inject GameState GameState
 
 <div class="app-grid-container">
-    <div class="item grid-search">
-        <div class="grid-search-container">
-            <div class="grid-search-1">
-                <button class="btn btn-danger" @onclick=@(() => navigationManager.NavigateTo("search"))>Search</button>
+        <div class="grid-menu-container">
+            <div class="grid-menu-1">
+            <button class="btn btn-primary" @onclick="() => YdkMenuButton(true)">YDK Menu</button>
+                <!--<button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("search"))>YDK Import/Export</button>-->
             </div>
-            <div class="size grid-search-2">
-                <button class="btn btn-danger" @onclick=@(() => navigationManager.NavigateTo("search"))>Search</button>
+            <div class="grid-menu-2">
+                <button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("search"))>Clear Unsupported</button>
             </div>
-            <div class="grid-search-3">
-                <!-- />-->
-                <SmallButtonComponent Text="Search" OnClick="@(() => navigationManager.NavigateTo("search"))"/>
+            <div class="grid-menu-3">
+            <button class="btn btn-danger" @onclick=@(() => navigationManager.NavigateTo("search"))>Search</button>
+
             </div>
         </div>
-    </div>
 
 
     <div class="grid-cards">
@@ -38,15 +37,39 @@
             }
         </div>
     </div>
+    @if (showYdk)
+    {
+        <div class="ydk-backdrop" @onclick="() => YdkMenuButton(false)">
+            <div class="modal-content" @onclick:stopPropagation>
 
+                <h3>YDK Menu</h3>
+                <p class="ydk-text">
+                    Any unsupported cards will generate placeholder cards when imported.
+                </p>
+
+                <div class="ydk-button-row">
+                    <button class="btn btn-primary ydk-button" @onclick="ExportYdk">Export YDK</button>
+                    <button class="btn btn-primary ydk-button" @onclick="ImportYdk">Import YDK</button>
+                    <button class="btn btn-primary ydk-button" @onclick="() => YdkMenuButton(false)">Close</button>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
+    private bool showYdk= false;
 
     protected override async Task OnInitializedAsync()
     {
         CardManager.BuildDecklist();
         StatisticsManager.ActionRefresh += OnRefresh;
+    }
+
+    private void YdkMenuButton(bool value)
+    {
+        showYdk = value;
+        StateHasChanged();
     }
 
     private async void OnRefresh()
@@ -80,12 +103,14 @@
 
     async Task ExportYdk()
     {
+        showYdk = false;
         await CardManager.ExportYdk();
         StateHasChanged();
     }
 
     async Task ImportYdk()
     {
+        showYdk = false;
         await CardManager.ImportYdk();
         StateHasChanged();
     }
