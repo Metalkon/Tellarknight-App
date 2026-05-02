@@ -5,10 +5,21 @@
 @inject GameState GameState
 
 <div class="app-grid-container">
-
-    <div class="grid-search">
-        <SmallButtonComponent Text="Search" OnClick="@(() => navigationManager.NavigateTo("search"))" />
+    <div class="item grid-search">
+        <div class="grid-search-container">
+            <div class="grid-search-1">
+                <button class="btn btn-danger" @onclick=@(() => navigationManager.NavigateTo("search"))>Search</button>
+            </div>
+            <div class="size grid-search-2">
+                <button class="btn btn-danger" @onclick=@(() => navigationManager.NavigateTo("search"))>Search</button>
+            </div>
+            <div class="grid-search-3">
+                <!-- />-->
+                <SmallButtonComponent Text="Search" OnClick="@(() => navigationManager.NavigateTo("search"))"/>
+            </div>
+        </div>
     </div>
+
 
     <div class="grid-cards">
         <div class="card-container">
@@ -65,5 +76,17 @@
             lines.Add("Archetype: N/A");
 
         return string.Join("\n", lines);
+    }
+
+    async Task ExportYdk()
+    {
+        await CardManager.ExportYdk();
+        StateHasChanged();
+    }
+
+    async Task ImportYdk()
+    {
+        await CardManager.ImportYdk();
+        StateHasChanged();
     }
 }

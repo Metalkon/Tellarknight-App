@@ -148,13 +148,26 @@ namespace TellarknightApp.Services
             RefreshCards();
             _supportedCards.RefreshUpdate();
 
-            var lines = content.Split('\n');
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            var deckType = MainDeck;
 
             foreach (var line in lines)
             {
 
                 if (line.Trim().Equals("!side", StringComparison.OrdinalIgnoreCase))
                     break;
+
+                if (line.Trim().Equals("#main", StringComparison.OrdinalIgnoreCase))
+                {
+                    deckType = MainDeck;
+                    continue;
+                }
+
+                if (line.Trim().Equals("#extra", StringComparison.OrdinalIgnoreCase))
+                {
+                    deckType = ExtraDeck;
+                    continue;
+                }
 
                 var isCardId = int.TryParse(line.Trim(), out int cardId);
 
@@ -163,11 +176,20 @@ namespace TellarknightApp.Services
 
                 var card = _supportedCards.Cards.FirstOrDefault(x => x.Id == cardId);
 
-                if (card != null)
-                    card.Quantity++;
-                else
-                    _supportedCards.Cards.FirstOrDefault(x => x is EmptyCard).Quantity++;
+                if (deckType == MainDeck)
+                {
+                    if (card != null)
+                        card.Quantity++;
+                    else
+                        _supportedCards.Cards.FirstOrDefault(x => x is EmptyCard).Quantity++;
+                }
+                else if (deckType == ExtraDeck)
+                {
+                    if (card != null)
+                        card.Quantity++;
+                }
             }
+            BuildDecklist();
         }
     }
 }

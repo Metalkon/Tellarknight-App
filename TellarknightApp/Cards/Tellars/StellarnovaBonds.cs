@@ -15,7 +15,7 @@ namespace TellarknightApp.Cards
             Scale = null;
             Role = "Extender";
             Archetype = new List<string> { "Tellarknight", "Constellar" };
-            Id = 99999999;
+            Id = 69678646;
             Image = $"./CardArt/{Id}.jpg";
         }
 
