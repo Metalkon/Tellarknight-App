@@ -101,13 +101,17 @@ namespace TellarknightApp.Services
 
         public async Task ExportYdk()
         {
-            using var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
-            var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent);
+            var filecontent = new MemoryStream(Encoding.UTF8.GetBytes(GenerateYdk()));
+            var fileSaverResult = await FileSaver.SaveAsync("tellarknight.ydk", filecontent, CancellationToken.None);
         }
 
         public async Task ImportYdk()
         {
-            var YdkFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> { { DevicePlatform.WinUI, new[] { ".ydk" } } });
+            var YdkFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+            {
+                { DevicePlatform.WinUI, new[] { ".ydk" } },
+                { DevicePlatform.Android, new[] { "*/*" } }
+            });
 
             var result = await FilePicker.PickAsync(new PickOptions { FileTypes = YdkFileType });
 
@@ -153,7 +157,6 @@ namespace TellarknightApp.Services
 
             foreach (var line in lines)
             {
-
                 if (line.Trim().Equals("!side", StringComparison.OrdinalIgnoreCase))
                     break;
 
