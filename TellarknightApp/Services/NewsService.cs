@@ -43,6 +43,7 @@ namespace TellarknightApp.Services
                         Content = cols[3]
                     });
                 }
+                Entries.Reverse();
             }
             catch
             {

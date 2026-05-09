@@ -4,14 +4,41 @@
 @inject GameState GameState
 @inject SupportedCards SupportedCards
 
-<nav class="nav-center" style="">
-    <div>
-        <SmallButtonComponent Text="Home" OnClick="@(() => navigationManager.NavigateTo("/"))" />
-        <SmallButtonComponent Text="Stats" OnClick="@(() => navigationManager.NavigateTo("statistics"))" />
-        <SmallButtonComponent Text="Deck" OnClick="@(() => navigationManager.NavigateTo("search"))" />
-        <SmallButtonComponent CustomStyle="" Text="Reset" OnClick="ResetCards" />
+<div class="app-grid-container">
+
+    <div class="grid-button1">
+        <button type="button" class="social-btn standard-btn"
+                @onclick='() => navigationManager.NavigateTo("/")'>
+            <img src="./home4.svg">
+            <span>Home</span>
+        </button>
     </div>
-</nav>
+
+    <div class="grid-button2">
+        <button type="button" class="social-btn standard-btn"
+                @onclick='() => navigationManager.NavigateTo("statistics")'>
+            <img src="./stats2.svg">
+            <span>Statistics</span>
+        </button>
+    </div>
+
+    <div class="grid-button3">
+        <button type="button" class="social-btn standard-btn"
+                @onclick='() => navigationManager.NavigateTo("search")'>
+            <img src="./search.svg">
+            <span>Search</span>
+        </button>
+    </div>
+
+    <div class="grid-button4">
+        <button type="button" class="social-btn standard-btn"
+                @onclick='() => navigationManager.NavigateTo("deck")'>
+            <img src="./deck.svg">
+            <span>Deck</span>
+        </button>
+    </div>
+
+</div>
 
 @code{
     public async Task ResetCards()

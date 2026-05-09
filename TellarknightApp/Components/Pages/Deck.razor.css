@@ -139,36 +139,3 @@
     .btn-quantity:hover {
         background-color: #e0e0e0;
     }
-
-.ydk-backdrop {
-    position: fixed;
-    inset: 0; 
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80vw;
-    max-width: 800px; 
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-
-.ydk-button-row {
-    display: flex;
-    gap: 1%;
-}
-
-.ydk-button {
-    flex: 1; 
-    min-width: 0; 
-}
-
-ydk-text {
-    white-space: nowrap;
-    font-size: clamp(0.7rem, 1.2vw, 1rem);
-}

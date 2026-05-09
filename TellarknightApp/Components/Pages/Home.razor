@@ -6,22 +6,111 @@
 @inject SupportedCards SupportedCards
 @inject NewsService NewsService
 
-<br />
-<div style="color: white;">
-    Updates/PatchNotes:
-    @foreach (var entry in NewsService.Entries)
-    {
-        <div>
-            <b>@entry.Header</b> | @entry.Version | @entry.Date
-            <p>@entry.Content</p>
+<div class="app-grid-container">
+    <div class="grid-logo">
+        <div class="logo">
+            <img src="./logo3.png" class="logo" />
         </div>
-    }
+    </div>
+
+    <div class="grid-button1">
+        <button type="button" class="social-btn standard-btn" @onclick="() => YdkMenuButton(true)">
+            <img src="./file.svg">
+            <span>YDK&nbsp;Menu</span>
+        </button>
+    </div>
+
+    <div class="grid-button2">
+        <button type="button" class="social-btn standard-btn"
+                @onclick='() => Launcher.OpenAsync("https://github.com/Metalkon/Tellarknight-App/releases")'>
+            <img src="./github.svg">
+            <span>GitHub</span>
+        </button>
+    </div>
+
+    <div class="grid-button3">
+        <button type="button" class="social-btn discord-btn"
+                @onclick='() => Launcher.OpenAsync("https://discord.gg/4h2yBcK")'>
+            <img src="./Discord-Symbol-White.png">
+            <span>Discord</span>
+        </button>
+    </div>
+
+    <div class="grid-news">
+        <div class="news-container">
+            <span class="news-title">PATCH NOTES</span>
+            @if (showNews == true)
+            {
+                @if (NewsService.Entries.Count == 0)
+                {
+                    <p class="news-content">⚠️ Unable to load patch notes. Please check your internet connection.</p>
+                }
+                @foreach (var entry in NewsService.Entries)
+                {
+                    <div class="news-entry">
+                        <div class="news-header-row">
+                            <span class="news-header">@entry.Header</span>
+                            <span class="news-meta">
+                                <span class="news-version">@entry.Version</span>
+                                <span class="news-separator">|</span>
+                                <span class="news-date">@entry.Date</span>
+                            </span>
+                        </div>
+                        <p class="news-content">@entry.Content</p>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
 </div>
 
+@if (showYdk)
+{
+    <div class="ydk-backdrop" @onclick="() => YdkMenuButton(false)">
+        <div class="modal-content" @onclick:stopPropagation>
+
+            <h3>YDK Menu</h3>
+            <p class="ydk-text">
+                Any unsupported cards will generate placeholder cards when imported.
+            </p>
+
+            <div class="ydk-button-row">
+                <button class="btn btn-primary ydk-button" @onclick="ExportYdk">Export YDK</button>
+                <button class="btn btn-primary ydk-button" @onclick="ImportYdk">Import YDK</button>
+                <button class="btn btn-primary ydk-button" @onclick="() => YdkMenuButton(false)">Close</button>
+            </div>
+        </div>
+    </div>
+}
+
 @code{
+    private bool showYdk = false;
+    private bool showNews = false;
 
     protected override async Task OnInitializedAsync()
     {
         await NewsService.GetNewsAsync();
+        showNews = true;
+    }
+
+    private void YdkMenuButton(bool value)
+    {
+        showYdk = value;
+        StateHasChanged();
+    }
+
+    async Task ExportYdk()
+    {
+        showYdk = false;
+        await CardManager.ExportYdk();
+        StateHasChanged();
+    }
+
+    async Task ImportYdk()
+    {
+        showYdk = false;
+        await CardManager.ImportYdk();
+        StateHasChanged();
     }
 }
