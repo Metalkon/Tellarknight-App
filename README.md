@@ -1,3 +1,5 @@
+# NOTE: This app is currently being refactored with major ui changes, code clean up, and new features being added.
+
 # Tellarknight App
 This is a windows and android application built for the Tellarknight community for the Yu-Gi-Oh Card Game, it's used for creating Tellarknight Decklists and testing their consistency rates and other statistics to optimize deckbuilding experiences.
 
