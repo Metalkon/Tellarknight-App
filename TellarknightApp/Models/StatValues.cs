@@ -16,6 +16,7 @@ namespace TellarknightApp.Models
         public bool Idle { get; set; }
         public bool HandTested { get; set; }
         public List<Card> HandTest { get; set; }
+        public int ProgressCount { get; set; } = 0;
 
 
         public StatValues() 
@@ -26,6 +27,7 @@ namespace TellarknightApp.Models
             CurrentCount = 0;
             Idle = true;
             HandTested = false;
+            ProgressCount = 0;
             HandTest = new List<Card>()
         {
             new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },

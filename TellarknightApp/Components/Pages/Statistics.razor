@@ -2,159 +2,103 @@
 @inherits Components.BaseComponent
 @inject CardManager CardManager
 @inject StatisticsManager StatisticsManager
+@inject SupportedCards SupportedCards
 @inject GameState GameState
 @using System.Text.Json
 
 <div class="app-grid-container">
-    <!-- Options & Start Button -->
-    <div class="item grid-options">
-        <div class="grid-options-container">
-            <div class="grid-options-1">
-                <b>Hand:</b>
-            </div>
-            <div class="grid-options-2">
-                <div style="width: 100%; height: 100%; position: relative;">
-                    <div style="width: 100%; background-color: transparent; height: 100%; position: absolute;"></div>
-                    <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.StartingHand">
+
+    <div class="grid-button1 ">
+        <button type="button" class="social-btn standard-btn"
+                @onclick="@CheckDeck">
+            <img src="./deck.svg">  
+            <span>Check Deck</span>
+        </button>
+    </div>
+
+    <div class="grid-button2">
+        <button type="button" class="social-btn standard-btn"
+                @onclick="@CheckDeck">
+            <img src="./card.svg">
+            <span>Check Hand</span>
+        </button>
+    </div>
+
+    <div class="grid-button3">
+        <button type="button" class="social-btn reset-btn"
+                @onclick='ResetCards'>
+            <img src="./reset.svg">
+            <span>Reset</span>
+        </button>
+    </div>
+
+    <div class="grid-options">
+        <div class="option-progress-wrap">
+            <div class="option-progress-bar" style="width: @($"{(double)StatisticsManager.StatValues.ProgressCount / StatisticsManager.StatValues.MaximumCount * 100}%")"></div>
+            <div class="option-content">
+                <div class="option-field">
+                    <span class="option-label">Hand Size</span>
+                    <input type="text" class="option-input" @bind-value="StatisticsManager.StatValues.StartingHand" />
                 </div>
-            </div>
-            <div class="grid-options-3">
-                <b>Sample:</b>
-            </div>
-            <div class="grid-options-4">
-                <div style="width: 100%; height: 100%; position: relative;">
-                    <div style="width: @($"{(double)StatisticsManager.StatValues.CurrentCount / StatisticsManager.StatValues.MaximumCount * 100}%"); background-color: lightgreen; height: 100%; position: absolute;"></div>
-                    @if (StatisticsManager.StatValues.Active == true)
+                <div class="option-divider"></div>
+                <div class="option-field">
+                    <span class="option-label">Sample Size</span>
+                    @if (StatisticsManager.StatValues.Active)
                     {
-                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.CurrentCount" readonly>
+                        <input type="text" class="option-input" @bind-value="StatisticsManager.StatValues.CurrentCount" readonly />
                     }
                     else
                     {
-                        <input type="text" style="width: 100%; text-align: center; position: relative; border: none; background: transparent;" @bind-value="StatisticsManager.StatValues.MaximumCount">
+                        <input type="text" class="option-input" @bind-value="StatisticsManager.StatValues.MaximumCount" />
                     }
-
                 </div>
-            </div>
-            <div class="grid-options-5">
-                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckHandOld">Check Hand</button>
-                </div>
-            <div class="grid-options-7">
-                <button class="btn btn-primary" HorizontalOptions="Center" @onclick="@CheckDeck">Check Deck</button>
             </div>
         </div>
     </div>
-    <!-- Deck Statistics -->
-    <div class="item grid-statistics">
-        <div class="grid-statistics-container">
-            <div class="grid-statistics-1">
-                <div class="title">
-                    <b>Basic Stats:</b>
-                </div>
-                <div>
-                    Deck Size: @StatisticsManager.DisplayValues.DeckSize <br />
-                    Total Monsters: @StatisticsManager.DisplayValues.TotalMonsters <br />
-                    Combo Chance: @StatisticsManager.DisplayValues.ComboChance.Value% <br />
-                    Brick Chance: @StatisticsManager.DisplayValues.BrickChance.Value% <br />
-                    (1 In @StatisticsManager.DisplayValues.BrickRate.Value) <br />
-                </div>
-            </div>
-            <div class="grid-statistics-2">
-                <div class="title">
-                    <b>Summon Stats:</b>
-                </div>
-                <div>
-                    Xyz Summon (0 Tellars): @StatisticsManager.DisplayValues.XyzSummonZero.Value% <br />
-                    Xyz Summon (1 Tellars): @StatisticsManager.DisplayValues.XyzSummonOne.Value% <br />
-                    Xyz Summon (2 Tellars): @StatisticsManager.DisplayValues.XyzSummonTwo.Value% <br />
-                    Pendulum Chance: @StatisticsManager.DisplayValues.PendulumnChance.Value% <br />
-                    Oracle Combo Chance: @StatisticsManager.DisplayValues.OracleChance.Value% <br />
-                </div>
-            </div>
-            <div class="grid-statistics-3">
-                <div class="title">
-                    <b>Hand Stats:</b>
-                </div>
-                <div>
-                    Average # Tellars: @StatisticsManager.DisplayValues.AverageHandTellars.Value <br />
-                    Average # Extenders: @StatisticsManager.DisplayValues.AverageHandExtenders.Value <br />
-                    Average # Hand Traps: @StatisticsManager.DisplayValues.AverageHandHT.Value <br />
-                </div>
-            </div>
-            <div class="grid-statistics-4">
-                <div class="title">
-                    <b>Other Stats:</b>
-                </div>
-                <div>
-                    Isolde Brick Chance: @StatisticsManager.DisplayValues.IsoldeBrickChance.Value% <br />
-                    Armored Brick Chance: @StatisticsManager.DisplayValues.ArmoredBrickChance.Value% <br />                    
-                    Ryzeal Lock Chance: @StatisticsManager.DisplayValues.RyzealLockChance.Value% <br />
-                </div>
-            </div>
 
-            <!--
-            // Statistics Testing Only
-            <div style="height: 90%; color:blanchedalmond;">
-                <div>
-                    <p>CurrentCount: @StatisticsManager.StatValues.CurrentCount</p>
-                    <p>BrickChance: @StatisticsManager.DeckStatistics.BrickChance</p>
-                    <p>AverageTellars: @StatisticsManager.DeckStatistics.AverageTellars</p>
-                    <p>AverageXyzNoTellar: @StatisticsManager.DeckStatistics.AverageXyzNoTellar</p>
-                    <p>AverageXyzOneTellar: @StatisticsManager.DeckStatistics.AverageXyzOneTellar</p>
-                    <p>AverageXyzTwoTellar: @StatisticsManager.DeckStatistics.AverageXyzTwoTellar</p>
-                    <p>PendulumSummon: @StatisticsManager.DeckStatistics.PendulumSummon</p>
-                    <p>OracleCombo: @StatisticsManager.DeckStatistics.OracleCombo</p>
-                    <p>ZefraComboWithNormalAvailable: @StatisticsManager.DeckStatistics.ZefraComboWithNormalAvailable</p>
-                    <p>AverageHandTraps: @StatisticsManager.DeckStatistics.AverageHandTraps</p>
-                    <p>AverageExtenders: @StatisticsManager.DeckStatistics.AverageExtenders</p>
-                    <p>IsoldeBrick: @StatisticsManager.DeckStatistics.IsoldeBrick</p>
-                    <p>ArmoredBrick: @StatisticsManager.DeckStatistics.ArmoredBrick</p>
-                    <p>RyzealLock: @StatisticsManager.DeckStatistics.RyzealLock</p>
-                </div>
-            </div>-->
+    <div class="grid-stats">
 
-            <div class="grid-statistics-extra">
-                <div class="hand-test-container">
-                    <!-- Button Section -->
-                    <div class="card-button">
-                                    <!--<button class="btn btn-secondary" style="width: 42.5%" @onclick="@(() => CheckHand.InvokeAsync())">Check Hand</button>-->
-                        <text class="check-hand-text">
-                            <b style="margin-right: 3px; font-size: clamp(12px, 1vw, 36px);">Result: </b>
-                                        @if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance != 0)
-                            {
-                                <text> Bricked!</text>
-                            }
-                                        else if (StatisticsManager.StatValues.HandTested == true && StatisticsManager.DeckStatisticsHand.BrickChance == 0)
-                            {
-                                <text> Success!</text>
-                            }
-                            else
-                            {
-                                <text> N/A</text>
-                            }
-                        </text>
-                    </div>
-                    <!-- Card Grid Section -->
-                    <div class="card-container">
-                                    @foreach (Card card in StatisticsManager.StatValues.HandTest)
-                        {
-                            <div class="grid-item">
-                                <img src="@card.Image" alt="@card.Name" class="item-image" />
-                            </div>
-                        }
-                        
-                        @if (StatisticsManager.StatValues.HandTest.Count == 5)
-                        {
-                            <div class="grid-item">
-                                <img src="./CardArt/Empty.jpg" alt="Empty" class="item-image" />
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-
+        <div class="stats-hdr">
+            <span>Statistic</span>
+            <span>Value</span>
+            <span>Variance</span>
         </div>
+
+        <div class="stats-section">Basic Stats</div>
+        <div class="stats-group">
+            <div class="stats-row"><span class="stats-name">Deck Size</span><span class="stats-val">@StatisticsManager.DisplayValues.DeckSize</span><div class="stats-var"></div></div>
+            <div class="stats-row"><span class="stats-name">Total Monsters</span><span class="stats-val">@StatisticsManager.DisplayValues.TotalMonsters</span><div class="stats-var"></div></div>
+            <div class="stats-row"><span class="stats-name">Combo Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.ComboChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Brick Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.BrickChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Brick Rate</span><span class="stats-val">1 In @StatisticsManager.DisplayValues.BrickRate.Value</span><div class="stats-var"></div></div>
+        </div>
+
+        <div class="stats-section">Summon Stats</div>
+        <div class="stats-group">
+            <div class="stats-row"><span class="stats-name">Xyz Summon (0 Tellars)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonZero.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Xyz Summon (1 Tellar)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonOne.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Xyz Summon (2 Tellars)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonTwo.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Pendulum Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.PendulumnChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Oracle Combo Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.OracleChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+        </div>
+
+        <div class="stats-section">Hand Stats</div>
+        <div class="stats-group">
+            <div class="stats-row"><span class="stats-name">Avg # Tellars</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandTellars.Value</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Avg # Extenders</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandExtenders.Value</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Avg # Hand Traps</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandHT.Value</span><div class="stats-var"><button>± var</button></div></div>
+        </div>
+
+        <div class="stats-section">Other Stats</div>
+        <div class="stats-group">
+            <div class="stats-row"><span class="stats-name">Isolde Brick Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.IsoldeBrickChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Armored Brick Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.ArmoredBrickChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Ryzeal Lock Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.RyzealLockChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+        </div>
+
     </div>
 </div>
+
 
 @code{
 
@@ -173,6 +117,15 @@
     {
         if(!StatisticsManager.StatValues.Active)
             await StatisticsManager.CheckDeck(CardManager.MainDeck, CardManager.ExtraDeck);
+    }
+
+    public async Task ResetCards()
+    {
+        CardManager.RefreshCards();
+        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
+        SupportedCards.RefreshUpdate();
+        StatisticsManager.StatValues.Idle = true;
+        StatisticsManager.RefreshStatistics();
     }
 
 

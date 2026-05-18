@@ -4,18 +4,6 @@
     overflow: hidden;
 }
 
-.item {
-    text-align: center;
-    vertical-align: middle;
-    box-sizing: border-box;
-}
-
-.center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .logo {
     display: flex;
     justify-content: center;

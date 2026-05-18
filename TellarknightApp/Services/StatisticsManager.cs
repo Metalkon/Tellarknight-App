@@ -44,39 +44,50 @@ namespace TellarknightApp.Services
             StatValues.Active = true;
             StatValues.Idle = false;
 
-            StatValues.MaximumCount = (StatValues.MaximumCount > 10000) ? 10000 : (StatValues.MaximumCount < 1000 ? 1000 : StatValues.MaximumCount);
             StatValues.StartingHand = (StatValues.StartingHand < 1) ? 1 : (StatValues.StartingHand > 6 ? 6 : StatValues.StartingHand);
 
             RefreshStatistics();
 
+            int uiInterval = StatValues.MaximumCount / 50;
+            int nextUiCheckpoint = uiInterval;
 
-            int interval = StatValues.MaximumCount / 20;
-            int nextCheckpoint = interval * 5;
+            int recordStart = StatValues.MaximumCount / 4;
+            int extraRecords = Math.Max(0, (StatValues.MaximumCount - 50000) / 10000);
+            int totalRecords = 5 + extraRecords;
+            int recordInterval = (StatValues.MaximumCount - recordStart) / totalRecords;
 
-            for (int i = 0; i < StatValues.MaximumCount; i++) 
+            int nextRecordCheckpoint = recordStart + recordInterval;
+
+            for (int i = 0; i < StatValues.MaximumCount; i++)
             {
                 StatValues.CurrentCount++;
+                StatValues.ProgressCount++;
+
                 _gameState.RefreshGameState(mainDeck, extraDeck);
                 _gameState.ShuffleDeck();
                 _gameState.DrawHand(StatValues.StartingHand);
 
-                // Check Hand & Deck For Optimal Searches
                 CardSearcher.CardSearch(_gameState);
-
-                // Analyze Hand & Update Hand Statistics
                 HandAnalyzer.HandCheck(_gameState, DeckStatistics);
 
-                if (StatValues.CurrentCount == nextCheckpoint)
+                if (StatValues.CurrentCount == nextUiCheckpoint)
+                {
+                    UpdateValues(mainDeck, extraDeck);
+                    nextUiCheckpoint += uiInterval;
+                    ActionRefresh?.Invoke();
+                    await Task.Yield();
+                }
+
+                if (StatValues.CurrentCount == nextRecordCheckpoint)
                 {
                     DeckStatisticsRecord.Add(DeckStatistics.Clone());
-                    UpdateValues(mainDeck, extraDeck);
-                    nextCheckpoint += interval;
-                    ActionRefresh?.Invoke();
-                    await Task.Yield(); // Releases the thread so Blazor can re-render
+                    nextRecordCheckpoint += recordInterval;
                 }
             }
 
             ActionRefresh?.Invoke();
+            await Task.Delay(500);
+            StatValues.ProgressCount = 0;
             StatValues.Active = false;
         }
 

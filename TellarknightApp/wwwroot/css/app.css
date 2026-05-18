@@ -86,6 +86,49 @@ h1:focus {
 }
 
 /* =========================
+   OTHER
+========================= */
+
+
+.item {
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fake-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #F3F4F6;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    font-weight: 600;
+    overflow: hidden;
+    height: 50px;
+}
+
+.input-borderless {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.input-centered {
+    text-align: center;
+}
+
+/* =========================
    SCROLLBAR
 ========================= */
 
@@ -165,16 +208,28 @@ ydk-text {
     height: 100%;
 }
 
-    .social-btn:active {
-        transform: translateY(1px);
+input.social-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+}
+
+    input.social-btn:focus {
+        box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
     }
 
-    .social-btn img {
-        width: 20px;
-        height: 20px;
-        object-fit: contain;
-        flex-shrink: 0;
-    }
+.social-btn:active {
+    transform: translateY(1px);
+}
+
+.social-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
 
 .discord-btn {
     background: #5865F2;
@@ -209,3 +264,18 @@ ydk-text {
         outline-offset: 2px;
     }
 
+.reset-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+}
+
+    .reset-btn:hover {
+        background: #bb2d3b;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .reset-btn:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+    }
