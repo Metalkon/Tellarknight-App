@@ -45,6 +45,7 @@ namespace TellarknightApp.Services
                 {
                     card.Quantity = 3;
                 }
+
                 if (card.Quantity > 0 && card.Role != "Extra Deck")
                 {
                     for (int i = 0; i < card.Quantity; i++)
@@ -52,6 +53,7 @@ namespace TellarknightApp.Services
                         MainDeck.Add(card);
                     }
                 }
+
                 if (card.Quantity > 0 && card.Role == "Extra Deck")
                 {
                     for (int i = 0; i < card.Quantity; i++)
@@ -60,11 +62,27 @@ namespace TellarknightApp.Services
                     }
                 }
             }
-            while (MainDeck.Count < 40)
-            {
-                MainDeck.Add(new EmptyCard());
-            }
-            //Action?.Invoke();
+
+            MainDeck = MainDeck
+                .OrderBy(card =>
+                {
+                    if (card is EmptyCard)
+                        return 0;
+
+                    if (card.Level != null)
+                        return 1;
+
+                    if (card.Type.Contains("Spell", StringComparison.OrdinalIgnoreCase) && card.Level == null)
+                        return 2;
+
+                    if (card.Type.Contains("Trap", StringComparison.OrdinalIgnoreCase))
+                        return 3;
+
+                    return 4;
+                })
+                .ThenBy(card => card.Name)
+                .ToList();
+
         }
 
         public async Task Search()
@@ -97,6 +115,13 @@ namespace TellarknightApp.Services
                 .Skip((SearchValues.CurrentPage - 1) * SearchValues.ItemsPerPage)
                 .Take(SearchValues.ItemsPerPage)
                 .ToList();
+        }
+
+        public async Task RemovePlaceholders()
+        {
+            Card placeholder = _supportedCards.Cards.FirstOrDefault(x => x is EmptyCard);
+            placeholder.Quantity = 0;
+            BuildDecklist();
         }
 
         public async Task ExportYdk()

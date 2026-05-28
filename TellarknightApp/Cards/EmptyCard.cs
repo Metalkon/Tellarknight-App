@@ -7,6 +7,7 @@ namespace TellarknightApp.Cards
         public EmptyCard()
         {
             Name = "Empty/Blank/Filler Card";
+            Image = "./CardArt/Placeholder.jpg";
         }
 
         public override Card Clone()

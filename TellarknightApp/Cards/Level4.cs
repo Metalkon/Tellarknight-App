@@ -8,7 +8,7 @@ namespace TellarknightApp.Cards
         {
             Name = "Level 4 Monster";
             Level = 4;
-            Image = "./CardArt/CelticGuardian.jpg";
+            Image = "./CardArt/CelticGuardian2.jpg";
         }
 
         public override Card Clone()

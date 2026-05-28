@@ -8,7 +8,6 @@
         public int CurrentPage { get; set; }
         public int ItemsPerPage { get; set; }
         public int TotalItems { get; set; }
-        public List<string> OptionsType { get; set; }
 
         public SearchValues() 
         {
@@ -16,15 +15,8 @@
             TypeQuery = string.Empty;
             ArchetypeQuery = string.Empty;
             CurrentPage = 1;
-            ItemsPerPage = 30;
+            ItemsPerPage = 25;
             TotalItems = 0;
-
-            OptionsType = new List<string>()
-            {
-                "Monster",
-                "Spell",
-                "Trap",
-            };
         }
     }
 }

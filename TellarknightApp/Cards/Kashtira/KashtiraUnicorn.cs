@@ -24,11 +24,11 @@ namespace TellarknightApp.Cards
             // Search Theosis
             if (deck.Any(x => x is Kashtiratheosis))
             {
-                // One Card Combo (Fenrir->Riseheart->Arsenal Falcon->Blackwing)
+                // One Card Combo (Fenrir->Riseheart->Arsenal Falcon->WingedBeast)
                 if (deck.Any(x => x is KashtiraFenrir) 
                     && (hand.Any(x => x is KashtiraRiseheart) || deck.Any(x => x is KashtiraRiseheart))
                     && extraDeck.Any(x => x is RaidraptorArsenalFalcon)
-                    && (hand.Any(x => x is BlackwingZephyrostheElite) || deck.Any(x => x is BlackwingZephyrostheElite)))
+                    && deck.Any(x => x.Type == "Winged Beast" && x.Level == 4))
                 {
                     localStats.AverageXyzNoTellar = true;
                     if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
@@ -49,7 +49,7 @@ namespace TellarknightApp.Cards
                     return localStats;
                 }
 
-                // Falcon->Blackwing For Extender
+                // Falcon->WingedBeast For Extender
                 if (deck.Any(x => x.Archetype.Contains("Kashtira") && x.Level == 7 && x.Attribute != this.Attribute)
                     && hand.Any(x => x.Level == 4 && x is not PhotonThrasher))
                 {

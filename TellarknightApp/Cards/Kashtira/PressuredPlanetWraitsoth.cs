@@ -38,7 +38,7 @@ namespace TellarknightApp.Cards
                 && deck.Any(x => x is KashtiraFenrir)
                 && (hand.Any(x => x is KashtiraRiseheart) || deck.Any(x => x is KashtiraRiseheart))
                 && extraDeck.Any(x => x is RaidraptorArsenalFalcon)
-                && (hand.Any(x => x is BlackwingZephyrostheElite) || deck.Any(x => x is BlackwingZephyrostheElite)))
+                && deck.Any(x => x.Type == "Winged Beast" && x.Level == 4))
             {
                 Card searchedCard = deck.First(x => x is KashtiraUnicorn);
                 hand.Add(searchedCard);

@@ -3,24 +3,34 @@
 @inject CardManager CardManager
 @inject StatisticsManager StatisticsManager
 @inject GameState GameState
+@inject SupportedCards SupportedCards
+
 
 <div class="app-grid-container">
-        <div class="grid-menu-container">
-            <div class="grid-menu-1">
-            <button class="btn btn-primary" @onclick="() => YdkMenuButton(true)">YDK Menu</button>
-                <!--<button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("search"))>YDK Import/Export</button>-->
-            </div>
-            <div class="grid-menu-2">
-                <button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("search"))>Clear Unsupported</button>
-            </div>
-            <div class="grid-menu-3">
-            <button class="btn btn-danger" @onclick=@(() => navigationManager.NavigateTo("search"))>Search</button>
 
-            </div>
-        </div>
+    <div class="grid-button1">
+        <button type="button" class="social-btn standard-btn" @onclick="() => YdkMenuButton(true)">
+            <img src="./file.svg">
+            <span>YDK&nbsp;Menu</span>
+        </button>
+    </div>
 
+    <div class="grid-button2">
+        <button type="button" class="social-btn standard-btn" @onclick="() => RemovePlaceholders()">
+            <img src="./clean.svg">
+            <span>Clean&nbsp;</span>
+        </button>
+    </div>
+
+    <div class="grid-button3">
+        <button type="button" class="social-btn reset-btn" @onclick="ResetCards">
+            <img src="./reset.svg">
+            <span>Reset</span>
+        </button>
+    </div>
 
     <div class="grid-cards">
+
         <div class="card-container">
             @foreach (Card card in CardManager.MainDeck)
             {
@@ -28,7 +38,6 @@
                     <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
                 </div>
             }
-
             @foreach (Card card in CardManager.ExtraDeck)
             {
                 <div class="grid-item">
@@ -37,25 +46,26 @@
             }
         </div>
     </div>
-    @if (showYdk)
-    {
-        <div class="ydk-backdrop" @onclick="() => YdkMenuButton(false)">
-            <div class="modal-content" @onclick:stopPropagation>
+</div>
 
-                <h3>YDK Menu</h3>
-                <p class="ydk-text">
-                    Any unsupported cards will generate placeholder cards when imported.
-                </p>
+@if (showYdk)
+{
+    <div class="ydk-backdrop" @onclick="() => YdkMenuButton(false)">
+        <div class="modal-content" @onclick:stopPropagation>
 
-                <div class="ydk-button-row">
-                    <button class="btn btn-primary ydk-button" @onclick="ExportYdk">Export YDK</button>
-                    <button class="btn btn-primary ydk-button" @onclick="ImportYdk">Import YDK</button>
-                    <button class="btn btn-primary ydk-button" @onclick="() => YdkMenuButton(false)">Close</button>
-                </div>
+            <h3>YDK Menu</h3>
+            <p class="ydk-text">
+                Any unsupported cards will generate placeholder cards when imported.
+            </p>
+
+            <div class="ydk-button-row">
+                <button class="btn btn-primary ydk-button" @onclick="ExportYdk">Export YDK</button>
+                <button class="btn btn-primary ydk-button" @onclick="ImportYdk">Import YDK</button>
+                <button class="btn btn-primary ydk-button" @onclick="() => YdkMenuButton(false)">Close</button>
             </div>
         </div>
-    }
-</div>
+    </div>
+}
 
 @code {
     private bool showYdk= false;
@@ -66,10 +76,19 @@
         StatisticsManager.ActionRefresh += OnRefresh;
     }
 
-    private void YdkMenuButton(bool value)
+    public async Task ResetCards()
     {
-        showYdk = value;
-        StateHasChanged();
+        CardManager.RefreshCards();
+        GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
+        SupportedCards.RefreshUpdate();
+        StatisticsManager.StatValues.Idle = true;
+        StatisticsManager.RefreshStatistics();
+    }
+
+    private async void RemovePlaceholders()
+    {
+        CardManager.RemovePlaceholders();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async void OnRefresh()
@@ -99,6 +118,12 @@
             lines.Add("Archetype: N/A");
 
         return string.Join("\n", lines);
+    }
+
+    private void YdkMenuButton(bool value)
+    {
+        showYdk = value;
+        StateHasChanged();
     }
 
     async Task ExportYdk()
