@@ -40,14 +40,14 @@ namespace TellarknightApp.Services
                         Date = cols[0],
                         Header = cols[1],
                         Version = cols[2],
-                        Content = cols[3]
+                        Content = string.Join(",", cols[3..]).Trim('"').Replace("\"\"", "\"")
                     });
                 }
                 Entries.Reverse();
             }
             catch
             {
-                return;            
+                return;
             }
         }
     }

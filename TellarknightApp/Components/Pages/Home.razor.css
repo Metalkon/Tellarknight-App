@@ -107,3 +107,9 @@
 .news-header {
     font-weight: 700;
 }
+
+.news-content {
+    margin: 5px 0 0 0;
+    color: #bebebe;
+    text-align: left;
+}
