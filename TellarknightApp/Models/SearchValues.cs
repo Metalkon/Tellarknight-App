@@ -15,7 +15,7 @@
             TypeQuery = string.Empty;
             ArchetypeQuery = string.Empty;
             CurrentPage = 1;
-            ItemsPerPage = 25;
+            ItemsPerPage = 30;
             TotalItems = 0;
         }
     }
