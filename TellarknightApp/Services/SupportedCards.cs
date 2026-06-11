@@ -85,6 +85,15 @@ namespace TellarknightApp.Services
                 new GagagagaMagician(),
                 new GagagagaGirl(),
 
+                new ConductionWarriorLinearMagnumPlusMinus(),
+                new EpsilonTheMagnetWarrior(),
+                new MagnetWarriorOmegaPlus(),
+                new MagnetWarriorSigmaMinus(),
+                new MagnetWarriorSigmaPlus(),
+                new Duoterion(),
+                new MagnetBonding(),
+
+
                 // Pend cards removed
                 //new Zefraath(),
                 //new ShaddollZefracore(),
