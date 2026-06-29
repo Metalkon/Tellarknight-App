@@ -83,6 +83,11 @@ namespace TellarknightApp.Services
                 .ThenBy(card => card.Name)
                 .ToList();
 
+            while (MainDeck.Count < 40)
+            {
+                MainDeck.Add(new EmptyCard());
+            }
+
         }
 
         public async Task Search()

@@ -6,7 +6,7 @@ namespace TellarknightApp.Cards
     {
         public EmptyCard()
         {
-            Name = "Empty/Blank/Filler Card";
+            Name = "Placeholder Card";
             Image = "./CardArt/Placeholder.jpg";
         }
 

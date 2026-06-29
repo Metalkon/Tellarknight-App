@@ -14,7 +14,7 @@ namespace TellarknightApp.Cards
             Defense = 2000;
             Scale = null;
             Role = "Extra Deck";
-            Archetype = new List<string> { "Onomat" };
+            Archetype = new List<string> { "Onomat", "Gagaga" };
             Id = 86331741;
             Image = $"./CardArt/{Id}.jpg";
         }

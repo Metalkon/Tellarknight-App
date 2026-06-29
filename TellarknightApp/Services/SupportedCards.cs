@@ -79,6 +79,7 @@ namespace TellarknightApp.Services
                 new GagagaGanbaraKnight(),
                 new GogogoGoblindbergh(),
                 new ZubababanchoGagagacoat(),
+                new DodododwarfGogogoglove(),
                 new ZubababaKnight(),
                 new Onomatopaira(),
                 new Onomatopickup(),
@@ -172,8 +173,8 @@ namespace TellarknightApp.Services
                 new CalledByTheGrave(),
                 new CrossoutDesignator(),
 
-                new ArtifactScythe(),
-                new ArtifactMjollnir(),
+                //new ArtifactScythe(),
+                //new ArtifactMjollnir(),
 
                 //new TherionKingRegulus(),
                 //new TherionDiscolosseum(),
@@ -182,10 +183,10 @@ namespace TellarknightApp.Services
                 //new MajestyPegasusTheDracoslayer(),
                 //new AmorphagePride(),
 
-                new InfernobleKnightRenaud(),
-                new FireFlintLady(),
-                new LivingFossil(),
-                new InfernobleArmsDurendal(),
+                //new InfernobleKnightRenaud(),
+                //new FireFlintLady(),
+                //new LivingFossil(),
+                //new InfernobleArmsDurendal(),
 
                 new ArmoredXyz(),
                 new FullArmoredXyz(),
@@ -214,6 +215,7 @@ namespace TellarknightApp.Services
                 new PSYFrameDriver(),
                 new SkullMeister(),
                 new InfiniteImpermanence(),
+                new DominusPurge(),
                 new RedReboot(),
             };
         }
