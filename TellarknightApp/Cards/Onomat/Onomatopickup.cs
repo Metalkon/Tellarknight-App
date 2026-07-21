@@ -22,6 +22,14 @@ namespace TellarknightApp.Cards
 
         public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
+            if (deck.Any(x => x is Onomatopaira))
+            {
+                Card searchedCard = deck.First(x => x is Onomatopaira);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
             return (hand, deck, extraDeck, gy, searched = false);
         }
     }
