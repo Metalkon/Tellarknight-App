@@ -2,11 +2,11 @@
 
 namespace TellarknightApp.Cards
 {
-    public class StellarnovaBonds : Card
+    public class StellarnovaBinding : Card
     {
-        public StellarnovaBonds() 
+        public StellarnovaBinding() 
         {
-            Name = "Stellarnova Bonds";
+            Name = "Stellarnova Binding";
             Type = "Spell";
             Attribute = string.Empty;
             Level = null;

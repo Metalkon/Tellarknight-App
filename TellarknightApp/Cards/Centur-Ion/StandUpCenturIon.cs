@@ -61,7 +61,7 @@ namespace TellarknightApp.Cards
             }
 
             // Extender + Lv4
-            if ((hand.Any(x => x.Level == 4) || (hand.Any(x => x is StellarnovaBonds) && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
+            if ((hand.Any(x => x.Level == 4) || (hand.Any(x => x is StellarnovaBinding) && deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
                 && deck.Any(x => x.Archetype.Contains("Centur-Ion") && (x.Level == 4 || x is CenturIonGargoyleII)))
             {
                 localStats.AverageXyzNoTellar = true;

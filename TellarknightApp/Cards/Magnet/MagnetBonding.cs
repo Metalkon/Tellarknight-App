@@ -22,6 +22,15 @@ namespace TellarknightApp.Cards
 
         public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
+            // Conduction
+            if (deck.Any(x => x is ConductionWarriorLinearMagnumPlusMinus))
+            {
+                Card searchedCard = deck.First(x => x is ConductionWarriorLinearMagnumPlusMinus);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
             return (hand, deck, extraDeck, gy, searched = false);
         }
     }

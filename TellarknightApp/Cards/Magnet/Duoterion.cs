@@ -20,9 +20,18 @@ namespace TellarknightApp.Cards
             Image = $"./CardArt/{Id}.jpg";
         }
 
-        public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
+        public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
-            return localStats;
+            // Bonding
+            if (deck.Any(x => x is MagnetBonding))
+            {
+                Card searchedCard = deck.First(x => x is MagnetBonding);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            return (hand, deck, extraDeck, gy, searched = false);
         }
     }
 }

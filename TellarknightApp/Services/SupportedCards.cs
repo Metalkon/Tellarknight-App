@@ -49,7 +49,7 @@ namespace TellarknightApp.Services
                 new ConstellarAlgiedi(),
                 new ConstellarKaus(),
                 new ConstellarSheratan(),
-                new StellarnovaBonds(),
+                new StellarnovaBinding(),
                 new ConstellarTellarknights(),
                 new SatellarknightSkybridge(),
                 new TellarknightGenesis(),
