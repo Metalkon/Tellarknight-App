@@ -18,8 +18,6 @@ namespace TellarknightApp.Models
         public float ZefraComboWithNormalAvailable { get; set; } = 0;
         public float AverageHandTraps { get; set; } = 0;
         public float AverageExtenders { get; set; } = 0;
-        public float IsoldeBrick { get; set; } = 0;
-        public float ArmoredBrick { get; set; } = 0;
         public float RyzealLock { get; set; } = 0;
 
 
@@ -33,12 +31,9 @@ namespace TellarknightApp.Models
                 AverageXyzOneTellar = this.AverageXyzOneTellar,
                 AverageXyzTwoTellar = this.AverageXyzTwoTellar,
                 PendulumSummon = this.PendulumSummon,
-                OracleCombo = this.OracleCombo,
                 ZefraComboWithNormalAvailable = this.ZefraComboWithNormalAvailable,
                 AverageHandTraps = this.AverageHandTraps,
                 AverageExtenders = this.AverageExtenders,
-                IsoldeBrick = this.IsoldeBrick,
-                ArmoredBrick = this.ArmoredBrick,
                 RyzealLock = this.RyzealLock
             };
         }

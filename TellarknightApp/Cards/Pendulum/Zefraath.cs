@@ -22,7 +22,7 @@ namespace TellarknightApp.Cards
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
-            bool superheavySamuraiFull = false;
+/*            bool superheavySamuraiFull = false;
             bool superheavySamurai = false;
             Card shsMonster = null;
             Card lowScale = null;
@@ -342,7 +342,7 @@ namespace TellarknightApp.Cards
                     return localStats;
                 }
             }
-
+*/
             return localStats;
         }
     }

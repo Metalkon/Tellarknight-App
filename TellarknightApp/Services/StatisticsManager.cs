@@ -126,8 +126,6 @@ namespace TellarknightApp.Services
             DisplayValues.AverageHandExtenders.Value = Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2);
             DisplayValues.AverageHandHT.Value = Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2);
 
-            DisplayValues.IsoldeBrickChance.Value = Math.Round((DeckStatistics.IsoldeBrick / StatValues.CurrentCount) * 100, 2);
-            DisplayValues.ArmoredBrickChance.Value = Math.Round((DeckStatistics.ArmoredBrick / StatValues.CurrentCount) * 100, 2);
             DisplayValues.RyzealLockChance.Value = Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2);
 
 

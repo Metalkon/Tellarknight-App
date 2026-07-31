@@ -23,43 +23,11 @@ namespace TellarknightApp.Cards
 
         public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
-            bool superheavySamurai = false;
-
-            // SHS Check
-            if ((hand.Any(x => x is SuperheavySamuraiProdigyWakaushi) || (hand.Any(x => x is SuperheavySamuraiMotorbike) && deck.Any(x => x is SuperheavySamuraiProdigyWakaushi)))
-                && (hand.Any(x => x is SuperheavySamuraiSoulgaiaBooster) || deck.Any(x => x is SuperheavySamuraiSoulgaiaBooster))
-                && deck.Any(x => x is SuperheavySamuraiMonkBigBenkei))
+            // Search Cygnian
+            if (deck.Any(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))
+                && deck.Any(x => x is TellarknightCygnian) && deck.Count(x => x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) >= 2)
             {
-                superheavySamurai = true;
-            }
-
-            // Zefraath or Zefra Spell In Hand + SHS (Oracle Combo)
-            if (superheavySamurai == true
-                && (hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
-                && hand.Count(x => x is not SatellarknightZefrathuban || x is not StellarknightZefraxciton) == 0 && deck.Any(x => x is SatellarknightZefrathuban))
-            {
-                Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
-                hand.Add(searchedCard);
-                deck.Remove(searchedCard);
-                return (hand, deck, extraDeck, gy, searched);
-            }
-
-            // Zefraath or Zefra Spell In Hand
-            if ((hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
-                && hand.Count(x => x is not SatellarknightZefrathuban) == 0 && deck.Any(x => x is SatellarknightZefrathuban))
-            {
-                Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
-                hand.Add(searchedCard);
-                deck.Remove(searchedCard);
-                return (hand, deck, extraDeck, gy, searched);
-            }
-
-            // Search Lyran (Zefraath)
-            if ((hand.Any(x => x is Zefraath) || hand.Any(x => x is OracleOfZefra) || hand.Any(x => x is ZefraProvidence))
-                && hand.Any(x => x is SatellarknightZefrathuban)
-                && hand.Count(x => x is not TellarknightLyran) == 0 && deck.Any(x => x is TellarknightLyran))
-            {
-                Card searchedCard = deck.First(x => x is SatellarknightZefrathuban);
+                Card searchedCard = deck.First(x => x is TellarknightCygnian);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 return (hand, deck, extraDeck, gy, searched);
