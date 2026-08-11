@@ -21,6 +21,17 @@ namespace TellarknightApp.Cards
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
+            Card? rockMonster = hand.FirstOrDefault(x => x.Type.Contains("Rock") && x != this);
+
+            if (rockMonster != null && hand.Any(x => x.Level == 4 && x != this && x != rockMonster))
+            {
+                localStats.AverageXyzNoTellar = true;
+                if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))                    
+                {
+                    localStats.AverageXyzOneTellar = true;
+                }
+            }
+
             return localStats;
         }
     }

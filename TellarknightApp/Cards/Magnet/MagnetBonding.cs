@@ -22,10 +22,61 @@ namespace TellarknightApp.Cards
 
         public override (List<Card>, List<Card>, List<Card>, List<Card>, bool) SearchDeck(List<Card> hand, List<Card> deck, List<Card> extraDeck, List<Card> gy, bool searched)
         {
+            int totalCount = hand.Count(x => x.Archetype.Contains("Magnet") && x.Level == 4) + deck.Count(x => x.Archetype.Contains("Magnet") && x.Level == 4);
+
             // Conduction
-            if (deck.Any(x => x is ConductionWarriorLinearMagnumPlusMinus))
+            if (totalCount >= 2 && deck.Any(x => x is ConductionWarriorLinearMagnumPlusMinus))
             {
-                Card searchedCard = deck.First(x => x is ConductionWarriorLinearMagnumPlusMinus);
+                // Epsilon
+                if (totalCount >= 2 && deck.Any(x => x is ConductionWarriorLinearMagnumPlusMinus))
+                {
+                    Card searchedCard = deck.First(x => x is ConductionWarriorLinearMagnumPlusMinus);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+            }
+
+            // OmegaPlus
+            if (totalCount > 2 && deck.Any(x => x is MagnetWarriorOmegaPlus))
+            {
+                Card searchedCard = deck.First(x => x is MagnetWarriorOmegaPlus);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // SigmaPlus
+            if (totalCount > 2 && deck.Any(x => x is MagnetWarriorSigmaPlus))
+            {
+                Card searchedCard = deck.First(x => x is MagnetWarriorSigmaPlus);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // Epsilon
+            if (totalCount > 2 && deck.Any(x => x is EpsilonTheMagnetWarrior))
+            {
+                Card searchedCard = deck.First(x => x is EpsilonTheMagnetWarrior);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // SigmaMinus
+            if (totalCount > 2 && deck.Any(x => x is MagnetWarriorSigmaMinus))
+            {
+                Card searchedCard = deck.First(x => x is MagnetWarriorSigmaMinus);
+                hand.Add(searchedCard);
+                deck.Remove(searchedCard);
+                return (hand, deck, extraDeck, gy, searched);
+            }
+
+            // Any Magnet
+            if (totalCount > 2 && deck.Any(x => x.Archetype.Contains("Magnet") && x.Level == 4))
+            {
+                Card searchedCard = deck.First(x => x.Archetype.Contains("Magnet") && x.Level == 4);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 return (hand, deck, extraDeck, gy, searched);

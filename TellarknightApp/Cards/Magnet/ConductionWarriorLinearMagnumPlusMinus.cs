@@ -21,6 +21,41 @@ namespace TellarknightApp.Cards
 
         public override LocalStats AnalyzeHand(LocalStats localStats, List<Card> hand, List<Card> deck, List<Card> gy, List<Card> extraDeck)
         {
+            int totalCount = hand.Count(x => x.Archetype.Contains("Magnet") && x.Level == 4) + deck.Count(x => x.Archetype.Contains("Magnet") && x.Level == 4);
+            bool epsilon = hand.Any(x => x is DodododoWarrior) || deck.Any(x => x is EpsilonTheMagnetWarrior);
+            bool sigmaPlus = hand.Any(x => x is MagnetWarriorSigmaPlus) || deck.Any(x => x is MagnetWarriorSigmaPlus);
+            bool omegaPlus = hand.Any(x => x is MagnetWarriorOmegaPlus) || deck.Any(x => x is MagnetWarriorOmegaPlus); 
+
+            if (totalCount >= 2)
+            {
+                if (epsilon && sigmaPlus && deck.Any(x => x.Level == 4 && x.Archetype.Contains("Magnet")))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
+                    {
+                        localStats.AverageXyzOneTellar = true;
+                    }
+                }
+
+                if (sigmaPlus == true && hand.Any(x => x.Level == 4))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
+                    {
+                        localStats.AverageXyzOneTellar = true;
+                    }
+                }
+
+                if (omegaPlus == true && hand.Any(x => x.Level == 4))
+                {
+                    localStats.AverageXyzNoTellar = true;
+                    if (hand.Any(x => x.Level == 4 && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar"))))
+                    {
+                        localStats.AverageXyzOneTellar = true;
+                    }
+                }
+            }
+
             return localStats;
         }
     }
