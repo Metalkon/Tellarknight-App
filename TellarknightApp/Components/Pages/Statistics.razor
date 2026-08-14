@@ -11,14 +11,14 @@
     <div class="grid-button1 ">
         <button type="button" class="social-btn standard-btn"
                 @onclick="@CheckDeck">
-            <img src="./deck.svg">  
+            <img src="./deck.svg">
             <span>Check Deck</span>
         </button>
     </div>
 
     <div class="grid-button2">
         <button type="button" class="social-btn standard-btn"
-                @onclick="@CheckDeck">
+                @onclick="() => HandTestButton(true)">
             <img src="./card.svg">
             <span>Check Hand</span>
         </button>
@@ -94,15 +94,82 @@
         </div>
 
     </div>
+
 </div>
 
+@if (showHandTest)
+{
+    <div class="ydk-backdrop" @onclick="() => HandTestButton(false)">
+        <div class="modal-content" @onclick:stopPropagation>
+            <div class="grid-statistics-extra">
+                <div class="hand-test-container">
 
-@code{
+                    <button type="button"
+                            class="social-btn standard-btn hand-test-button"
+                            @onclick="CheckHand">
+                        Check Hand
+                    </button>
+
+                    <div class="hand-test-result">
+                        <b>Result:</b>
+
+                        @if (!StatisticsManager.StatValues.HandTested)
+                        {
+                            <span>N/A</span>
+                        }
+                        else if (StatisticsManager.DeckStatisticsHand.BrickChance != 0)
+                        {
+                            <span>Bricked!</span>
+                        }
+                        else
+                        {
+                            <span>Success!</span>
+                        }
+                    </div>
+
+                    <div class="card-container">
+                        @foreach (Card card in StatisticsManager.StatValues.HandTest)
+                        {
+                            <div class="grid-item">
+                                <img src="@card.Image"
+                                     alt="@card.Name"
+                                     title="@GenerateCardTooltip(card)"
+                                     loading="lazy"
+                                     class="item-image" />
+                            </div>
+                        }
+
+                        @if (StatisticsManager.StatValues.HandTest.Count < 6)
+                        {
+                            <div class="grid-item">
+                                <img src="./CardArt/Empty.jpg"
+                                     alt="Empty"
+                                     class="item-image" />
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool showHandTest = false;
+    GameState tempGameState = new GameState();
 
     protected override void OnInitialized()
     {
         StatisticsManager.ActionRefresh += OnRefresh;
         CardManager.BuildDecklist();
+    }
+
+    private async Task HandTestButton(bool value)
+    {
+        showHandTest = value;
+        StatisticsManager.StatValues.ResetHandValues();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async void OnRefresh()
@@ -112,7 +179,7 @@
 
     private async Task CheckDeck()
     {
-        if(!StatisticsManager.StatValues.Active)
+        if (!StatisticsManager.StatValues.Active)
             await StatisticsManager.CheckDeck(CardManager.MainDeck, CardManager.ExtraDeck);
     }
 
@@ -125,31 +192,39 @@
         StatisticsManager.RefreshStatistics();
     }
 
-
-    private async Task CheckHandOld()
+    private async Task CheckHand()
     {
-        /*
-        StatisticsManager.StatValues.StartingHand = (StatisticsManager.StatValues.StartingHand < 1) ? 1 : (StatisticsManager.StatValues.StartingHand > 6 ? 6 : StatisticsManager.StatValues.StartingHand);
-
-        StatisticsManager.eckStatisticsHand = new DeckStatistics();
-        GameStateHand = new GameState();
-        handTest = new List<Card>();
-
-        CardManager.BuildDecklist(supportedCards);
-        GameStateHand = RefreshGameState(GameStateHand);
-        GameStateHand = ShuffleDeck(GameStateHand);
-        GameStateHand = DrawHand(GameStateHand);
-
-        foreach (Card card in GameStateHand.Hand)
-        {
-            handTest.Add(card);
-        }
-
-        GameStateHand = CardSearcher.CardSearch(GameStateHand);
-        deckStatisticsHand = HandAnalyzer.HandCheck(GameStateHand, deckStatisticsHand);
-
-        StatisticsManager.StatValues.HandTested = true;
+        tempGameState = await StatisticsManager.CheckHand(CardManager.MainDeck, CardManager.ExtraDeck, tempGameState);
         await InvokeAsync(StateHasChanged);
-        */
+    }
+
+    private Card? GetHandCard(int index)
+    {
+        return index >= 0 && index < tempGameState.Hand.Count
+            ? tempGameState.Hand[index]
+            : null;
+    }
+
+    public static string GenerateCardTooltip(Card card)
+    {
+        var lines = new List<string> { $"Name: {card.Name}" };
+
+        if (!string.IsNullOrEmpty(card.Type))
+            lines.Add($"Type: {card.Type}");
+        if (!string.IsNullOrEmpty(card.Attribute))
+            lines.Add($"Attribute: {card.Attribute}");
+        if (card.Level.HasValue)
+            lines.Add($"Level/Rank: {card.Level}");
+        if (card.Scale.HasValue)
+            lines.Add($"Scale: {card.Scale}");
+        if (card.Attack.HasValue || card.Defense.HasValue)
+            lines.Add($"ATK/DEF: {card.Attack.Value.ToString()}/{card.Defense.Value.ToString()}");
+
+        if (card.Archetype != null && card.Archetype.Count > 0)
+            lines.Add($"Archetype: {string.Join(", ", card.Archetype)}");
+        else
+            lines.Add("Archetype: N/A");
+
+        return string.Join("\n", lines);
     }
 }

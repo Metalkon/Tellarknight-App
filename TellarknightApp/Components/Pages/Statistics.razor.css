@@ -10,7 +10,7 @@
 
 .app-grid-container {
     display: grid;
-    grid-template-rows: 50px 50px 1fr;
+    grid-template-rows: 50px 50px 1fr auto;
     grid-template-columns: 1fr 1fr 1fr;
     row-gap: 5px;
     column-gap: 5px;
@@ -232,3 +232,55 @@
         .stats-var button:hover {
             background: rgba(255, 255, 255, 0.12);
         }
+
+/* =========================
+   HAND TEST
+   ========================= */
+
+.hand-test-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 5px;
+    box-sizing: border-box;
+}
+
+.hand-test-button {
+    width: fit-content;
+    max-width: 200px;
+    align-self: center;
+}
+
+.hand-test-result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: black;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5%;
+    width: 100%;
+    height: fit-content;
+    margin-top: auto;
+}
+
+.grid-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+    border: 1px solid #D3D3D3;
+}

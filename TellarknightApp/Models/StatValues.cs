@@ -37,5 +37,18 @@ namespace TellarknightApp.Models
             new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
         };
         }
+
+        public void ResetHandValues()
+        {
+            HandTested = false;
+            HandTest = new List<Card>()
+        {
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" },
+            new EmptyCard(){ Image = "./CardArt/CardBack.jpg" }
+        };
+        }
     }
 }

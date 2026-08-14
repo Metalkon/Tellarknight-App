@@ -91,19 +91,28 @@ namespace TellarknightApp.Services
             StatValues.Active = false;
         }
 
-        public void CheckHand(List<Card> mainDeck, List<Card> extraDeck)
+        public async Task<GameState> CheckHand(List<Card> mainDeck, List<Card> extraDeck, GameState tempGameState)
         {
-            // will finish this method later 
-            StatValues.Active = true;
-
             StatValues.StartingHand = (StatValues.StartingHand < 1) ? 1 : (StatValues.StartingHand > 6 ? 6 : StatValues.StartingHand);
 
             RefreshStatistics();
-            _gameState.RefreshGameState(mainDeck, extraDeck);
 
+            tempGameState.RefreshGameState(mainDeck, extraDeck);
+            tempGameState.ShuffleDeck();
+            tempGameState.DrawHand(StatValues.StartingHand);
 
+            CardSearcher.CardSearch(tempGameState);
+            HandAnalyzer.HandCheck(tempGameState, DeckStatisticsHand);
 
-            StatValues.Active = false;
+            StatValues.HandTest.Clear();
+
+            foreach (Card card in tempGameState.Hand)
+                StatValues.HandTest.Add(card);
+
+            StatValues.HandTested = true;
+            ActionRefresh?.Invoke();
+
+            return tempGameState;
         }
 
         public void UpdateValues(List<Card> mainDeck, List<Card> extraDeck)
