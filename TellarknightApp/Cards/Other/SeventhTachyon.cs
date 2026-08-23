@@ -45,6 +45,26 @@ namespace TellarknightApp.Cards
                     return (hand, deck, extraDeck, gy, searched);
                 }
 
+                // Search Lyran (Normal)
+                if (hand.Any(x => x is not TellarknightLyran && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4)
+                    && deck.Any(x => x is TellarknightLyran))
+                {
+                    Card searchedCard = deck.First(x => x is TellarknightLyran);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
+                // Search Pollux
+                if (hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4)
+                    && deck.Any(x => x is ConstellarPollux))
+                {
+                    Card searchedCard = deck.First(x => x is ConstellarPollux);
+                    hand.Add(searchedCard);
+                    deck.Remove(searchedCard);
+                    return (hand, deck, extraDeck, gy, searched);
+                }
+
                 // Ice Ryzeal 1CC
                 if (hand.Any(x => x is IceRyzeal) == false
                     && deck.Any(x => x is IceRyzeal) && deck.Any(x => x is not IceRyzeal && x.Archetype.Contains("Ryzeal") && x.Level == 4))
@@ -66,11 +86,11 @@ namespace TellarknightApp.Cards
                     return (hand, deck, extraDeck, gy, searched);
                 }
 
-                // Search Lyran (Normal)
-                if (hand.Any(x => x is not TellarknightLyran && (x.Archetype.Contains("Tellarknight") || x.Archetype.Contains("Constellar")) && x.Level == 4)
-                    && deck.Any(x => x is TellarknightLyran))
+                // Search Goblindberg 1CC
+                if (deck.Any(x => x is GogogoGoblindbergh)
+                    && hand.Any(x => x != this && x.Level == 4 && x.Archetype.Contains("Gogogo") && x.Type != "Warrior") || deck.Any(x => x.Level == 4 && x.Archetype.Contains("Gogogo") && x.Type != "Warrior"))
                 {
-                    Card searchedCard = deck.First(x => x is TellarknightLyran);
+                    Card searchedCard = deck.First(x => x is GogogoGoblindbergh);
                     hand.Add(searchedCard);
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
@@ -113,16 +133,6 @@ namespace TellarknightApp.Cards
                     && deck.Any(x => x is not SatellarknightUnukalhai && x.Archetype.Contains("Tellarknight") && x.Level == 4))
                 {
                     Card searchedCard = deck.First(x => x is SatellarknightUnukalhai);
-                    hand.Add(searchedCard);
-                    deck.Remove(searchedCard);
-                    return (hand, deck, extraDeck, gy, searched);
-                }
-
-                // Search Pollux
-                if (hand.Any(x => x.Archetype.Contains("Constellar") && x.Level == 4)
-                    && deck.Any(x => x is ConstellarPollux))
-                {
-                    Card searchedCard = deck.First(x => x is ConstellarPollux);
                     hand.Add(searchedCard);
                     deck.Remove(searchedCard);
                     return (hand, deck, extraDeck, gy, searched);
