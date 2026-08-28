@@ -169,7 +169,25 @@ h1:focus {
     width: 80vw;
     max-width: 800px;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    position: relative;
 }
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+}
+
+    .modal-close:hover {
+        color: #333;
+    }
 
 .ydk-button-row {
     display: flex;

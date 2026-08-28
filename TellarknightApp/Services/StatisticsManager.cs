@@ -14,19 +14,18 @@ namespace TellarknightApp.Services
         public event Action? ActionRefresh;
         public StatValues StatValues { get; set; }
         public DisplayValues DisplayValues { get; set; }
+        public List<DisplayValues> DisplayValuesVariance { get; set; }
         public DeckStatistics DeckStatistics { get; set; }
         public DeckStatistics DeckStatisticsHand { get; set; }
-        public List<DeckStatistics> DeckStatisticsRecord { get; set; }
-
         public StatisticsManager(GameState gameState)
         {
             _gameState = gameState;
 
             StatValues = new StatValues();
             DisplayValues = new DisplayValues();
+            DisplayValuesVariance = new List<DisplayValues>();
             DeckStatistics = new DeckStatistics();
             DeckStatisticsHand = new DeckStatistics();
-            DeckStatisticsRecord = new List<DeckStatistics>();
         }
 
         // Clears the statistics
@@ -34,7 +33,7 @@ namespace TellarknightApp.Services
         {
             DeckStatistics = new DeckStatistics();
             DeckStatisticsHand = new DeckStatistics();
-            DeckStatisticsRecord = new List<DeckStatistics>();
+            DisplayValuesVariance = new List<DisplayValues>();
             StatValues.CurrentCount = 0;
             ActionRefresh?.Invoke();
         }
@@ -44,6 +43,7 @@ namespace TellarknightApp.Services
             StatValues.Active = true;
             StatValues.Idle = false;
 
+            StatValues.MaximumCount = (StatValues.MaximumCount > 100000) ? 100000 : (StatValues.MaximumCount < 5000 ? 5000 : StatValues.MaximumCount);
             StatValues.StartingHand = (StatValues.StartingHand < 1) ? 1 : (StatValues.StartingHand > 6 ? 6 : StatValues.StartingHand);
 
             RefreshStatistics();
@@ -51,12 +51,8 @@ namespace TellarknightApp.Services
             int uiInterval = StatValues.MaximumCount / 50;
             int nextUiCheckpoint = uiInterval;
 
-            int recordStart = StatValues.MaximumCount / 4;
-            int extraRecords = Math.Max(0, (StatValues.MaximumCount - 50000) / 10000);
-            int totalRecords = 5 + extraRecords;
-            int recordInterval = (StatValues.MaximumCount - recordStart) / totalRecords;
-
-            int nextRecordCheckpoint = recordStart + recordInterval;
+            int recordInterval = CalculateRecordInterval(StatValues.MaximumCount);
+            int nextRecordCheckpoint = recordInterval;
 
             for (int i = 0; i < StatValues.MaximumCount; i++)
             {
@@ -72,7 +68,7 @@ namespace TellarknightApp.Services
 
                 if (StatValues.CurrentCount == nextUiCheckpoint)
                 {
-                    UpdateValues(mainDeck, extraDeck);
+                    DisplayValues = UpdateValues(mainDeck, extraDeck);
                     nextUiCheckpoint += uiInterval;
                     ActionRefresh?.Invoke();
                     await Task.Yield();
@@ -80,7 +76,7 @@ namespace TellarknightApp.Services
 
                 if (StatValues.CurrentCount == nextRecordCheckpoint)
                 {
-                    DeckStatisticsRecord.Add(DeckStatistics.Clone());
+                    DisplayValuesVariance.Add(UpdateValues(mainDeck, extraDeck));
                     nextRecordCheckpoint += recordInterval;
                 }
             }
@@ -89,6 +85,26 @@ namespace TellarknightApp.Services
             await Task.Delay(500);
             StatValues.ProgressCount = 0;
             StatValues.Active = false;
+        }
+
+        private static int CalculateRecordInterval(int maximumCount)
+        {
+            // Linearly scale target checkpoints: 20 at MaximumCount=5,000 up to 50 at MaximumCount=100,000
+            const int minCount = 5000;
+            const int maxCount = 100000;
+            const int minCheckpoints = 20;
+            const int maxCheckpoints = 50;
+
+            double t = Math.Clamp((maximumCount - minCount) / (double)(maxCount - minCount), 0, 1);
+            int targetCheckpoints = minCheckpoints + (int)Math.Round(t * (maxCheckpoints - minCheckpoints));
+
+            int rawInterval = Math.Max(1000, maximumCount / targetCheckpoints);
+
+            // Snap to a clean step: multiples of 500 under 5000, multiples of 1000 at/above
+            int step = rawInterval < 5000 ? 500 : 1000;
+            int interval = (int)Math.Round(rawInterval / (double)step) * step;
+
+            return Math.Max(1000, interval);
         }
 
         public async Task<GameState> CheckHand(List<Card> mainDeck, List<Card> extraDeck, GameState tempGameState)
@@ -115,30 +131,43 @@ namespace TellarknightApp.Services
             return tempGameState;
         }
 
-        public void UpdateValues(List<Card> mainDeck, List<Card> extraDeck)
+        public DisplayValues UpdateValues(List<Card> mainDeck, List<Card> extraDeck)
         {
-            DisplayValues.DeckSize = mainDeck.Count();
-            DisplayValues.TotalMonsters = mainDeck.Count(x => x.Level != null);
+            var display = new DisplayValues();
 
-            DisplayValues.BrickChance.Value = Math.Round((DeckStatistics.BrickChance / StatValues.CurrentCount) * 100, 2);
-            DisplayValues.ComboChance.Value = Math.Round(100 - DisplayValues.BrickChance.Value, 2);
-            DisplayValues.BrickRate.Value = Math.Round(StatValues.CurrentCount / (double)DeckStatistics.BrickChance, 2);
+            display.Count = StatValues.CurrentCount;
+            display.DeckSize = mainDeck.Count();
+            display.TotalMonsters = mainDeck.Count(x => x.Level != null);
 
+            display.BrickChance = Math.Round((DeckStatistics.BrickChance / StatValues.CurrentCount) * 100, 2);
+            display.ComboChance = Math.Round(100 - display.BrickChance, 2);
+            display.BrickRate = Math.Round(StatValues.CurrentCount / (double)DeckStatistics.BrickChance, 2);
 
-            DisplayValues.XyzSummonZero.Value = Math.Round((DeckStatistics.AverageXyzNoTellar / StatValues.CurrentCount) * 100, 2);
-            DisplayValues.XyzSummonOne.Value = Math.Round((DeckStatistics.AverageXyzOneTellar / StatValues.CurrentCount) * 100, 2);
-            DisplayValues.XyzSummonTwo.Value = Math.Round((DeckStatistics.AverageXyzTwoTellar / StatValues.CurrentCount) * 100, 2);
-            DisplayValues.PendulumnChance.Value = Math.Round((DeckStatistics.PendulumSummon / StatValues.CurrentCount) * 100, 2);
-            DisplayValues.OracleChance.Value = Math.Round((DeckStatistics.OracleCombo / StatValues.CurrentCount) * 100, 2);
+            display.XyzSummonZero = Math.Round((DeckStatistics.AverageXyzNoTellar / StatValues.CurrentCount) * 100, 2);
+            display.XyzSummonOne = Math.Round((DeckStatistics.AverageXyzOneTellar / StatValues.CurrentCount) * 100, 2);
+            display.XyzSummonTwo = Math.Round((DeckStatistics.AverageXyzTwoTellar / StatValues.CurrentCount) * 100, 2);
+            display.PendulumnChance = Math.Round((DeckStatistics.PendulumSummon / StatValues.CurrentCount) * 100, 2);
+            display.OracleChance = Math.Round((DeckStatistics.OracleCombo / StatValues.CurrentCount) * 100, 2);
 
-            DisplayValues.AverageHandTellars.Value = Math.Round(DeckStatistics.AverageTellars / StatValues.CurrentCount, 2);
-            DisplayValues.AverageHandExtenders.Value = Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2);
-            DisplayValues.AverageHandHT.Value = Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2);
+            display.AverageHandTellars = Math.Round(DeckStatistics.AverageTellars / StatValues.CurrentCount, 2);
+            display.AverageHandExtenders = Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2);
+            display.AverageHandHT = Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2);
 
-            DisplayValues.RyzealLockChance.Value = Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2);
+            display.RyzealLockChance = Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2);
 
+            return display;
+        }
 
+        public List<StatValues> ReturnDisplayValues(string propertyName)
+        {
+            var property = DisplayValues.GetType().GetProperty(propertyName);
 
+            if (property?.GetValue(this) is List<StatValues> values)
+            {
+                return values;
+            }
+
+            return new List<StatValues>();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using TellarknightApp.Models;
 
@@ -7,47 +8,63 @@ namespace TellarknightApp.Services
 {
     public class NewsService
     {
-        public List<NewsEntry> Entries { get; set; } 
+        private const string NewsUrl =
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vSucAIVLHb6_L10XKCrEkLA270gF0eljGACEe2umn8Y6iDR3CSMRCKFaUPWuEvBKphFTo7woE5RDUWb/pub?output=csv";
 
-        public NewsService()
-        {
-            Entries = new List<NewsEntry>();
-        }
+        public List<NewsEntry> Entries { get; private set; } = new();
 
         public async Task GetNewsAsync()
         {
-            if (Entries.Count > 0)
-                return;
-
-            Entries.Clear();
+            if (Entries.Count > 0) return;
 
             try
             {
-                HttpClient client = new HttpClient();
-                var csv = await client.GetStringAsync("https://docs.google.com/spreadsheets/d/e/2PACX-1vSucAIVLHb6_L10XKCrEkLA270gF0eljGACEe2umn8Y6iDR3CSMRCKFaUPWuEvBKphFTo7woE5RDUWb/pub?output=csv");
+                using var client = new HttpClient();
+                var csv = await client.GetStringAsync(NewsUrl);
 
-                var lines = csv.Split('\n');
+                var entries = new List<NewsEntry>();
+                var row = new List<string>();
+                var field = new StringBuilder();
+                bool inQuotes = false, isHeader = true;
 
-                for (int i = 1; i < lines.Length; i++)
+                void EndRow()
                 {
-                    var cols = lines[i].Trim().Split(',');
+                    row.Add(field.ToString());
+                    field.Clear();
 
-                    if (cols.Length < 4)
-                        continue;
+                    if (isHeader) isHeader = false;
+                    else if (row.Count >= 4)
+                        entries.Add(new NewsEntry
+                        {
+                            Date = row[0].Trim(),
+                            Header = row[1].Trim(),
+                            Version = row[2].Trim(),
+                            Content = string.Join(",", row.GetRange(3, row.Count - 3)).Trim()
+                        });
 
-                    Entries.Add(new NewsEntry
-                    {
-                        Date = cols[0],
-                        Header = cols[1],
-                        Version = cols[2],
-                        Content = string.Join(",", cols[3..]).Trim('"').Replace("\"\"", "\"")
-                    });
+                    row = new List<string>();
                 }
-                Entries.Reverse();
+
+                foreach (char c in csv)
+                {
+                    if (inQuotes)
+                    {
+                        if (c == '"') inQuotes = false;
+                        else field.Append(c);
+                    }
+                    else if (c == '"') inQuotes = true;
+                    else if (c == ',') { row.Add(field.ToString()); field.Clear(); }
+                    else if (c == '\n') EndRow();
+                    else if (c != '\r') field.Append(c);
+                }
+                if (field.Length > 0 || row.Count > 0) EndRow();
+
+                entries.Reverse();
+                Entries = entries;
             }
             catch
             {
-                return;
+                // leave Entries empty on failure
             }
         }
     }

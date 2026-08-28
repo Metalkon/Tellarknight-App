@@ -52,6 +52,7 @@
 {
     <div class="ydk-backdrop" @onclick="() => YdkMenuButton(false)">
         <div class="modal-content" @onclick:stopPropagation>
+            <button type="button" class="modal-close" @onclick="() => YdkMenuButton(false)">✕</button>
 
             <h3>YDK Menu</h3>
             <p class="ydk-text">
@@ -61,7 +62,6 @@
             <div class="ydk-button-row">
                 <button class="btn btn-primary ydk-button" @onclick="ExportYdk">Export YDK</button>
                 <button class="btn btn-primary ydk-button" @onclick="ImportYdk">Import YDK</button>
-                <button class="btn btn-primary ydk-button" @onclick="() => YdkMenuButton(false)">Close</button>
             </div>
         </div>
     </div>

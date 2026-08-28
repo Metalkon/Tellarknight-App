@@ -11,52 +11,88 @@ namespace TellarknightApp.Models
 {
     public class DisplayValues
     {
+        // Statistics
+        public int Count { get; set; }
+
         // Basic Stats
         public int DeckSize { get; set; }
         public int TotalMonsters { get; set; }
-        public StatRange ComboChance { get; set; }
-        public StatRange BrickChance { get; set; }
-        public StatRange BrickRate { get; set; }
+        public double ComboChance { get; set; }
+        public double BrickChance { get; set; }
+        public double BrickRate { get; set; }
 
         // Summon Stats
-        public StatRange XyzSummonZero { get; set; }
-        public StatRange XyzSummonOne { get; set; }
-        public StatRange XyzSummonTwo { get; set; }
-        public StatRange PendulumnChance { get; set; }
-        public StatRange OracleChance { get; set; }
+        public double XyzSummonZero { get; set; }
+        public double XyzSummonOne { get; set; }
+        public double XyzSummonTwo { get; set; }
+        public double PendulumnChance { get; set; }
+        public double OracleChance { get; set; }
 
         // Hand Stats
-        public StatRange AverageHandTellars { get; set; }
-        public StatRange AverageHandExtenders { get; set; }
-        public StatRange AverageHandHT { get; set; }
+        public double AverageHandTellars { get; set; }
+        public double AverageHandExtenders { get; set; }
+        public double AverageHandHT { get; set; }
 
         // Other Stats
-        public StatRange IsoldeBrickChance { get; set; }
-        public StatRange ArmoredBrickChance { get; set; }
-        public StatRange RyzealLockChance { get; set; }
+        public double IsoldeBrickChance { get; set; }
+        public double ArmoredBrickChance { get; set; }
+        public double RyzealLockChance { get; set; }
 
         public DisplayValues()
         {
             DeckSize = 40;
             TotalMonsters = 0;
-            ComboChance = new StatRange();
-            BrickChance = new StatRange();
-            BrickRate = new StatRange();
+            ComboChance = 0;
+            BrickChance = 0;
+            BrickRate = 0;
 
-            XyzSummonZero = new StatRange();
-            XyzSummonOne = new StatRange();
-            XyzSummonTwo = new StatRange();
-            PendulumnChance = new StatRange();
-            OracleChance = new StatRange();
+            XyzSummonZero = 0;
+            XyzSummonOne = 0;
+            XyzSummonTwo = 0;
+            PendulumnChance = 0;
+            OracleChance = 0;
 
-            AverageHandTellars = new StatRange();
-            AverageHandExtenders = new StatRange();
-            AverageHandHT = new StatRange();
+            AverageHandTellars = 0;
+            AverageHandExtenders = 0;
+            AverageHandHT = 0;
 
-            IsoldeBrickChance = new StatRange();
-            ArmoredBrickChance = new StatRange();
-            RyzealLockChance = new StatRange();
+            IsoldeBrickChance = 0;
+            ArmoredBrickChance = 0;
+            RyzealLockChance = 0;
         }
+
+        public double this[VarianceStat stat] => stat switch
+        {
+            VarianceStat.ComboChance => ComboChance,
+            VarianceStat.BrickChance => BrickChance,
+            VarianceStat.BrickRate => BrickRate,
+            VarianceStat.XyzSummonZero => XyzSummonZero,
+            VarianceStat.XyzSummonOne => XyzSummonOne,
+            VarianceStat.XyzSummonTwo => XyzSummonTwo,
+            VarianceStat.PendulumnChance => PendulumnChance,
+            VarianceStat.OracleChance => OracleChance,
+            VarianceStat.AverageHandTellars => AverageHandTellars,
+            VarianceStat.AverageHandExtenders => AverageHandExtenders,
+            VarianceStat.AverageHandHT => AverageHandHT,
+            VarianceStat.RyzealLockChance => RyzealLockChance,
+            _ => throw new ArgumentOutOfRangeException(nameof(stat))
+        };
+    }
+
+    public enum VarianceStat
+    {
+        ComboChance,
+        BrickChance,
+        BrickRate,
+        XyzSummonZero,
+        XyzSummonOne,
+        XyzSummonTwo,
+        PendulumnChance,
+        OracleChance,
+        AverageHandTellars,
+        AverageHandExtenders,
+        AverageHandHT,
+        RyzealLockChance
     }
 }
 

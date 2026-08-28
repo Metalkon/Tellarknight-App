@@ -68,29 +68,39 @@
         <div class="stats-group">
             <div class="stats-row"><span class="stats-name">Deck Size</span><span class="stats-val">@StatisticsManager.DisplayValues.DeckSize</span><div class="stats-var"></div></div>
             <div class="stats-row"><span class="stats-name">Total Monsters</span><span class="stats-val">@StatisticsManager.DisplayValues.TotalMonsters</span><div class="stats-var"></div></div>
-            <div class="stats-row"><span class="stats-name">Combo Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.ComboChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Brick Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.BrickChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Brick Rate</span><span class="stats-val">1 In @StatisticsManager.DisplayValues.BrickRate.Value</span><div class="stats-var"></div></div>
+            <div class="stats-row"><span class="stats-name">Combo Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.ComboChance%</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.ComboChance)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Brick Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.BrickChance%</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.BrickChance)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Brick Rate</span><span class="stats-val">1 In @StatisticsManager.DisplayValues.BrickRate</span>
+                <div class="stats-var"></div></div>
         </div>
 
         <div class="stats-section">Summon Stats</div>
         <div class="stats-group">
-            <div class="stats-row"><span class="stats-name">Xyz Summon (0 Tellars)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonZero.Value%</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Xyz Summon (1 Tellar)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonOne.Value%</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Xyz Summon (2 Tellars)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonTwo.Value%</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Pendulum Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.PendulumnChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Xyz Summon (0 Tellars)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonZero%</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.XyzSummonZero)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Xyz Summon (1 Tellar)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonOne%</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.XyzSummonOne)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Xyz Summon (2 Tellars)</span><span class="stats-val">@StatisticsManager.DisplayValues.XyzSummonTwo%</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.XyzSummonTwo)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Pendulum Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.PendulumnChance%</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.PendulumnChance)">± var</button></div></div>
         </div>
 
         <div class="stats-section">Hand Stats</div>
         <div class="stats-group">
-            <div class="stats-row"><span class="stats-name">Avg # Tellars</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandTellars.Value</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Avg # Extenders</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandExtenders.Value</span><div class="stats-var"><button>± var</button></div></div>
-            <div class="stats-row"><span class="stats-name">Avg # Hand Traps</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandHT.Value</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Avg # Tellars</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandTellars</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.AverageHandTellars)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Avg # Extenders</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandExtenders</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.AverageHandExtenders)">± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Avg # Hand Traps</span><span class="stats-val">@StatisticsManager.DisplayValues.AverageHandHT</span>
+                <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.AverageHandHT)">± var</button></div></div>
         </div>
 
         <div class="stats-section">Other Stats</div>
         <div class="stats-group">
-            <div class="stats-row"><span class="stats-name">Ryzeal Lock Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.RyzealLockChance.Value%</span><div class="stats-var"><button>± var</button></div></div>
+            <div class="stats-row"><span class="stats-name">Ryzeal Lock Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.RyzealLockChance%</span><div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.RyzealLockChance)">± var</button></div></div>
         </div>
 
     </div>
@@ -101,6 +111,7 @@
 {
     <div class="ydk-backdrop" @onclick="() => HandTestButton(false)">
         <div class="modal-content" @onclick:stopPropagation>
+            <button type="button" class="modal-close" @onclick="() => HandTestButton(false)">✕</button>
             <div class="grid-statistics-extra">
                 <div class="hand-test-container">
 
@@ -155,7 +166,70 @@
     </div>
 }
 
+@if (showVariance)
+{
+    <div class="ydk-backdrop" @onclick="() => VarianceExitButton()">
+        <div class="modal-content variance-modal" @onclick:stopPropagation>
+            <button type="button" class="variance-close" @onclick="() => VarianceExitButton()">✕</button>
+            <div class="grid-statistics-extra">
+                <div class="variance-title">@GetVarianceStatLabel(selectedvariance) Variance</div>
+                @if (StatisticsManager.DisplayValuesVariance.Any())
+                {
+                    double minVal = StatisticsManager.DisplayValuesVariance.Min(x => x[selectedvariance]);
+                    double maxVal = StatisticsManager.DisplayValuesVariance.Max(x => x[selectedvariance]);
+                    <div class="variance-range">
+                        Range: @minVal.ToString("F2") to @maxVal.ToString("F2")
+                    </div>
+                    <div class="variance-columns">
+                        @{
+                            int half = (StatisticsManager.DisplayValuesVariance.Count + 1) / 2;
+                            var leftColumn = StatisticsManager.DisplayValuesVariance.Take(half);
+                            var rightColumn = StatisticsManager.DisplayValuesVariance.Skip(half);
+                        }
+                        <div class="variance-table">
+                            <div class="variance-hdr">
+                                <span>Sample #</span>
+                                <span>Value</span>
+                            </div>
+                            <div class="variance-list">
+                                @foreach (DisplayValues item in leftColumn)
+                                {
+                                    <div class="variance-row">
+                                        <span class="variance-count">@item.Count</span>
+                                        <span class="variance-value">@item[selectedvariance].ToString("F2")</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="variance-table variance-table-right">
+                            <div class="variance-hdr">
+                                <span>Sample #</span>
+                                <span>Value</span>
+                            </div>
+                            <div class="variance-list">
+                                @foreach (DisplayValues item in rightColumn)
+                                {
+                                    <div class="variance-row">
+                                        <span class="variance-count">@item.Count</span>
+                                        <span class="variance-value">@item[selectedvariance].ToString("F2")</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="variance-empty">No data yet — run a check first.</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
 @code {
+    VarianceStat selectedvariance;
+    private bool showVariance = false;
     private bool showHandTest = false;
     GameState tempGameState = new GameState();
 
@@ -169,6 +243,19 @@
     {
         showHandTest = value;
         StatisticsManager.StatValues.ResetHandValues();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task VarianceButton(VarianceStat stat)
+    {
+        selectedvariance = stat;
+        showVariance = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task VarianceExitButton()
+    {
+        showVariance = false;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -227,4 +314,21 @@
 
         return string.Join("\n", lines);
     }
+
+    private static string GetVarianceStatLabel(VarianceStat stat) => stat switch
+    {
+        VarianceStat.ComboChance => "Combo Chance",
+        VarianceStat.BrickChance => "Brick Chance",
+        VarianceStat.BrickRate => "Brick Rate",
+        VarianceStat.XyzSummonZero => "Xyz Summon (0 Tellars)",
+        VarianceStat.XyzSummonOne => "Xyz Summon (1 Tellar)",
+        VarianceStat.XyzSummonTwo => "Xyz Summon (2 Tellars)",
+        VarianceStat.PendulumnChance => "Pendulum Chance",
+        VarianceStat.OracleChance => "Oracle Chance",
+        VarianceStat.AverageHandTellars => "Avg # Tellars",
+        VarianceStat.AverageHandExtenders => "Avg # Extenders",
+        VarianceStat.AverageHandHT => "Avg # Hand Traps",
+        VarianceStat.RyzealLockChance => "Ryzeal Lock Chance",
+        _ => stat.ToString()
+    };
 }

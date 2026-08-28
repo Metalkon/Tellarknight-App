@@ -128,7 +128,7 @@
 
 .stats-hdr {
     display: grid;
-    grid-template-columns: 1fr 70px 80px;
+    grid-template-columns: 1fr 80px 80px;
     padding: 3px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     margin-bottom: 2px;
@@ -180,7 +180,7 @@
 
 .stats-row {
     display: grid;
-    grid-template-columns: 1fr 70px 80px;
+    grid-template-columns: 1fr 80px 80px;
     height: 20px;
     line-height: 20px;
     align-items: center;
@@ -283,4 +283,136 @@
     object-fit: contain;
     border-radius: 5px;
     border: 1px solid #D3D3D3;
+}
+
+/* =========================
+   VARIANCE
+========================= */
+
+.variance-modal {
+    width: 420px;
+    max-width: 90vw;
+    padding: 16px 0 8px;
+    position: relative;
+}
+
+.variance-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+}
+
+    .variance-close:hover {
+        color: #333;
+    }
+
+.variance-title {
+    font-size: clamp(14px, 1.5vw, 16px);
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    padding-bottom: 8px;
+}
+
+.variance-range {
+    font-size: 12px;
+    font-weight: 400;
+    color: #555;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.variance-empty {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.variance-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0 20px;
+}
+
+.variance-table-right {
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 16px;
+    margin-left: 16px;
+}
+
+.variance-hdr {
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    padding: 3px 10px 6px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 2px;
+}
+
+    .variance-hdr span {
+        font-size: 10px;
+        font-weight: 600;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-align: left;
+    }
+
+        .variance-hdr span:last-child {
+            text-align: right;
+        }
+
+.variance-list {
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+    .variance-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .variance-list::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+        .variance-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+.variance-row {
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    height: 22px;
+    line-height: 22px;
+    align-items: center;
+    border-radius: 3px;
+}
+
+    .variance-row:nth-child(odd) {
+        background: rgba(0, 0, 0, 0.03);
+    }
+
+.variance-count {
+    font-size: 12px;
+    color: #888;
+    text-align: left;
+    padding-left: 2px;
+}
+
+.variance-value {
+    font-size: 12px;
+    color: #333;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }

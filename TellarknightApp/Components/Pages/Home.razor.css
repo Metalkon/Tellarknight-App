@@ -112,4 +112,5 @@
     margin: 5px 0 0 0;
     color: #bebebe;
     text-align: left;
+    white-space: pre-line;
 }
