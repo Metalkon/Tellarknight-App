@@ -48,7 +48,8 @@ namespace TellarknightApp.Services
 
             RefreshStatistics();
 
-            int uiInterval = StatValues.MaximumCount / 50;
+            Random randomValue = new Random();
+            int uiInterval = StatValues.MaximumCount / randomValue.Next(40, 66);
             int nextUiCheckpoint = uiInterval;
 
             int recordInterval = CalculateRecordInterval(StatValues.MaximumCount);

@@ -25,6 +25,7 @@ namespace TellarknightApp.Models
         public bool Enabled { get; set; }
         public bool Searcher { get; set; }
         public int Id { get; set; }
+        public virtual bool IsPlaceholder => false;
 
         public Card()
         {
@@ -56,7 +57,7 @@ namespace TellarknightApp.Models
             return (Card)Activator.CreateInstance(this.GetType());
         }
 
-        public virtual Card CloneTest()
+        public virtual Card ShallowClone()
         {
             return (Card)MemberwiseClone();
         }

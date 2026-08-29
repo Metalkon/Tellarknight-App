@@ -1,0 +1,153 @@
+﻿@page "/cardtest"
+@inject CardManager CardManager
+@inject SupportedCards SupportedCards
+@inject GameState GameState
+@inject StatisticsManager StatisticsManager
+
+<!-- A page used for testing crashes with randomly generated decks (used a.i. to generate this test page) -->
+
+<div class="stress-container" style="background: white; height: 100%; width: 100%; padding: 5%;">
+
+    <h3>Card Stress Test</h3>
+
+    <div class="stress-controls">
+        <label>Iterations:</label>
+        <input type="number" @bind="iterations" />
+
+        <button type="button" class="btn btn-primary" @onclick="RunTest" disabled="@isRunning">
+            @(isRunning ? "Running..." : "Run Test")
+        </button>
+    </div>
+
+    <p>Completed: @iterationsCompleted / @iterations</p>
+
+    @if (brokenCard != null)
+    {
+        <div class="stress-errors">
+            <p><strong>Card:</strong> @brokenCard</p>
+            <pre class="stress-error-item">@errorMessage</pre>
+
+            <h4>Hand</h4>
+            <ul>
+                @foreach (Card card in handSnapshot)
+                {
+                    <li>@card.Name</li>
+                }
+            </ul>
+
+            <h4>Graveyard</h4>
+            <ul>
+                @foreach (Card card in gySnapshot)
+                {
+                    <li>@card.Name</li>
+                }
+            </ul>
+
+            <h4>Main Deck</h4>
+            <ul>
+                @foreach (Card card in deckSnapshot)
+                {
+                    <li>@card.Name</li>
+                }
+            </ul>
+
+            <h4>Extra Deck</h4>
+            <ul>
+                @foreach (Card card in extraDeckSnapshot)
+                {
+                    <li>@card.Name</li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+@code {
+    private int iterations = 500;
+    private int iterationsCompleted = 0;
+    private bool isRunning = false;
+    private Random random = new Random();
+
+    private string? brokenCard;
+    private string? errorMessage;
+    private List<Card> handSnapshot = new List<Card>();
+    private List<Card> gySnapshot = new List<Card>();
+    private List<Card> deckSnapshot = new List<Card>();
+    private List<Card> extraDeckSnapshot = new List<Card>();
+
+    private async Task RunTest()
+    {
+        isRunning = true;
+        iterationsCompleted = 0;
+        brokenCard = null;
+        errorMessage = null;
+        StateHasChanged();
+
+        for (int i = 0; i < iterations; i++)
+        {
+            RandomizeQuantities();
+            CardManager.BuildDecklist();
+
+            GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
+            GameState.ShuffleDeck();
+            GameState.DrawHand(random.Next(5, 7));
+
+            try
+            {
+                CardSearcher.CardSearch(GameState);
+                HandAnalyzer.HandCheck(GameState, StatisticsManager.DeckStatistics);
+            }
+            catch (Exception ex)
+            {
+                brokenCard = FindBrokenCard(ex);
+                errorMessage = $"{ex.GetType().Name} - {ex.Message}";
+
+                handSnapshot = GameState.Hand.ToList();
+                gySnapshot = GameState.Gy.ToList();
+                deckSnapshot = GameState.Deck.ToList();
+                extraDeckSnapshot = GameState.ExtraDeck.ToList();
+
+                break;
+            }
+
+            iterationsCompleted++;
+
+            if (i % 10 == 0)
+            {
+                StateHasChanged();
+                await Task.Yield();
+            }
+        }
+
+        isRunning = false;
+        StateHasChanged();
+    }
+
+    private void RandomizeQuantities()
+    {
+        foreach (Card card in SupportedCards.Cards)
+        {
+            if (card.Name == "Placeholder Card")
+                continue;
+
+            card.Quantity = random.Next(0, 4);
+        }
+    }
+
+    private string FindBrokenCard(Exception ex)
+    {
+        foreach (var line in ex.StackTrace?.Split('\n') ?? Array.Empty<string>())
+        {
+            if (line.Contains("TellarknightApp.Cards."))
+            {
+                var start = line.IndexOf("TellarknightApp.Cards.") + "TellarknightApp.Cards.".Length;
+                var end = line.IndexOf('.', start);
+
+                if (end > start)
+                    return line.Substring(start, end - start);
+            }
+        }
+
+        return "Unknown";
+    }
+}

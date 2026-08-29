@@ -25,7 +25,7 @@ namespace TellarknightApp.Services
         {
             Cards = new List<Card>
             {
-                new EmptyCard(),
+                new EmptyCard() { Name = "Placeholder Card *" },
                 new Level4(),
                 new SatellarknightDeneb(),
                 new SatellarknightAltair(),

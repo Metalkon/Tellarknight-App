@@ -4,7 +4,7 @@ namespace TellarknightApp
 {
     public partial class App : Application
     {
-        string version = AppInfo.Current.Version.ToString();
+        string version = $"{AppInfo.Current.Version.Major}.{AppInfo.Current.Version.Minor}.{AppInfo.Current.Version.Build}";
 
         public App()
         {

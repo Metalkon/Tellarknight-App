@@ -272,9 +272,9 @@
 
     public async Task ResetCards()
     {
+        SupportedCards.RefreshUpdate();
         CardManager.RefreshCards();
         GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
-        SupportedCards.RefreshUpdate();
         StatisticsManager.StatValues.Idle = true;
         StatisticsManager.RefreshStatistics();
     }

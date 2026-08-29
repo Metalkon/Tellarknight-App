@@ -32,7 +32,8 @@
 
     <div class="grid-logo">
         <div class="logo">
-            <img src="./logo3.png" class="logo" />
+            <img src="./logo3.png" class="logo-image" />
+            <span class="app-version">@version</span>
         </div>
     </div>
 
@@ -87,10 +88,11 @@
 @code{
     private bool showYdk = false;
     private bool showNews = false;
-
+    private string version = $"v{AppInfo.Current.Version.Major}.{AppInfo.Current.Version.Minor}.{AppInfo.Current.Version.Build}";
     protected override async Task OnInitializedAsync()
     {
         await NewsService.GetNewsAsync();
+
         showNews = true;
     }
 

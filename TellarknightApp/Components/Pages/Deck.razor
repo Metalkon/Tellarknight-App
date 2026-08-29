@@ -16,9 +16,9 @@
     </div>
 
     <div class="grid-button2">
-        <button type="button" class="social-btn standard-btn" @onclick="() => RemovePlaceholders()">
-            <img src="./clean.svg">
-            <span>Clean&nbsp;</span>
+        <button type="button" class="social-btn standard-btn" @onclick="UndoLast" disabled="@(!hasUndo)">
+            <img src="./undo.svg">
+            <span>Undo</span>
         </button>
     </div>
 
@@ -35,12 +35,20 @@
             @foreach (Card card in CardManager.MainDeck)
             {
                 <div class="grid-item">
+                    @if (!showYdk && card.Name != "Placeholder Card")
+                    {
+                        <button type="button" class="card-remove-btn" @onclick="() => RemoveCard(card)">✕</button>
+                    }
                     <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
                 </div>
             }
             @foreach (Card card in CardManager.ExtraDeck)
             {
                 <div class="grid-item">
+                    @if (!showYdk && card.Name != "Placeholder Card")
+                    {
+                        <button type="button" class="card-remove-btn" @onclick="() => RemoveCard(card)">✕</button>
+                    }
                     <img src="@card.Image" alt="@card.Name" loading="lazy" class="item-image" title="@GenerateCardTooltip(card)" />
                 </div>
             }
@@ -68,33 +76,61 @@
 }
 
 @code {
-    private bool showYdk= false;
+    private bool showYdk = false;
+    private List<Card> undoCards = new List<Card>();
+    private bool hasUndo = false;
 
     protected override async Task OnInitializedAsync()
     {
         CardManager.BuildDecklist();
-        StatisticsManager.ActionRefresh += OnRefresh;
+    }
+
+    private void SaveUndoSnapshot()
+    {
+        undoCards = new List<Card>();
+
+        foreach (Card card in SupportedCards.Cards)
+        {
+            undoCards.Add(card.ShallowClone());
+        }
+
+        hasUndo = true;
+    }
+
+    private void UndoLast()
+    {
+        if (!hasUndo)
+            return;
+
+        SupportedCards.Cards = undoCards;
+        hasUndo = false;
+        CardManager.BuildDecklist();
+        StateHasChanged();
     }
 
     public async Task ResetCards()
     {
+        SaveUndoSnapshot();
+        SupportedCards.RefreshUpdate();
         CardManager.RefreshCards();
         GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
-        SupportedCards.RefreshUpdate();
         StatisticsManager.StatValues.Idle = true;
         StatisticsManager.RefreshStatistics();
+        StateHasChanged();
     }
 
-    private async void RemovePlaceholders()
+    private void RemoveCard(Card card)
     {
-        CardManager.RemovePlaceholders();
-        await InvokeAsync(StateHasChanged);
-    }
+        if (card.Name == "Placeholder Card")
+            return;
 
-    private async void OnRefresh()
-    {
+        SaveUndoSnapshot();
+
+        if (card.Quantity > 0)
+            card.Quantity--;
+
         CardManager.BuildDecklist();
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 
     public static string GenerateCardTooltip(Card card)
@@ -135,6 +171,7 @@
 
     async Task ImportYdk()
     {
+        SaveUndoSnapshot();
         showYdk = false;
         await CardManager.ImportYdk();
         StateHasChanged();

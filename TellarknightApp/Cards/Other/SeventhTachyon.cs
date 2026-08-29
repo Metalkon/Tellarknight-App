@@ -88,7 +88,8 @@ namespace TellarknightApp.Cards
 
                 // Search Goblindberg 1CC
                 if (deck.Any(x => x is GogogoGoblindbergh)
-                    && hand.Any(x => x != this && x.Level == 4 && x.Archetype.Contains("Gogogo") && x.Type != "Warrior") || deck.Any(x => x.Level == 4 && x.Archetype.Contains("Gogogo") && x.Type != "Warrior"))
+                    && (hand.Any(x => x != this && x.Level == 4 && x.Archetype.Contains("Gogogo") && x.Type != "Warrior")
+                    || deck.Any(x => x.Level == 4 && x.Archetype.Contains("Gogogo") && x.Type != "Warrior")))
                 {
                     Card searchedCard = deck.First(x => x is GogogoGoblindbergh);
                     hand.Add(searchedCard);
