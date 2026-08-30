@@ -15,11 +15,15 @@ namespace TellarknightApp.Models
         public int Count { get; set; }
 
         // Basic Stats
-        public int DeckSize { get; set; }
-        public int TotalMonsters { get; set; }
         public double ComboChance { get; set; }
         public double BrickChance { get; set; }
         public double BrickRate { get; set; }
+
+        // Deck Stats
+        public int DeckSize { get; set; }
+        public int TotalMonsters { get; set; }
+        public int TotalSpells { get; set; }
+        public int TotalTraps { get; set; }
 
         // Summon Stats
         public double XyzSummonZero { get; set; }
@@ -40,11 +44,14 @@ namespace TellarknightApp.Models
 
         public DisplayValues()
         {
-            DeckSize = 40;
-            TotalMonsters = 0;
             ComboChance = 0;
             BrickChance = 0;
             BrickRate = 0;
+
+            DeckSize = 40;
+            TotalMonsters = 0;
+            TotalSpells = 0;
+            TotalTraps = 0;
 
             XyzSummonZero = 0;
             XyzSummonOne = 0;

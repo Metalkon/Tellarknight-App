@@ -50,6 +50,13 @@
 		-->
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<!-- Forces Visual Studio to completely reinstall the APK delta on changes -->
+		<AndroidForceQueueDebuggerInsteadOfLaunch>true</AndroidForceQueueDebuggerInsteadOfLaunch>
+		<!-- Inserts a small timing delay to prevent the LaunchApplicationAsync crash -->
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-maccatalyst|AnyCPU'">
 		<ApplicationId>TellarknightStatistics</ApplicationId>
 	</PropertyGroup>

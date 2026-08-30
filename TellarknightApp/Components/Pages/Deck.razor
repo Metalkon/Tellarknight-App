@@ -116,6 +116,7 @@
         GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
         StatisticsManager.StatValues.Idle = true;
         StatisticsManager.RefreshStatistics();
+        StatisticsManager.UpdateValues(CardManager.MainDeck, CardManager.ExtraDeck);
         StateHasChanged();
     }
 

@@ -9,7 +9,7 @@ namespace TellarknightApp.Cards
             Name = "Number 104: Masquerade";
             Type = "Spellcaster";
             Attribute = "Light";
-            Level = null;
+            Level = 4;
             Attack = 2700;
             Defense = 1200;
             Scale = null;

@@ -89,11 +89,12 @@
     private bool showYdk = false;
     private bool showNews = false;
     private string version = $"v{AppInfo.Current.Version.Major}.{AppInfo.Current.Version.Minor}.{AppInfo.Current.Version.Build}";
+   
     protected override async Task OnInitializedAsync()
     {
         await NewsService.GetNewsAsync();
-
         showNews = true;
+        await InvokeAsync(StateHasChanged);
     }
 
     private void YdkMenuButton(bool value)

@@ -100,18 +100,20 @@ namespace TellarknightApp.Services
                 .Where(x =>
                     string.IsNullOrEmpty(SearchValues.ArchetypeQuery) ||
                     (x.Archetype != null && x.Archetype.Contains(SearchValues.ArchetypeQuery)))
-                
+
                 .Where(x =>
                     string.IsNullOrEmpty(SearchValues.TypeQuery) ||
                     (SearchValues.TypeQuery == "Monster"
                     ? (x.Type != "Spell" && x.Type != "Field Spell" && x.Type != "Trap")
                     : SearchValues.TypeQuery == "Spell"
-                    ? x.Type.Contains("Spell")
+                    ? (x.Level == null && x.Type.Contains("Spell"))
+                    : SearchValues.TypeQuery == "Trap"
+                    ? (x.Level == null && x.Type.Contains("Trap"))
                     : SearchValues.TypeQuery == "Extender"
                     ? x.Role == "Extender"
                     : SearchValues.TypeQuery == "Hand Trap"
                     ? x.Role == "Hand Trap"
-                    : x.Type == SearchValues.TypeQuery))                
+                    : x.Type == SearchValues.TypeQuery))
                 .ToList();
 
             SearchValues.TotalItems = filtered.Count;

@@ -9,7 +9,7 @@ namespace TellarknightApp.Cards
             Name = "Mathmech Superfactorial";
             Type = "Trap";
             Attribute = string.Empty;
-            Level = 4;
+            Level = null;
             Attack = null;
             Defense = null;
             Scale = null;

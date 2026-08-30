@@ -9,7 +9,9 @@
 <div class="app-grid-container">
 
     <div class="grid-button1">
-        <input type="text" class="search-input" @bind="CardManager.SearchValues.SearchQuery"
+        <input type="text" class="search-input"
+               @bind="CardManager.SearchValues.SearchQuery"
+               @bind:event="oninput"
                @onkeydown="@(async e => { if (e.Key == "Enter") await CardSearch(); })"
                placeholder="Search cards..." />
     </div>
@@ -32,7 +34,7 @@
         <div class="option-content">
             <div class="option-group">
                 <div class="option-field">
-                    <select class="filter-select" @bind="CardManager.SearchValues.TypeQuery">
+                    <select class="filter-select" @bind="CardManager.SearchValues.TypeQuery" @bind:after="CardSearch">
                         <option value="">Type / Role</option>
                         <option value="Monster">Monster</option>
                         <option value="Spell">Spell</option>
@@ -45,7 +47,7 @@
             <div class="option-divider"></div>
             <div class="option-group">
                 <div class="option-field">
-                    <select class="filter-select" @bind="CardManager.SearchValues.ArchetypeQuery">
+                    <select class="filter-select" @bind="CardManager.SearchValues.ArchetypeQuery" @bind:after="CardSearch">
                         <option value="">Archetype</option>
                         <option value="None">None</option>
                         <option value="Tellarknight">Tellarknight</option>
@@ -64,7 +66,7 @@
             <div class="option-divider"></div>
             <div class="option-group">
                 <div class="option-field">
-                    <select class="filter-select" @bind="CardManager.SearchValues.ItemsPerPage">
+                    <select class="filter-select" @bind="CardManager.SearchValues.ItemsPerPage" @bind:after="CardSearch">
                         <option value="30">Page Size</option>
                         <option value="30">30</option>
                         <option value="60">60</option>
@@ -143,7 +145,7 @@
     {
         CardManager.SearchValues.CurrentPage = 1;
         await CardManager.Search();
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     public void IncreaseQuantity(Card card)

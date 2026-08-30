@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using TellarknightApp.Cards;
 using TellarknightApp.Components.Pages;
 using TellarknightApp.Models;
 
@@ -69,7 +70,7 @@ namespace TellarknightApp.Services
 
                 if (StatValues.CurrentCount == nextUiCheckpoint)
                 {
-                    DisplayValues = UpdateValues(mainDeck, extraDeck);
+                    UpdateValues(mainDeck, extraDeck);
                     nextUiCheckpoint += uiInterval;
                     ActionRefresh?.Invoke();
                     await Task.Yield();
@@ -139,22 +140,29 @@ namespace TellarknightApp.Services
             display.Count = StatValues.CurrentCount;
             display.DeckSize = mainDeck.Count();
             display.TotalMonsters = mainDeck.Count(x => x.Level != null);
+            display.TotalSpells = mainDeck.Count(x => x.Level == null && x.Type.Contains("Spell"));
+            display.TotalTraps = mainDeck.Count(x => x.Level == null && x.Type.Contains("Trap"));
 
-            display.BrickChance = Math.Round((DeckStatistics.BrickChance / StatValues.CurrentCount) * 100, 2);
-            display.ComboChance = Math.Round(100 - display.BrickChance, 2);
-            display.BrickRate = Math.Round(StatValues.CurrentCount / (double)DeckStatistics.BrickChance, 2);
+            if (StatValues.CurrentCount > 0)
+            {
+                display.BrickChance = Math.Round((DeckStatistics.BrickChance / StatValues.CurrentCount) * 100, 2);
+                display.ComboChance = Math.Round(100 - display.BrickChance, 2);
+                display.BrickRate = Math.Round(StatValues.CurrentCount / (double)DeckStatistics.BrickChance, 2);
 
-            display.XyzSummonZero = Math.Round((DeckStatistics.AverageXyzNoTellar / StatValues.CurrentCount) * 100, 2);
-            display.XyzSummonOne = Math.Round((DeckStatistics.AverageXyzOneTellar / StatValues.CurrentCount) * 100, 2);
-            display.XyzSummonTwo = Math.Round((DeckStatistics.AverageXyzTwoTellar / StatValues.CurrentCount) * 100, 2);
-            display.PendulumnChance = Math.Round((DeckStatistics.PendulumSummon / StatValues.CurrentCount) * 100, 2);
-            display.OracleChance = Math.Round((DeckStatistics.OracleCombo / StatValues.CurrentCount) * 100, 2);
+                display.XyzSummonZero = Math.Round((DeckStatistics.AverageXyzNoTellar / StatValues.CurrentCount) * 100, 2);
+                display.XyzSummonOne = Math.Round((DeckStatistics.AverageXyzOneTellar / StatValues.CurrentCount) * 100, 2);
+                display.XyzSummonTwo = Math.Round((DeckStatistics.AverageXyzTwoTellar / StatValues.CurrentCount) * 100, 2);
+                display.PendulumnChance = Math.Round((DeckStatistics.PendulumSummon / StatValues.CurrentCount) * 100, 2);
+                display.OracleChance = Math.Round((DeckStatistics.OracleCombo / StatValues.CurrentCount) * 100, 2);
 
-            display.AverageHandTellars = Math.Round(DeckStatistics.AverageTellars / StatValues.CurrentCount, 2);
-            display.AverageHandExtenders = Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2);
-            display.AverageHandHT = Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2);
+                display.AverageHandTellars = Math.Round(DeckStatistics.AverageTellars / StatValues.CurrentCount, 2);
+                display.AverageHandExtenders = Math.Round(DeckStatistics.AverageExtenders / StatValues.CurrentCount, 2);
+                display.AverageHandHT = Math.Round(DeckStatistics.AverageHandTraps / StatValues.CurrentCount, 2);
 
-            display.RyzealLockChance = Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2);
+                display.RyzealLockChance = Math.Round((DeckStatistics.RyzealLock / StatValues.CurrentCount) * 100, 2);
+            }
+
+            DisplayValues = display;
 
             return display;
         }

@@ -66,14 +66,19 @@
 
         <div class="stats-section">Basic Stats</div>
         <div class="stats-group">
-            <div class="stats-row"><span class="stats-name">Deck Size</span><span class="stats-val">@StatisticsManager.DisplayValues.DeckSize</span><div class="stats-var"></div></div>
-            <div class="stats-row"><span class="stats-name">Total Monsters</span><span class="stats-val">@StatisticsManager.DisplayValues.TotalMonsters</span><div class="stats-var"></div></div>
             <div class="stats-row"><span class="stats-name">Combo Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.ComboChance%</span>
                 <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.ComboChance)">± var</button></div></div>
             <div class="stats-row"><span class="stats-name">Brick Chance</span><span class="stats-val">@StatisticsManager.DisplayValues.BrickChance%</span>
                 <div class="stats-var"><button @onclick="() => VarianceButton(VarianceStat.BrickChance)">± var</button></div></div>
             <div class="stats-row"><span class="stats-name">Brick Rate</span><span class="stats-val">1 In @StatisticsManager.DisplayValues.BrickRate</span>
                 <div class="stats-var"></div></div>
+        </div>
+
+        <div class="stats-section">Deck Stats</div>
+        <div class="stats-group">
+            <div class="stats-row"><span class="stats-name">Deck Size</span><span class="stats-val">@StatisticsManager.DisplayValues.DeckSize</span><div class="stats-var"></div></div>
+            <div class="stats-row"><span class="stats-name">Total Monsters</span><span class="stats-val">@StatisticsManager.DisplayValues.TotalMonsters</span><div class="stats-var"></div></div>
+            <div class="stats-row"><span class="stats-name">Total Spells/Traps</span><span class="stats-val">@StatisticsManager.DisplayValues.TotalSpells / @StatisticsManager.DisplayValues.TotalTraps</span><div class="stats-var"></div></div>
         </div>
 
         <div class="stats-section">Summon Stats</div>
@@ -237,6 +242,8 @@
     {
         StatisticsManager.ActionRefresh += OnRefresh;
         CardManager.BuildDecklist();
+        StatisticsManager.UpdateValues(CardManager.MainDeck, CardManager.ExtraDeck);
+        StateHasChanged();
     }
 
     private async Task HandTestButton(bool value)
@@ -277,6 +284,7 @@
         GameState.RefreshGameState(CardManager.MainDeck, CardManager.ExtraDeck);
         StatisticsManager.StatValues.Idle = true;
         StatisticsManager.RefreshStatistics();
+        StatisticsManager.UpdateValues(CardManager.MainDeck, CardManager.ExtraDeck);
     }
 
     private async Task CheckHand()
