@@ -1,27 +1,26 @@
-# NOTE: This app is currently being refactored with major ui changes, code clean up, and new features being added.
-
 # Tellarknight App
-This is a windows and android application built for the Tellarknight community for the Yu-Gi-Oh Card Game, it's used for creating Tellarknight Decklists and testing their consistency rates and other statistics to optimize deckbuilding experiences.
+
+This is a Windows and Android application built for the Tellarknight community for the Yu-Gi-Oh! Card Game. It's used for creating Tellarknight decklists and testing their consistency rates and other statistics to optimize the deckbuilding experience.
 
 [Download The Latest Release Version](https://github.com/Metalkon/Tellarknight-App/releases)
 
 ## Features
-- Deck Statistics that calculate the chances of summoning a Rank 4 monster, specifically Tellarknight Constellar Caduceus.
-- Deckbuilding with nearly 150 cards that are most commonly used with the Tellarknight Archetype.
-- Indvidual Hand Tests to see the brick rate and your drawn hands.
+- Deck statistics that calculate the chances of summoning a Rank 4 monster, primarily Tellarknight Constellar Caduceus and Tellarknight Constellar Delteros.
+- Deckbuilding with nearly 200 cards that are most commonly used with the Tellarknight archetype.
+- Individual hand tests to see the brick rate and your drawn hands.
 - Card searching to easily find the cards you want to work with.
-- The ability to export your decklist as a YDK file to be used with other Yu-Gi-OH services and clients.
+- The ability to import and export your decklist as a YDK file to be used with other Yu-Gi-Oh! services and clients.
 
 -----
 
 ## Simplified App Overview:
 
 ### Main
-- User builds their deck with the selection of cards provided.
-- When the user pushes the "Check Deck" button it starts a loop that uses the card selection to build a Decklist object, which is then cloned to a fresh GameState object which contains the hand/deck/extradeck/etc.
-- The loop inputs the GameState into a Card Searcher service which checks for search labled cards in your hand and then goes through several hand/deck checks to see if you have certain card combinations and available search targets before deciding on the card to be searched and added to the GameState.Hand from GameState.Deck.
-- The loop then inputs the GameState into a Hand Analyzer service that runs an override method within each card in your hand which checks for certain card combinations in your hand to set GameState.LocalStats boolean values to true.
-- At the end of the Hand Analyzer, all of the booleans are converted into integers to be added to the DeckStatistics object which is not reset during each loop.
-- After the loop has been done at least a few thousand times, the user is given the full statistics of their deck such as brick rate and combo chance, as well as some other helpful statistics.
+- The user imports their deck or builds one from the selection of cards provided.
+- When the user presses the "Check Deck" button on the Statistics page, it starts a loop that clones the built decklist into the GameState, containing the hand, deck, extra deck, and graveyard, for each run.
+- Each loop passes the GameState into a Card Searcher service, which checks for "searcher" cards in your hand and runs through several hand and deck checks to see if you have certain card combinations and available search targets before deciding which card to search for and add to GameState.Hand from GameState.Deck.
+- The loop then passes the GameState into a Hand Analyzer service, which runs an override method on each card in your hand to check for certain card combinations and sets the corresponding GameState.LocalStats boolean values to true.
+- At the end of the Hand Analyzer, those booleans are converted into integers and added to the DeckStatistics object, which persists across the loop rather than resetting each iteration.
+- After the loop has run several thousand times, the user is given the full statistics of their deck, such as brick rate and combo chance, along with other helpful statistics.
 
 ![Example Image](tellar_app_windows.PNG)
