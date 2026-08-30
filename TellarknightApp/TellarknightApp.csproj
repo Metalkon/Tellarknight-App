@@ -83,7 +83,7 @@
 	  <GenerateTestArtifacts>True</GenerateTestArtifacts>
 	  <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
 	  <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-	  <PackageCertificateThumbprint>EB3B5D5F70A7E1ABDA6A6E02A11507CF1A99C48D</PackageCertificateThumbprint>
+	  <PackageCertificateKeyFile>TellarknightApp_TemporaryKey.pfx</PackageCertificateKeyFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
