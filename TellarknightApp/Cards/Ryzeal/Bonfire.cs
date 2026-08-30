@@ -44,10 +44,10 @@ namespace TellarknightApp.Cards
                 return (hand, deck, extraDeck, gy, searched);
             }
 
-            // Search Ex Ryzeal
-            if (deck.Any(x => x is ExRyzeal))
+            // Search Ext Ryzeal
+            if (deck.Any(x => x is ExtRyzeal))
             {
-                Card searchedCard = deck.First(x => x is ExRyzeal);
+                Card searchedCard = deck.First(x => x is ExtRyzeal);
                 hand.Add(searchedCard);
                 deck.Remove(searchedCard);
                 return (hand, deck, extraDeck, gy, searched);

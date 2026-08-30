@@ -104,13 +104,13 @@ namespace TellarknightApp.Services
                 //new ZefraDivineStrike(),
 
                 new IceRyzeal(),
-                new ExRyzeal(),
-                new ThodeRyzeal(),
+                new ExtRyzeal(),
+                new SwordRyzeal(),
                 new NodeRyzeal(),
                 new PalmaRyzeal(),
                 new RyzealCross(),
                 new RyzealPlugIn(),
-                new RyzealHoleThruster(),
+                new RyzealPlasmaHole(),
                 new Bonfire(),
 
                 new CenturIonPrimera(),

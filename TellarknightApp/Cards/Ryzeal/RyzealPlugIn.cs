@@ -6,7 +6,7 @@ namespace TellarknightApp.Cards
     {
         public RyzealPlugIn() 
         {
-            Name = "Ryzeal Plug-In";
+            Name = "Ryzeal Plugin";
             Type = "Spell";
             Attribute = string.Empty;
             Level = null;

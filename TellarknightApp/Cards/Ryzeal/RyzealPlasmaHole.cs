@@ -2,11 +2,11 @@
 
 namespace TellarknightApp.Cards
 {
-    public class RyzealHoleThruster : Card
+    public class RyzealPlasmaHole : Card
     {
-        public RyzealHoleThruster() 
+        public RyzealPlasmaHole() 
         {
-            Name = "Ryzeal Hole Thruster";
+            Name = "Ryzeal Plasma Hole-----**";
             Type = "Trap";
             Attribute = string.Empty;
             Level = null;

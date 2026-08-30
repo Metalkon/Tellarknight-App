@@ -2,11 +2,11 @@
 
 namespace TellarknightApp.Cards
 {
-    public class ExRyzeal : Card
+    public class ExtRyzeal : Card
     {
-        public ExRyzeal()
+        public ExtRyzeal()
         {
-            Name = "Ex Ryzeal";
+            Name = "Ext Ryzeal";
             Type = "Thunder";
             Attribute = "Fire";
             Level = 4;
@@ -27,7 +27,7 @@ namespace TellarknightApp.Cards
                 return localStats;
             }
 
-            if (deck.Any(x => x is ThodeRyzeal))
+            if (deck.Any(x => x is SwordRyzeal))
             {
                 localStats.RyzealLock = true;
                 return localStats;
