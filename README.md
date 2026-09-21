@@ -2,7 +2,7 @@
 
 This is a Windows and Android application built for the Tellarknight community for the Yu-Gi-Oh! Card Game. It's used for creating Tellarknight decklists and testing their consistency rates and other statistics to optimize the deckbuilding experience.
 
-[Download The Latest Release Version](https://github.com/Metalkon/Tellarknight-App/releases)
+### 📥[Download The Latest Release Version](https://github.com/Metalkon/Tellarknight-App/releases)
 
 ## Features
 - Deck statistics that calculate the chances of summoning a Rank 4 monster, primarily Tellarknight Constellar Caduceus and Tellarknight Constellar Delteros.
